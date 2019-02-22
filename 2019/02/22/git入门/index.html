@@ -17,8 +17,12 @@
 
 
 
+  <meta name="description" content="git入门">
 
 
+
+
+  <meta name="keywords" content="命令行 git, Celeste's Blog">
 
 
 
@@ -38,7 +42,7 @@
 
 
 
-<link rel="canonical" href="http://yoursite.com/archives/2019/02/">
+<link rel="canonical" href="http://yoursite.com/2019/02/22/git入门/">
 
 
 
@@ -86,11 +90,7 @@
   window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":true};
 </script>
 
-    <title>
-  
-    归档 - Celeste's Blog
-  
-</title>
+    <title> git入门 - Celeste's Blog </title>
   </head>
 
   <body><div id="mobile-navbar" class="mobile-navbar">
@@ -148,139 +148,115 @@
           <div id="content" class="content">
             
   
-  
-  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          git入门
+        
+      </h1>
 
-  <section id="archive" class="archive">
-    
-      
-        <div class="archive-title">
-          <span class="archive-post-counter">
-            目前共计 5 篇日志
-          </span>
-        </div>
-      
-    
-
-    
-      
+      <div class="post-meta">
+        <span class="post-time">
+          2019-02-22
+        </span>
         
         
+      </div>
+    </header>
 
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#git-init"><span class="toc-text">git init</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#git-add"><span class="toc-text">git add</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#git-commit-v"><span class="toc-text">git commit -v</span></a></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <h3 id="git-init"><a href="#git-init" class="headerlink" title="git init"></a>git init</h3><ul>
+<li>运行”mkdir 目录名”，创建项目目录</li>
+<li>运行”cd 目录名”，进入项目目录</li>
+<li>运行”git init”，在当前工作目录创建一个空的 git 仓库，会生成一个 .git 隐藏目录</li>
+<li>使用 tree 命令可以查看 .git 目录，其中 HEAD 为指向 master 的指针<a id="more"></a>
+</li>
+</ul>
+<p><img src="//video.jirengu.com/xdml/image/8beac5ce-6d1c-4fda-a375-033b1924edcd/2019-2-22-13-11-46.png" alt="gitInit.png"></p>
+<h3 id="git-add"><a href="#git-add" class="headerlink" title="git add"></a>git add</h3><ul>
+<li>工作区的文件发生变化后，使用 git add 命令按需求添加到暂存区（index）</li>
+<li>此时查看 .git 目录，相比执行完 git init 时，多了 index 文件，objects 目录也增加了 b1 子目录</li>
+<li>大批量的操作文件时，可使用参数 -A -U，或 git add .</li>
+</ul>
+<p><img src="//video.jirengu.com/xdml/file/8beac5ce-6d1c-4fda-a375-033b1924edcd/2019-2-22-15-53-17.jpeg" alt="gitAdd.jpeg"></p>
+<h3 id="git-commit-v"><a href="#git-commit-v" class="headerlink" title="git commit -v"></a>git commit -v</h3>
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>原文作者: </span>
+      <a href="http://yoursite.com">Celeste Weng</a>
+    </p>
+    <p class="copyright-item">
+      <span>原文链接: </span>
+      <a href="http://yoursite.com/2019/02/22/git入门/">http://yoursite.com/2019/02/22/git入门/</a>
+    </p>
+    <p class="copyright-item">
+      <span>许可协议: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
         
-          
-          <div class="collection-title">
-            <h2 class="archive-year">2019</h2>
+          <div class="post-tags">
+            
+              <a href="/tags/命令行-git/">命令行 git</a>
+            
           </div>
         
-      
-
-      <div class="archive-post">
-        <span class="archive-post-time">
-          
-            02-22
-          
-        </span>
-        <span class="archive-post-title">
-          <a href="/2019/02/22/git入门/" class="archive-post-link">
-            git入门
-          </a>
-        </span>
-      </div>
+        
+        
+  <nav class="post-nav">
     
-      
-        
-        
-
-        
-      
-
-      <div class="archive-post">
-        <span class="archive-post-time">
-          
-            02-21
-          
-        </span>
-        <span class="archive-post-title">
-          <a href="/2019/02/21/常用命令/" class="archive-post-link">
-            常用命令及查询
-          </a>
-        </span>
-      </div>
     
-      
-        
-        
-
-        
-      
-
-      <div class="archive-post">
-        <span class="archive-post-time">
-          
-            02-21
-          
-        </span>
-        <span class="archive-post-title">
-          <a href="/2019/02/21/第二篇博客/" class="archive-post-link">
-            第二篇博客
-          </a>
-        </span>
-      </div>
-    
-      
-        
-        
-
-        
-      
-
-      <div class="archive-post">
-        <span class="archive-post-time">
-          
-            02-21
-          
-        </span>
-        <span class="archive-post-title">
-          <a href="/2019/02/21/开博大吉/" class="archive-post-link">
-            开博大吉
-          </a>
-        </span>
-      </div>
-    
-      
-        
-        
-
-        
-      
-
-      <div class="archive-post">
-        <span class="archive-post-time">
-          
-            02-21
-          
-        </span>
-        <span class="archive-post-title">
-          <a href="/2019/02/21/hello-world/" class="archive-post-link">
-            Hello World
-          </a>
-        </span>
-      </div>
-    
-  </section>
-
-  
-  <nav class="pagination">
-    
+      <a class="next" href="/2019/02/21/常用命令/">
+        <span class="next-text nav-default">常用命令及查询</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
     
   </nav>
 
 
+      </footer>
+    
+
+  </article>
 
 
           </div>
           
+  <div class="comments" id="comments">
+    
+  </div>
+
 
         </div>
       </main>
@@ -365,6 +341,11 @@
     </div>
 
     
+  
+  
+
+  
+
 
 
     
