@@ -42,7 +42,7 @@
 
 
 
-<link rel="canonical" href="https://github.com/celesteweng/2019/02/22/git入门/">
+<link rel="canonical" href="https://celesteweng.github.io/2019/02/22/git入门/">
 
 
 
@@ -185,14 +185,21 @@
 <li>使用 tree 命令可以查看 .git 目录，其中 HEAD 为指向 master 的指针<a id="more"></a>
 </li>
 </ul>
-<p><img src="//video.jirengu.com/xdml/image/8beac5ce-6d1c-4fda-a375-033b1924edcd/2019-2-22-13-11-46.png" alt="gitInit.png"></p>
+<p><img src="//raw.githubusercontent.com/CelesteWeng/images/master/gitInit.jpeg" alt="gitAdd.jpeg"></p>
 <h3 id="git-add"><a href="#git-add" class="headerlink" title="git add"></a>git add</h3><ul>
 <li>工作区的文件发生变化后，使用 git add 命令按需求添加到暂存区（index）</li>
 <li>此时查看 .git 目录，相比执行完 git init 时，多了 index 文件，objects 目录也增加了 b1 子目录</li>
 <li>大批量的操作文件时，可使用参数 -A -U，或 git add .</li>
 </ul>
-<p><img src="//video.jirengu.com/xdml/file/8beac5ce-6d1c-4fda-a375-033b1924edcd/2019-2-22-15-53-17.jpeg" alt="gitAdd.jpeg"></p>
-<h3 id="git-commit-v"><a href="#git-commit-v" class="headerlink" title="git commit -v"></a>git commit -v</h3>
+<p><img src="//raw.githubusercontent.com/CelesteWeng/images/master/gitAdd.jpeg" alt="gitAdd.jpeg"></p>
+<h3 id="git-commit-v"><a href="#git-commit-v" class="headerlink" title="git commit -v"></a>git commit -v</h3><ul>
+<li>当暂存区有内容时，执行该命令会进入 vim ，罗列未跟踪的文件和已提交的文件，同时展示已提交的文件相比之前的改动</li>
+<li>执行过 git commit 命令后，.git 目录中会增加 COMMIT_EDITMSG 文件</li>
+<li>git commit -m “提交信息” 可提交暂存区文件</li>
+</ul>
+<p><img src="//raw.githubusercontent.com/CelesteWeng/images/master/gcv.jpeg" alt="gcv.jpeg"></p>
+<p><img src="//raw.githubusercontent.com/CelesteWeng/images/master/gcv2.png" alt="gcv2.png"></p>
+
       
     </div>
 
@@ -203,11 +210,11 @@
   <div class="post-copyright">
     <p class="copyright-item">
       <span>原文作者: </span>
-      <a href="https://github.com/celesteweng">Celeste Weng</a>
+      <a href="https://celesteweng.github.io">Celeste Weng</a>
     </p>
     <p class="copyright-item">
       <span>原文链接: </span>
-      <a href="https://github.com/celesteweng/2019/02/22/git入门/">https://github.com/celesteweng/2019/02/22/git入门/</a>
+      <a href="https://celesteweng.github.io/2019/02/22/git入门/">https://celesteweng.github.io/2019/02/22/git入门/</a>
     </p>
     <p class="copyright-item">
       <span>许可协议: </span>
