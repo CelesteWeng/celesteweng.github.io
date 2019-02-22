@@ -229,6 +229,193 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/02/21/常用命令/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Celeste Weng">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/02/21/常用命令/" itemprop="url">常用命令及查询</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-02-21T18:11:27+08:00">
+                2019-02-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="ls"><a href="#ls" class="headerlink" title="ls"></a>ls</h2><p><code>list directory contents</code> 罗列指定目录（或当前工作目录）中的子目录和文件</p>
+<p><strong>用法</strong>：ls [-alrtAFR] [name…]</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> -a</td>
+<td>显示所有的文件，包括以”.”开头的隐藏文件</td>
+<td></td>
+</tr>
+<tr>
+<td> -l</td>
+<td>不仅显示文件名，还罗列了文件型态、权限、所有者、文件大小、更新时间等信息</td>
+<td></td>
+</tr>
+<tr>
+<td> -r</td>
+<td>将文件以相反次序显示(原定依英文字母次序)</td>
+<td></td>
+</tr>
+<tr>
+<td> -t</td>
+<td>将文件依建立时间之先后次序列出</td>
+<td></td>
+</tr>
+<tr>
+<td> -A</td>
+<td>同 -a，但不列出 “.” (目前目录) 及 “..” (父目录)</td>
+<td></td>
+</tr>
+<tr>
+<td> -F</td>
+<td>在列出的文件名称后加一符号；例如可执行档则加 “*”, 目录则加 “/“</td>
+<td></td>
+</tr>
+<tr>
+<td> -R</td>
+<td>若目录下有文件，则以下之文件亦皆依序列出</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p> 参数可叠加使用：ls -la 路径</p>
+<h2 id="cat"><a href="#cat" class="headerlink" title="cat"></a>cat</h2><p> <code>concatenate files and print on the standard output</code> 连接文件并打印到标准输出设备上</p>
+<p><strong>语法格式</strong>：cat [-AbeEnstTuv] [–help] [–version] fileName </p>
+<pre><code>参数          |              功能                         |
+</code></pre><p>————————–|——————————————-|<br> -n 或 –number           | 由 1 开始对所有输出的行数编号                  |<br> -b 或 –number-nonblank  | 和 -n 相似，只不过对于空白行不编号              |<br> -s 或 –squeeze-blank    | 当遇到有连续两行以上的空白行，就代换为一行的空白行 |<br> -v 或 –show-nonprinting | 使用 ^ 和 M- 符号，除了 LFD 和 TAB 之外       |<br> -E 或 –show-ends        | 在每行结束处显示 $                           |<br> -T 或 –show-tabs        | 将 TAB 字符显示为 ^I                        |<br> -A, –show-all           | 等价于 -vET                                |<br> -e                       | 等价于”-vE”选项                            |<br> -t                       | 等价于”-vT”选项                            |</p>
+<h2 id="mv"><a href="#mv" class="headerlink" title="mv"></a>mv</h2><p> <code>move (rename) files</code> 移动文件或目录到指定路径、重命名文件或目录</p>
+<p><strong>语法格式</strong>：</p>
+<ul>
+<li>mv [options] source dest</li>
+<li><p>mv [options] source… directory</p>
+<p>  命令格式    |                               运行结果                            |<br>—————-|—————————————————————–|<br>mv 文件名 文件名 | 将源文件名改为指定文件名                                            |<br>mv 文件名 目录名 | 将文件移动到指定目录                                               |<br>mv 目录名 目录名 | 目标目录存在，将源目录移动到目标目录；目标目录不存在，源目录名改为指定目录名 |<br>mv 目录名 文件名 | 报错                                                             |</p>
+</li>
+</ul>
+<h2 id="touch"><a href="#touch" class="headerlink" title="touch"></a>touch</h2><p> <code>change file timestamps</code> 修改文件或目录的时间属性（读取时间、更改时间），文件不存在则创建一个新文件</p>
+<p><strong>语法格式</strong>：touch [-acfm][-d&lt;日期时间&gt;][-r&lt;参考文件或目录&gt;] [-t&lt;日期时间&gt;][–help][–version][文件或目录…]</p>
+<p>这个参数感觉没什么卵用。。</p>
+<h2 id="如何使用-explainshell-com"><a href="#如何使用-explainshell-com" class="headerlink" title="如何使用 explainshell.com"></a>如何使用 explainshell.com</h2><ul>
+<li>把命令输进 input 查询，可以移动鼠标分别查看命令和参数的释义</li>
+<li>点击结果中命令名，可以查看所有参数及其释义</li>
+<li>点击命令名左侧向下箭头，可以切换查看命令在其他手册中的释义</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/02/21/第二篇博客/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -629,7 +816,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -637,6 +824,15 @@
 
             
 
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
             
 
           </nav>
