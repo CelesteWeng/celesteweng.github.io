@@ -17,8 +17,12 @@
 
 
 
+  <meta name="description" content="HTTP">
 
 
+
+
+  <meta name="keywords" content="请求, 响应, Celeste's Blog">
 
 
 
@@ -38,7 +42,7 @@
 
 
 
-<link rel="canonical" href="https://celesteweng.github.io/">
+<link rel="canonical" href="https://celesteweng.github.io/2019/02/24/HTTP/">
 
 
 
@@ -86,7 +90,7 @@
   window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":true};
 </script>
 
-    <title> Celeste's Blog </title>
+    <title> HTTP - Celeste's Blog </title>
   </head>
 
   <body><div id="mobile-navbar" class="mobile-navbar">
@@ -144,15 +148,11 @@
           <div id="content" class="content">
             
   
-  <section id="posts" class="posts">
-    
-      
-        
   <article class="post">
     <header class="post-header">
       <h1 class="post-title">
         
-          <a class="post-link" href="/2019/02/24/HTTP/">HTTP</a>
+          HTTP
         
       </h1>
 
@@ -167,15 +167,18 @@
 
     
     
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-请求"><span class="toc-text">HTTP 请求</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#请求示例"><span class="toc-text">请求示例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#请求的格式"><span class="toc-text">请求的格式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#用-Chrome-发请求"><span class="toc-text">用 Chrome 发请求</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-响应"><span class="toc-text">HTTP 响应</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#响应示例"><span class="toc-text">响应示例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#响应的格式"><span class="toc-text">响应的格式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#用-Chrome-查看响应"><span class="toc-text">用 Chrome 查看响应</span></a></li></ol></li></ol>
+    </div>
+  </div>
+
 
 
     <div class="post-content">
       
-        
-        
-
-        
-          <h2 id="HTTP-请求"><a href="#HTTP-请求" class="headerlink" title="HTTP 请求"></a>HTTP 请求</h2><h3 id="请求示例"><a href="#请求示例" class="headerlink" title="请求示例"></a>请求示例</h3><p>命令 </p>
+        <h2 id="HTTP-请求"><a href="#HTTP-请求" class="headerlink" title="HTTP 请求"></a>HTTP 请求</h2><h3 id="请求示例"><a href="#请求示例" class="headerlink" title="请求示例"></a>请求示例</h3><p>命令 </p>
 <p><code>curl -s -v -H &quot;aaa: bbb&quot; -- &quot;https://www.baidu.com&quot;</code></p>
 <p>请求的内容为</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">GET / HTTP/1.1</span><br><span class="line">Host: www.baidu.com</span><br><span class="line">User-Agent: curl/7.54.0</span><br><span class="line">Accept: */*</span><br><span class="line">aaa: bbb</span><br></pre></td></tr></table></figure>
@@ -226,292 +229,72 @@
 <li>查看 Response 或者 Preview，你会看到响应的第 4 部分</li>
 </ol>
 
-        
       
     </div>
 
     
+      
+      
 
-    
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>原文作者: </span>
+      <a href="https://celesteweng.github.io">Celeste Weng</a>
+    </p>
+    <p class="copyright-item">
+      <span>原文链接: </span>
+      <a href="https://celesteweng.github.io/2019/02/24/HTTP/">https://celesteweng.github.io/2019/02/24/HTTP/</a>
+    </p>
+    <p class="copyright-item">
+      <span>许可协议: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
 
-  </article>
+
 
       
-        
-  <article class="post">
-    <header class="post-header">
-      <h1 class="post-title">
-        
-          <a class="post-link" href="/2019/02/22/git入门/">git入门</a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <span class="post-time">
-          2019-02-22
-        </span>
-        
-        
-      </div>
-    </header>
-
-    
-    
-
-
-    <div class="post-content">
       
-        
-        
-          
-        
+    
 
+    
+      <footer class="post-footer">
         
-          <h3 id="git-init"><a href="#git-init" class="headerlink" title="git init"></a>git init</h3><ul>
-<li>运行”mkdir 目录名”，创建项目目录</li>
-<li>运行”cd 目录名”，进入项目目录</li>
-<li>运行”git init”，在当前工作目录创建一个空的 git 仓库，会生成一个 .git 隐藏目录</li>
-<li>使用 tree 命令可以查看 .git 目录，其中 HEAD 为指向 master 的指针
-          <div class="read-more">
-            <a href="/2019/02/22/git入门/" class="read-more-link">阅读更多</a>
+          <div class="post-tags">
+            
+              <a href="/tags/请求/">请求</a>
+            
+              <a href="/tags/响应/">响应</a>
+            
           </div>
         
-      
-    </li></ul></div>
-
-    
-
-    
-
-  </article>
-
-      
-        
-  <article class="post">
-    <header class="post-header">
-      <h1 class="post-title">
-        
-          <a class="post-link" href="/2019/02/21/常用命令/">常用命令及查询</a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <span class="post-time">
-          2019-02-21
-        </span>
         
         
-      </div>
-    </header>
-
+  <nav class="post-nav">
     
     
-
-
-    <div class="post-content">
-      
-        
-        
-          
-        
-
-        
-          <h2 id="ls"><a href="#ls" class="headerlink" title="ls"></a>ls</h2><p><code>list directory contents</code> 罗列指定目录（或当前工作目录）中的子目录和文件</p>
-<p><strong>用法</strong>：ls [-alrtAFR] [name…]</p>
-<table>
-<thead>
-<tr>
-<th>参数</th>
-<th>功能</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>-a</td>
-<td>显示所有的文件，包括以”.”开头的隐藏文件</td>
-</tr>
-<tr>
-<td>-l</td>
-<td>不仅显示文件名，还罗列了文件型态、权限、所有者、文件大小、更新时间等信息</td>
-</tr>
-<tr>
-<td>-r</td>
-<td>将文件以相反次序显示(原定依英文字母次序)</td>
-</tr>
-<tr>
-<td>-t</td>
-<td>将文件依建立时间之先后次序列出</td>
-</tr>
-<tr>
-<td>-A</td>
-<td>同 -a，但不列出 “.” (目前目录) 及 “..” (父目录)</td>
-</tr>
-<tr>
-<td>-F</td>
-<td>在列出的文件名称后加一符号；例如可执行档则加 “*”, 目录则加 “/“</td>
-</tr>
-<tr>
-<td>-R</td>
-<td>若目录下有文件，则以下之文件亦皆依序列出</td>
-</tr>
-</tbody>
-</table>
-          <div class="read-more">
-            <a href="/2019/02/21/常用命令/" class="read-more-link">阅读更多</a>
-          </div>
-        
-      
-    </div>
-
-    
-
-    
-
-  </article>
-
-      
-        
-  <article class="post">
-    <header class="post-header">
-      <h1 class="post-title">
-        
-          <a class="post-link" href="/2019/02/21/第二篇博客/">第二篇博客</a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <span class="post-time">
-          2019-02-21
-        </span>
-        
-        
-      </div>
-    </header>
-
-    
-    
-
-
-    <div class="post-content">
-      
-        
-        
-
-        
-          <h2 id="123"><a href="#123" class="headerlink" title="123"></a>123</h2>
-        
-      
-    </div>
-
-    
-
-    
-
-  </article>
-
-      
-        
-  <article class="post">
-    <header class="post-header">
-      <h1 class="post-title">
-        
-          <a class="post-link" href="/2019/02/21/开博大吉/">开博大吉</a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <span class="post-time">
-          2019-02-21
-        </span>
-        
-        
-      </div>
-    </header>
-
-    
-    
-
-
-    <div class="post-content">
-      
-        
-        
-
-        
-          <p>Hi</p>
-
-        
-      
-    </div>
-
-    
-
-    
-
-  </article>
-
-      
-        
-  <article class="post">
-    <header class="post-header">
-      <h1 class="post-title">
-        
-          <a class="post-link" href="/2019/02/21/hello-world/">Hello World</a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <span class="post-time">
-          2019-02-21
-        </span>
-        
-        
-      </div>
-    </header>
-
-    
-    
-
-
-    <div class="post-content">
-      
-        
-        
-
-        
-          <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-
-        
-      
-    </div>
-
-    
-
-    
-
-  </article>
-
-      
-      
-  <nav class="pagination">
-    
+      <a class="next" href="/2019/02/22/git入门/">
+        <span class="next-text nav-default">git入门</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
     
   </nav>
 
 
+      </footer>
     
-  </section>
+
+  </article>
+
 
           </div>
           
+  <div class="comments" id="comments">
+    
+  </div>
+
 
         </div>
       </main>
@@ -596,6 +379,11 @@
     </div>
 
     
+  
+  
+
+  
+
 
 
     
