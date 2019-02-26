@@ -183,12 +183,12 @@
 <ol>
 <li><code>name</code> 属性可以和 a 标签配合使用</li>
 <li>使用 <code>frameborder=&quot;0&quot;</code> 去掉元素边框</li>
-<li>相当新开一个窗口，用起来卡，过时</li>
+<li>相当新开一个窗口，用起来卡</li>
 <li><code>src</code> 可以写相对路径</li>
 </ol>
 <a id="more"></a>
 <h2 id="a-标签"><a href="#a-标签" class="headerlink" title="a 标签"></a>a 标签</h2><p>跳转页面（HTTP GET 请求）</p>
-<p>更多属性见 &gt;&gt; <a href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/a" target="_blank">MDN</a></p>
+<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/a" target="_blank">a 的更多属性见 &gt;&gt; MDN</a></p>
 <ol>
 <li><p>target 属性（结合 iframe 理解）</p>
 <ul>
@@ -222,7 +222,7 @@
 </li>
 </ol>
 <h2 id="form-标签"><a href="#form-标签" class="headerlink" title="form 标签"></a>form 标签</h2><p>跳转页面（HTTP POST 请求）</p>
-<p>更多属性见 &gt;&gt; <a href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/form" target="_blank">MDN</a></p>
+<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/form" target="_blank">form 的更多属性见 &gt;&gt; MDN</a></p>
 <ol>
 <li>和 a 标签的区别是发起请求的类型不同。action 类似于 href，target 和 a标签的一样</li>
 <li>GET 请求：表单信息变成查询参数，会出现在 url 里，请求头中无法有第四部分（Form Data）；<br>POST 请求：表单信息作为 HTTP 请求的第四部分提交到服务器，如果要写查询参数，可直接写在 action 属性中， <code>action=&quot;users?age=33&quot;</code></li>
@@ -340,14 +340,14 @@
 </tbody>
 </table>
 <h2 id="table-标签示例"><a href="#table-标签示例" class="headerlink" title="table 标签示例"></a>table 标签示例</h2><p>用于展示数据</p>
-<p>属性见：<a href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/table" target="_blank" rel="noopener">https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/table</a></p>
+<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/table" target="_blank">input 的更多属性&gt;&gt;</a></p>
 <ol>
 <li>HTML 规定 <code>&lt;table&gt;</code> 中只可以有3个元素：<code>&lt;thead&gt; &lt;tbody&gt; &lt;tfoot&gt;</code></li>
 <li>tbody 标签不写，浏览器会自动补上</li>
 <li>表格边框的间隙默认有，不要则设置 table { border-collapse: collapse; }</li>
 </ol>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- table row 行 tr --&gt;</span><br><span class="line">&lt;!-- table data 数据 td --&gt;</span><br><span class="line">&lt;!-- table header 表头的标题 --&gt;</span><br><span class="line"></span><br><span class="line">&lt;table border=1&gt;</span><br><span class="line">        &lt;!-- colgroup 里面有元素就是有标签的元素 --&gt;</span><br><span class="line">    &lt;colgroup&gt;</span><br><span class="line">        &lt;!-- col 指定列的宽度 --&gt;</span><br><span class="line">        &lt;!-- col 有 bgcolor 属性，设置改列的背景色 --&gt;</span><br><span class="line">        &lt;col width=100&gt;</span><br><span class="line">        &lt;col bgcolor=red width=200&gt;</span><br><span class="line">        &lt;col width=100&gt;</span><br><span class="line">        &lt;col width=70&gt;</span><br><span class="line">    &lt;/colgroup&gt;</span><br><span class="line">    &lt;thead&gt;</span><br><span class="line">            &lt;tr&gt;</span><br><span class="line">                &lt;th&gt;项目&lt;/th&gt;&lt;th&gt;姓名&lt;/th&gt;&lt;th&gt;性别&lt;/th&gt;&lt;th&gt;年龄&lt;/th&gt;</span><br><span class="line">            &lt;/tr&gt;</span><br><span class="line">        &lt;/thead&gt;</span><br><span class="line">        &lt;tbody&gt;</span><br><span class="line">            &lt;tr&gt;</span><br><span class="line">                &lt;th&gt;&lt;/th&gt;&lt;td&gt;如花&lt;/td&gt;&lt;td&gt;1&lt;/td&gt;&lt;td&gt;90&lt;/td&gt;</span><br><span class="line">            &lt;/tr&gt;</span><br><span class="line">            &lt;tr&gt;</span><br><span class="line">                &lt;th&gt;&lt;/th&gt;&lt;td&gt;狗蛋&lt;/td&gt;&lt;td&gt;2&lt;/td&gt;&lt;td&gt;92&lt;/td&gt;</span><br><span class="line">            &lt;/tr&gt;</span><br><span class="line">            &lt;tr&gt;</span><br><span class="line">                &lt;th&gt;平均分&lt;/th&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;</span><br><span class="line">            &lt;/tr&gt;</span><br><span class="line">        &lt;/tbody&gt;</span><br><span class="line">        &lt;tfoot&gt;</span><br><span class="line">            &lt;tr&gt;</span><br><span class="line">                &lt;th&gt;总分&lt;/th&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;</span><br><span class="line">            &lt;/tr&gt;</span><br><span class="line">        &lt;/tfoot&gt;</span><br><span class="line">&lt;/table&gt;</span><br></pre></td></tr></table></figure>
-<p><a href="http://www.w3school.com.cn/html5/html5_reference.asp" title="HTML 5 参考手册" target="_blank" rel="noopener">HTML5 标签</a></p>
+<p><a href="http://www.w3school.com.cn/html5/html5_reference.asp" title="HTML 5 参考手册" target="_blank" rel="noopener">HTML5 新标签 完整列表&gt;&gt;</a></p>
 
       
     </div>
