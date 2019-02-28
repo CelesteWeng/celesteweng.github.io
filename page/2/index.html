@@ -152,7 +152,7 @@
     <header class="post-header">
       <h1 class="post-title">
         
-          <a class="post-link" href="/2019/02/21/hello-world/">Hello World</a>
+          <a class="post-link" href="/2019/02/21/常用命令/">常用命令及查询</a>
         
       </h1>
 
@@ -173,18 +173,53 @@
       
         
         
+          
+        
 
         
-          <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-
+          <h2 id="ls"><a href="#ls" class="headerlink" title="ls"></a>ls</h2><p><code>list directory contents</code> 罗列指定目录（或当前工作目录）中的子目录和文件</p>
+<p><strong>用法</strong>：ls [-alrtAFR] [name…]</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-a</td>
+<td>显示所有的文件，包括以”.”开头的隐藏文件</td>
+</tr>
+<tr>
+<td>-l</td>
+<td>不仅显示文件名，还罗列了文件型态、权限、所有者、文件大小、更新时间等信息</td>
+</tr>
+<tr>
+<td>-r</td>
+<td>将文件以相反次序显示(原定依英文字母次序)</td>
+</tr>
+<tr>
+<td>-t</td>
+<td>将文件依建立时间之先后次序列出</td>
+</tr>
+<tr>
+<td>-A</td>
+<td>同 -a，但不列出 “.” (目前目录) 及 “..” (父目录)</td>
+</tr>
+<tr>
+<td>-F</td>
+<td>在列出的文件名称后加一符号；例如可执行档则加 “*”, 目录则加 “/“</td>
+</tr>
+<tr>
+<td>-R</td>
+<td>若目录下有文件，则以下之文件亦皆依序列出</td>
+</tr>
+</tbody>
+</table>
+          <div class="read-more">
+            <a href="/2019/02/21/常用命令/" class="read-more-link">阅读更多</a>
+          </div>
         
       
     </div>
@@ -222,33 +257,21 @@
       
         
         
+          
+        
 
         
-          <h2 id="一、基本概念：DOM事件的级别"><a href="#一、基本概念：DOM事件的级别" class="headerlink" title="一、基本概念：DOM事件的级别"></a>一、基本概念：DOM事件的级别</h2><p>事件级别（DOM标准定义的级别）<br>DOM0 element.onclick = function(){}<br>DOM2 element.addEventListener(‘click’,function(){},false)<br>默认false，冒泡；true为捕获。<br>DOM3 element.addEventListener(‘keyup’,function(){},false)<br>DOM1标准并非不存在，只是没有涉及和事件相关的东西</p>
-<h2 id="二、DOM事件模型"><a href="#二、DOM事件模型" class="headerlink" title="二、DOM事件模型"></a>二、DOM事件模型</h2><p>捕获：从上往下<br>冒泡：从下往上</p>
-<h2 id="三、DOM事件流"><a href="#三、DOM事件流" class="headerlink" title="三、DOM事件流"></a>三、DOM事件流</h2><p>浏览器为当前页面与用户做交互（如点击鼠标左键）的过程中，左键传到页面上，然后给出响应。<br>三个阶段<br>捕获<br>目标阶段：事件通过捕获到达目标元素（如：点击的那个按钮，就为目标阶段）<br>冒泡：从目标元素上传到window对象</p>
-<h2 id="四、描述DOM事件捕获的具体流程"><a href="#四、描述DOM事件捕获的具体流程" class="headerlink" title="四、描述DOM事件捕获的具体流程"></a>四、描述DOM事件捕获的具体流程</h2><ul>
-<li>接收事件的顺序<ol>
-<li>window</li>
-<li>document</li>
-<li>html(扩展：如何获取当前页面的html节点：document.documentElement)</li>
-<li>body</li>
-<li>…</li>
-<li>最终：目标元素</li>
-</ol>
-</li>
-<li>冒泡则反向回去</li>
+          <h2 id="一、基本概念：DOM事件的级别"><a href="#一、基本概念：DOM事件的级别" class="headerlink" title="一、基本概念：DOM事件的级别"></a>一、基本概念：DOM事件的级别</h2><ul>
+<li>事件级别（DOM标准定义的级别）</li>
+<li>DOM0 element.onclick = function(){}</li>
+<li>DOM2 element.addEventListener(‘click’,function(){},false)</li>
+<li>默认false，冒泡；true为捕获。</li>
+<li>DOM3 element.addEventListener(‘keyup’,function(){},false)</li>
+<li>DOM1标准并非不存在，只是没有涉及和事件相关的东西</li>
 </ul>
-<h2 id="五、Event对象的常见应用"><a href="#五、Event对象的常见应用" class="headerlink" title="五、Event对象的常见应用"></a>五、Event对象的常见应用</h2><ul>
-<li>简介：拿用户交互的参数，比如想知道按了哪个键，鼠标点了哪个键，基本都是从Event对象拿来的。</li>
-<li>易混淆的5项：<br>  event.preventDefault() —- 阻止默认事件<br>  event.stopPropagation() —- 阻止冒泡<br>  event.stopImmediatePropagation()<br>  例：一个按钮，绑定2个事件，响应函数a、响应函数b，通过++优先级++的方式，若a被点击，b不执行，就要用到该语句，在函数a中加入该语句。<br>  event.currentTarget —-指向事件所绑定的元素（即事件委托中的父级）<br>  event.target —-始终指向事件发生时的元素</li>
-<li>知识前提：<br>  事件委托：把子元素的事件都委托到父元素上，绑定一次事件即可。做响应时，要判断当前是哪个元素被点击，就要用到target。</li>
-</ul>
-<h2 id="六、自定义事件"><a href="#六、自定义事件" class="headerlink" title="六、自定义事件"></a>六、自定义事件</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">var eve = new Event(&apos;custome&apos;);</span><br><span class="line">ev.addEventListener(&apos;custome&apos;, function()&#123;</span><br><span class="line">    console.log(&apos;custome&apos;);</span><br><span class="line">&#125;);</span><br><span class="line">ev.ispatchEvent(eve); //触发eve对象</span><br></pre></td></tr></table></figure>
-<ul>
-<li>CustomEvent和Event区别：CustomEvent还可以绑定obj参数，在用法上，两者一致。</li>
-</ul>
-
+          <div class="read-more">
+            <a href="/2017/10/29/dom事件类/" class="read-more-link">阅读更多</a>
+          </div>
         
       
     </div>

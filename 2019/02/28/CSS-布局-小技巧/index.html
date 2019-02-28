@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang>
+  <head><meta name="generator" content="Hexo 3.8.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="CSS_布局&小技巧">
+
+
+
+
+  <meta name="keywords" content="CSS, Celeste's Blog">
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/default" title="Celeste's Blog">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.10.2">
+
+
+
+<link rel="canonical" href="https://celesteweng.github.io/2019/02/28/CSS-布局-小技巧/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.2">
+
+
+
+  
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> CSS_布局&小技巧 - Celeste's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Celeste's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            首页
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Celeste's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              首页
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          CSS_布局&小技巧
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2019-02-28
+        </span>
+        
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#左中右布局"><span class="toc-text">左中右布局</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#垂直布局"><span class="toc-text">垂直布局</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#左右布局-资料来自博客，抄抄大法好"><span class="toc-text">左右布局 (资料来自博客，抄抄大法好)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#左列定宽，右列自适应"><span class="toc-text">左列定宽，右列自适应</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#margin-float"><span class="toc-text">margin + float</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#absolute"><span class="toc-text">absolute</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#左列不定宽，右列自适应"><span class="toc-text">左列不定宽，右列自适应</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#float-BFC"><span class="toc-text">float + BFC</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#table布局"><span class="toc-text">table布局</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#flex"><span class="toc-text">flex</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#推荐使用"><span class="toc-text">推荐使用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#BFC-是什么？我失忆了，翻了下笔记"><span class="toc-text">BFC 是什么？我失忆了，翻了下笔记</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#水平居中-垂直居中"><span class="toc-text">水平居中/垂直居中</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#其他小技巧"><span class="toc-text">其他小技巧</span></a></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <h2 id="左中右布局"><a href="#左中右布局" class="headerlink" title="左中右布局"></a>左中右布局</h2><p><a href="https://celesteweng.com/CSS_layout/horizontal-layout.html" target="_blank">查看在线 demo （调整浏览器宽度见效果）</a></p>
+<ul>
+<li>5种布局：float、绝对定位、flex、表格、网格</li>
+<li>网格布局兼容性差，测试发现chome、FireFox新版本兼容，360浏览器grid挂了。</li>
+</ul>
+<ol>
+<li>浮动-优点：兼容性高；缺点：浮动要清除，关系要处理好</li>
+<li>绝对定位-优点：快捷；缺点：脱离文档流了，之后的元素也要脱离文档流，可使用性差</li>
+<li>flex-css3出现，移动端，比较完美，不兼容IE8</li>
+<li>表格-优点：兼容性好，缺点：三栏，其中一个单元格高度超出，别的单元格也会调整</li>
+<li>网格-新技术-优点：代码量少，缺点：只兼容ie11+</li>
+</ol>
+<a id="more"></a>
+<h2 id="垂直布局"><a href="#垂直布局" class="headerlink" title="垂直布局"></a>垂直布局</h2><p><a href="https://celesteweng.com/CSS_layout/vertical-layout.html" target="_blank">查看在线 demo （调整浏览器高度见效果）</a></p>
+<ul>
+<li>4种布局：绝对定位、flex、表格、网格</li>
+<li>网格布局兼容性差，测试发现chome、FireFox新版本兼容，360浏览器grid挂了。 垂直方向与水平方向在编写是略有不同，需要设<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">html, body, ...&#123; //省略号代表包含items的标签</span><br><span class="line">    height:100%;</span><br><span class="line">    width:... //宽度自设</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="左右布局-资料来自博客，抄抄大法好"><a href="#左右布局-资料来自博客，抄抄大法好" class="headerlink" title="左右布局 (资料来自博客，抄抄大法好)"></a>左右布局 (资料来自博客，抄抄大法好)</h2><ul>
+<li>分类：2列定宽（不说了）、1列定宽、2列都自适应</li>
+</ul>
+<h3 id="左列定宽，右列自适应"><a href="#左列定宽，右列自适应" class="headerlink" title="左列定宽，右列自适应"></a>左列定宽，右列自适应</h3><h4 id="margin-float"><a href="#margin-float" class="headerlink" title="margin + float"></a>margin + float</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;div class=&quot;parent&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;left&quot;&gt;&lt;p&gt;left&lt;/p&gt;&lt;/div&gt;</span><br><span class="line">    &lt;div class=&quot;right-fix&quot;&gt;</span><br><span class="line">        &lt;div class=&quot;right&quot;&gt;</span><br><span class="line">            &lt;p&gt;right&lt;/p&gt;&lt;p&gt;right&lt;/p&gt;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"> .left&#123;</span><br><span class="line">    float: left;     //向左浮动</span><br><span class="line">    width: 100px;    //固定宽度</span><br><span class="line">    position: relative;//由于.left与.right-fix重合，且.right-fix在DOM树上的位置比.left要后，因此.right-fix会遮挡住.left，设置.left为relative可以让其冒出来。</span><br><span class="line">&#125;</span><br><span class="line">.right-fix&#123;</span><br><span class="line">    float: right;     //向右浮动</span><br><span class="line">    width: 100%;    //为了自适应设为100%</span><br><span class="line">    margin-left: -100px;//由于宽度设为100%，.right-fix遭到浏览器换行处理；因此通过设置负的margin值，在左侧制造出100px的空白，使.right-fix与.left重合（即处于同一行）</span><br><span class="line">&#125;</span><br><span class="line">.right&#123;</span><br><span class="line">    margin-left: 120px;    //由于.left和.right-fix重合了，因此给.right设置一个margin-left，避免内容区（.right）与.left重合。另外，120px - 100px = 多出来的20px实际上就相当于.left和.right之间的间隔了。</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个方法其实已经是兼顾到低版本IE的完善版本了，缺点是代码冗长，而且有两个关键知识点比较难理解：</p>
+<ol>
+<li>给.left加上position:relative;怎么就能让.left冒出来而不受.right-fix的遮挡了呢？</li>
+<li>.right-fix设置负的margin-left，怎么就能使.left与.right-fix重合了呢？</li>
+</ol>
+<p>再者，这个方案由于.right-fix的margin-left和.left的width高度耦合，因此无法实现自适应，只能应用在左列（当然右列也成）固定宽度的场景。</p>
+<h4 id="absolute"><a href="#absolute" class="headerlink" title="absolute"></a>absolute</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;div class=&quot;parent&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;left&quot;&gt;</span><br><span class="line">        &lt;p&gt;left&lt;/p&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">    &lt;div class=&quot;right&quot;&gt;</span><br><span class="line">        &lt;p&gt;right&lt;/p&gt;</span><br><span class="line">        &lt;p&gt;right&lt;/p&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">.parent&#123;</span><br><span class="line">    position: relative;</span><br><span class="line">&#125;</span><br><span class="line">.left&#123;</span><br><span class="line">    position: absolute;</span><br><span class="line">    left: 0;</span><br><span class="line">    width: 100px;</span><br><span class="line">&#125;</span><br><span class="line">.right&#123;</span><br><span class="line">    position: absolute;</span><br><span class="line">    left: 120px;    //比.left的left多出20px，相当于间隔</span><br><span class="line">    right: 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这种方法是通过absolute配合left/right进行布局：</p>
+<ol>
+<li>设置display: absolute后，通过top/right/bottom/left可以实现对元素的位置进行像素级的任意控制。因此，使用left属性即可控制各元素的起始位置，避免重叠。</li>
+<li>自适应的关键在于left和right属性，在对元素同时设置这两个属性后，元素的宽度便会遭到拉伸，实现自适应。</li>
+<li>需要注意的是父级元素需要设置display: relative。</li>
+</ol>
+<p>这种方案很容易理解，但缺点就是不能做到“<strong>不定宽</strong>”，因为.left和.right的left属性的值高度相关。</p>
+<h3 id="左列不定宽，右列自适应"><a href="#左列不定宽，右列自适应" class="headerlink" title="左列不定宽，右列自适应"></a>左列不定宽，右列自适应</h3><h4 id="float-BFC"><a href="#float-BFC" class="headerlink" title="float + BFC"></a>float + BFC</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;div class=&quot;parent&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;left&quot;&gt;</span><br><span class="line">        &lt;p&gt;left&lt;/p&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">    &lt;div class=&quot;right&quot;&gt;</span><br><span class="line">        &lt;p&gt;right&lt;/p&gt;</span><br><span class="line">        &lt;p&gt;right&lt;/p&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">.left&#123;</span><br><span class="line">    float: left;</span><br><span class="line">    width: 100px;</span><br><span class="line">    margin-right: 20px;    //形成20px的间隔</span><br><span class="line">&#125;</span><br><span class="line">.right&#123;</span><br><span class="line">    overflow: hidden; //通过设置overflow: hidden来触发BFC特性</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个方法主要是应用到BFC的一个特性：</p>
+<ol>
+<li>浮动元素的块状兄弟元素会无视浮动元素的位置，尽量占满一整行，这样该兄弟元素就会被浮动元素覆盖。</li>
+<li>若浮动元素的块状兄弟元素为BFC，则不会占满一整行，而是根据浮动元素的宽度，占据该行剩下的宽度，避免与浮动元素重叠。</li>
+<li>浮动元素与其块状BFC兄弟元素之间的margin可以生效，这将继续减少兄弟元素的宽度。</li>
+</ol>
+<p>并不是一定要在.right上用overflow: hidden;，只要能触发BFC就好了，另外在IE6上也可以触发haslayout特性（推荐用*zoom: 1;）。</p>
+<p>由于.right的宽度是自动计算的，不需要设置任何与.left宽度相关的css，因此.left的宽度可以不固定（由内容盒子决定）。</p>
+<h4 id="table布局"><a href="#table布局" class="headerlink" title="table布局"></a>table布局</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;div class=&quot;parent&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;left&quot;&gt;</span><br><span class="line">        &lt;p&gt;left&lt;/p&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">    &lt;div class=&quot;right&quot;&gt;</span><br><span class="line">        &lt;p&gt;right&lt;/p&gt;</span><br><span class="line">        &lt;p&gt;right&lt;/p&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">.parent&#123;</span><br><span class="line">    display: table; width: 100%;</span><br><span class="line">    table-layout: fixed;</span><br><span class="line">&#125;</span><br><span class="line">.left,.right&#123;</span><br><span class="line">    display: table-cell;</span><br><span class="line">&#125;</span><br><span class="line">.left&#123;</span><br><span class="line">    width: 100px;</span><br><span class="line">    padding-right: 20px;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个方法是表格布局的典型运用。说真的，我也很迷惘要不要使用表格布局，毕竟已经是上个时代的产物了，虽然已经不再用<code>&lt;table&gt;</code>的HTML结构了，但用上相应的CSS其实思路跟以前是变化不大的。</p>
+<p>这个方法主要是利用了表格(table)的宽度必然等于其所有单元格(table-cell)加起来的总宽度，那么只要表格的宽度一定，其中一个（或几个）单元格的宽度也一定，那么另外一个未设置宽度的单元格则会默认占满剩下的宽度，即实现自适应。</p>
+<h4 id="flex"><a href="#flex" class="headerlink" title="flex"></a>flex</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;div class=&quot;parent&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;left&quot;&gt;</span><br><span class="line">        &lt;p&gt;left&lt;/p&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">    &lt;div class=&quot;right&quot;&gt;</span><br><span class="line">        &lt;p&gt;right&lt;/p&gt;</span><br><span class="line">        &lt;p&gt;right&lt;/p&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">.parent&#123;</span><br><span class="line">    display: flex;</span><br><span class="line">&#125;</span><br><span class="line">.left&#123;</span><br><span class="line">    margin-right: 20px;</span><br><span class="line">&#125;</span><br><span class="line">.right&#123;</span><br><span class="line">    flex: 1;</span><br><span class="line">&#125;</span><br><span class="line">.left p&#123;width: 200px;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>flex布局的自适应我就不多说了，本来就是设计来自适应的，只需要用上<code>flex: 1;</code>，就能让.right分到.parent的宽度减去.left的宽度。</p>
+<h4 id="推荐使用"><a href="#推荐使用" class="headerlink" title="推荐使用"></a>推荐使用</h4><p>比较推荐用float + <code>BFC</code>方案，浏览器兼容性很好，代码量也少，另外也很好理解；移动端上也可以考虑用上flex方案，不过还是那一句，注意用旧版的flex，兼容性会好一点。</p>
+<h4 id="BFC-是什么？我失忆了，翻了下笔记"><a href="#BFC-是什么？我失忆了，翻了下笔记" class="headerlink" title="BFC 是什么？我失忆了，翻了下笔记"></a>BFC 是什么？我失忆了，翻了下笔记</h4><p><a href="https://celesteweng.github.io/2019/02/28/CSS-盒模型/" target="_blank">详情见 &gt;&gt; CSS 盒模型</a></p>
+<h2 id="水平居中-垂直居中"><a href="#水平居中-垂直居中" class="headerlink" title="水平居中/垂直居中"></a>水平居中/垂直居中</h2><p><a href="https://css-tricks.com/centering-css-complete-guide/" target="_blank" rel="noopener">https://css-tricks.com/centering-css-complete-guide/</a></p>
+<p>文盲如何看懂英文，chrome 浏览器 翻译</p>
+<hr>
+<h2 id="其他小技巧"><a href="#其他小技巧" class="headerlink" title="其他小技巧"></a>其他小技巧</h2><ol>
+<li>行内元素设置了 position：fixed/absolute 或者 float 属性，即<code>脱离文档流</code>，display 隐性更改为 inline-block</li>
+<li>加了 <code>display:inline-block;</code>，元素底部多出间隙，加 <code>vertical-align:top;</code></li>
+<li>行内元素不能设置宽高，上下边距</li>
+<li>所有的非空标签都有伪类（::before ::after）</li>
+<li>height 和width高度不要定死，容易出bug</li>
+<li>ionic 中用 <code>position：fixed</code> 容易变态</li>
+<li><a href="https://segmentfault.com/a/1190000005863953" target="_blank">【译】22个必备的CSS小技巧</a></li>
+<li>搞来抄一抄 https://codepen.io/pens/</li>
+<li>Google</li>
+</ol>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>原文作者: </span>
+      <a href="https://celesteweng.github.io">Celeste Weng</a>
+    </p>
+    <p class="copyright-item">
+      <span>原文链接: </span>
+      <a href="https://celesteweng.github.io/2019/02/28/CSS-布局-小技巧/">https://celesteweng.github.io/2019/02/28/CSS-布局-小技巧/</a>
+    </p>
+    <p class="copyright-item">
+      <span>许可协议: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/CSS/">CSS</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2019/02/28/CSS-盒模型/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">CSS_盒模型</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    
+    
+      <a class="next" href="/2019/02/27/老博客/">
+        <span class="next-text nav-default">老博客</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:673319951@email.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/celesteweng" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2015 - 
+    
+    2019
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Celeste Weng</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.2"></script>
+
+  </body>
+</html>
