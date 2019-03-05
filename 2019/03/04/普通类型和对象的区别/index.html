@@ -8,14 +8,25 @@
   <link rel="dns-prefetch" href="https://celesteweng.github.io">
   <title>普通类型和对象的区别 | Celeste&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="article">
+  <meta name="description" content="动态类型JavaScript 是一种弱类型或者说动态语言。这意味着你不用提前声明变量的类型，在程序运行过程中，类型会被自动确定。这也意味着你可以使用同一个变量保存不同类型的数据：123var foo = 42;    // foo is a Number nowfoo = &amp;quot;bar&amp;quot;; // foo is a String nowfoo = true;  // foo is a">
+<meta name="keywords" content="类型转换,垃圾回收,内存图,浅拷贝&#x2F;深拷贝">
+<meta property="og:type" content="article">
 <meta property="og:title" content="普通类型和对象的区别">
 <meta property="og:url" content="https://celesteweng.github.io/2019/03/04/普通类型和对象的区别/index.html">
 <meta property="og:site_name" content="Celeste&#39;s Blog">
+<meta property="og:description" content="动态类型JavaScript 是一种弱类型或者说动态语言。这意味着你不用提前声明变量的类型，在程序运行过程中，类型会被自动确定。这也意味着你可以使用同一个变量保存不同类型的数据：123var foo = 42;    // foo is a Number nowfoo = &amp;quot;bar&amp;quot;; // foo is a String nowfoo = true;  // foo is a">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-03-04T07:57:40.584Z">
+<meta property="og:image" content="http://pntmc1hcw.bkt.clouddn.com/tostring.png">
+<meta property="og:image" content="http://pntmc1hcw.bkt.clouddn.com/string.png">
+<meta property="og:image" content="http://pntmc1hcw.bkt.clouddn.com/x+''.png">
+<meta property="og:image" content="http://pntmc1hcw.bkt.clouddn.com/compare.jpg">
+<meta property="og:image" content="http://pntmc1hcw.bkt.clouddn.com/referenceType.png">
+<meta property="og:image" content="http://pntmc1hcw.bkt.clouddn.com/garbage.png">
+<meta property="og:updated_time" content="2019-03-05T04:10:55.565Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="普通类型和对象的区别">
+<meta name="twitter:description" content="动态类型JavaScript 是一种弱类型或者说动态语言。这意味着你不用提前声明变量的类型，在程序运行过程中，类型会被自动确定。这也意味着你可以使用同一个变量保存不同类型的数据：123var foo = 42;    // foo is a Number nowfoo = &amp;quot;bar&amp;quot;; // foo is a String nowfoo = true;  // foo is a">
+<meta name="twitter:image" content="http://pntmc1hcw.bkt.clouddn.com/tostring.png">
   
     <link rel="alternative" href="/atom.xml" title="Celeste&#39;s Blog" type="application/atom+xml">
   
@@ -150,14 +161,106 @@
 
         
         <a href="/2019/03/04/普通类型和对象的区别/" class="archive-article-date">
-  	<time datetime="2019-03-04T07:56:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-04</time>
+  	<time datetime="2019-03-04T07:53:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-04</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <h2 id="动态类型"><a href="#动态类型" class="headerlink" title="动态类型"></a>动态类型</h2><p>JavaScript 是一种弱类型或者说动态语言。这意味着你不用提前声明变量的类型，在程序运行过程中，类型会被自动确定。这也意味着你可以使用同一个变量保存不同类型的数据：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">var foo = 42;    // foo is a Number now</span><br><span class="line">foo = &quot;bar&quot;; // foo is a String now</span><br><span class="line">foo = true;  // foo is a Boolean now</span><br></pre></td></tr></table></figure></p>
+<a id="more"></a>
+<h2 id="类型转换"><a href="#类型转换" class="headerlink" title="类型转换"></a>类型转换</h2><h3 id="变-String"><a href="#变-String" class="headerlink" title="变 String"></a>变 String</h3><ol>
+<li>xxx.toString()<br><img src="http://pntmc1hcw.bkt.clouddn.com/tostring.png" alt="tostring.png"></li>
+<li>String(xxx)<br><img src="http://pntmc1hcw.bkt.clouddn.com/string.png" alt="string.png"></li>
+<li>‘’ + xxx （推荐）<br><img src="http://pntmc1hcw.bkt.clouddn.com/x+&#39;&#39;.png" alt="x+&#39;&#39;.png"></li>
+</ol>
+<h3 id="变-Boolean"><a href="#变-Boolean" class="headerlink" title="变 Boolean"></a>变 Boolean</h3><ol>
+<li>!!xxx （推荐）</li>
+<li>Boolean(xxx)</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>值</th>
+<th>布尔值</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>number</td>
+<td>0 / NaN</td>
+<td>false</td>
+<td>其余为 true</td>
+</tr>
+<tr>
+<td>string</td>
+<td>“”</td>
+<td>false</td>
+<td>其余为 true</td>
+</tr>
+<tr>
+<td>null</td>
+<td>null</td>
+<td>false</td>
+<td>-</td>
+</tr>
+<tr>
+<td>undefined</td>
+<td>undefined</td>
+<td>false</td>
+<td>-</td>
+</tr>
+<tr>
+<td>object</td>
+<td>{}，包括 Array、Function</td>
+<td>true</td>
+<td>全部为 true</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>falay 值：0、NaN、null、undefined、空字符串（’’ or “”）、false</p>
+</blockquote>
+<h3 id="变-Number"><a href="#变-Number" class="headerlink" title="变 Number"></a>变 Number</h3><ol>
+<li>‘1’ -&gt; 1<ul>
+<li><code>Number(&#39;1&#39;)</code> === 1</li>
+<li><code>parseInt(&#39;1&#39;, 10)</code> === 1</li>
+<li><code>parseFloat(&#39;1.23&#39;)</code> === 1.23</li>
+<li><code>&#39;1&#39; - 0</code> -&gt; 1 （推荐）</li>
+<li><code>+ &#39;.0&#39;</code> -&gt; <code>0.1</code>; <code>+ &#39;-1&#39;</code> -&gt; <code>-1</code> (并非取绝对值)</li>
+</ul>
+</li>
+</ol>
+<h2 id="Object-、内存"><a href="#Object-、内存" class="headerlink" title="Object 、内存"></a>Object 、内存</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">// wrong</span><br><span class="line">var a = &#123; self: a &#125;</span><br><span class="line">// a.self 为 undefined</span><br></pre></td></tr></table></figure>
+<p>等价于</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var a // 变量提升</span><br><span class="line">a = &#123; self: a &#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">// correct</span><br><span class="line">var a = &#123;&#125;</span><br><span class="line">a.self = a</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>引用类型的比较是引用的比较</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">var person1 = &#123; &apos;name&apos;: &apos;pikachu&apos; &#125;</span><br><span class="line">var person2 = &#123; &apos;name&apos;: &apos;pikachu&apos; &#125;</span><br><span class="line">console.log(person1 === person2); // false</span><br></pre></td></tr></table></figure></p>
+<p>虽然变量 person1 和变量 person2 都是表示一个内容为 <code>&#39;name&#39;: &#39;pikachu&#39;</code> 的对象，但是其在内存中的位置不一样，也就是说变量 person1 和变量 person2 指向的不是同一个对象，所以它们是不相等的。<br><img src="http://pntmc1hcw.bkt.clouddn.com/compare.jpg" alt="image.png"></p>
+<hr>
+<p>你买一个 8G 的内存条<br>操作系统开机即占用 512MB<br>Chrome 打开即占用 1G 内存<br>Chrome 各每个网页分配一定数量的内存<br>这些内存要分给页面渲染器、网络模块、浏览器外壳和 JS 引擎（V8引擎）<br>JS 引擎将内存分为代码区和数据区<br>我们只研究数据区<br>数据区分为 Stack（栈内存） 和 Heap（堆内存）<br>简单类型的数据直接存在 Stack 里<br>复杂类型的数据是把 Heap 地址存在 Stack 里</p>
+<p><img src="http://pntmc1hcw.bkt.clouddn.com/referenceType.png" alt="referenceType.png"></p>
+<h3 id="垃圾回收"><a href="#垃圾回收" class="headerlink" title="垃圾回收"></a>垃圾回收</h3><p>如果一个对象没有被引用，它就是垃圾，将被回收</p>
+<p><img src="http://pntmc1hcw.bkt.clouddn.com/garbage.png" alt="image.png"></p>
+<p>JavaScript 是一门具有<strong>自动垃圾收集</strong>机制的编程语言，开发人员不必关心内存分配和回收问题。可以对 JavaScript 的垃圾收集例程作如下总结。</p>
+<ul>
+<li><strong>离开作用域</strong>的值将被自动标记为可以回收，因此将在垃圾收集期间被删除。</li>
+<li>“<strong>标记清除</strong>“是目前主流的垃圾收集算法，这种算法的思想是给当前不使用的值加上标记，然后再回收其内存。</li>
+<li>另一种垃圾收集算法是”<strong>引用计数</strong>“，这种算法的思想是跟踪记录所有值被引用的次数。JavaScript引擎目前都不再使用这种算法;但在 IE 中访问非原生 JavaScript 对象(如 DOM 元素)时，这种算法仍然可能会导致问题。</li>
+<li>当代码中存在<strong>循环引用</strong>现象时，”引用计数”算法就会导致问题。</li>
+<li>解除变量的引用不仅有助于消除循环引用现象，而且对垃圾收集也有好处。为了确保有效地回收内存，应该及时<strong>解除</strong>不再使用的全局对象、全局对象属性以及循环引用变量的<strong>引用</strong>。</li>
+</ul>
+<!-- ## 浅拷贝 VS 深拷贝
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var a = 1</span><br><span class="line">var b = a</span><br></pre></td></tr></table></figure>
+<p>b 变不影响 a -&gt; 深拷贝</p>
+<p>基本类型（赋值）都是深拷贝</p>
+<p>一般针对 Object 讨论 –&gt;</p>
+-->
       
 
       
@@ -165,6 +268,29 @@
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">类型转换</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">垃圾回收</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">内存图</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">浅拷贝/深拷贝</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
 
       
@@ -230,8 +356,8 @@
 <nav id="article-nav">
   
   
-    <a href="/2019/03/04/JS里的数据类型转换/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">JS里的数据类型转换</div>
+    <a href="/2019/03/04/CSS-深入浅出-笔记/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">CSS_深入浅出_笔记</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -442,6 +568,34 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">原型模式</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">类型转换</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">垃圾回收</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">内存图</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">qian'kao</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">浅拷贝</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">浅拷贝/</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">浅拷贝/深拷贝</a>
               </li>
             
             <div class="clearfix"></div>
