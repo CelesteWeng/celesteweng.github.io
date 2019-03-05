@@ -22,7 +22,7 @@
 <meta property="og:image" content="http://pntmc1hcw.bkt.clouddn.com/compare.jpg">
 <meta property="og:image" content="http://pntmc1hcw.bkt.clouddn.com/referenceType.png">
 <meta property="og:image" content="http://pntmc1hcw.bkt.clouddn.com/garbage.png">
-<meta property="og:updated_time" content="2019-03-05T04:10:55.565Z">
+<meta property="og:updated_time" content="2019-03-05T07:12:11.673Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="普通类型和对象的区别">
 <meta name="twitter:description" content="动态类型JavaScript 是一种弱类型或者说动态语言。这意味着你不用提前声明变量的类型，在程序运行过程中，类型会被自动确定。这也意味着你可以使用同一个变量保存不同类型的数据：123var foo = 42;    // foo is a Number nowfoo = &amp;quot;bar&amp;quot;; // foo is a String nowfoo = true;  // foo is a">
@@ -171,7 +171,7 @@
         <h2 id="动态类型"><a href="#动态类型" class="headerlink" title="动态类型"></a>动态类型</h2><p>JavaScript 是一种弱类型或者说动态语言。这意味着你不用提前声明变量的类型，在程序运行过程中，类型会被自动确定。这也意味着你可以使用同一个变量保存不同类型的数据：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">var foo = 42;    // foo is a Number now</span><br><span class="line">foo = &quot;bar&quot;; // foo is a String now</span><br><span class="line">foo = true;  // foo is a Boolean now</span><br></pre></td></tr></table></figure></p>
 <a id="more"></a>
 <h2 id="类型转换"><a href="#类型转换" class="headerlink" title="类型转换"></a>类型转换</h2><h3 id="变-String"><a href="#变-String" class="headerlink" title="变 String"></a>变 String</h3><ol>
-<li>xxx.toString()<br><img src="http://pntmc1hcw.bkt.clouddn.com/tostring.png" alt="tostring.png"></li>
+<li>xxx.toString()<br><img src="http://pntmc1hcw.bkt.clouddn.com/tostring.png" alt="tostring.png"><br><code>1.toString</code> 报错；<br><code>1..toString</code> -&gt; <code>&quot;1&quot;</code> 第一个点被当成小数点，第二点用来接 api</li>
 <li>String(xxx)<br><img src="http://pntmc1hcw.bkt.clouddn.com/string.png" alt="string.png"></li>
 <li>‘’ + xxx （推荐）<br><img src="http://pntmc1hcw.bkt.clouddn.com/x+&#39;&#39;.png" alt="x+&#39;&#39;.png"></li>
 </ol>
@@ -355,6 +355,15 @@
   
 <nav id="article-nav">
   
+    <a href="/2019/03/05/原型与原型链/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          原型与原型链
+        
+      </div>
+    </a>
+  
   
     <a href="/2019/03/04/CSS-深入浅出-笔记/" id="article-nav-older" class="article-nav-link-wrap">
       <div class="article-nav-title">CSS_深入浅出_笔记</div>
@@ -511,15 +520,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">DOM</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">HTTP</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">JS的历史</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">JS数据类型</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -531,7 +536,43 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">DOM</a>
+                <a href="javascript:void(0)" class="js-tag color1">JS的历史</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">JS数据类型</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">类型转换</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">垃圾回收</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">内存图</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">浅拷贝/深拷贝</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">创建对象</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">工厂模式</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">构造函数模式</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">原型模式</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -555,47 +596,27 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">创建对象</a>
+                <a href="javascript:void(0)" class="js-tag color2">单体内置对象</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">工厂模式</a>
+                <a href="javascript:void(0)" class="js-tag color4">Global对象</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">构造函数模式</a>
+                <a href="javascript:void(0)" class="js-tag color2">Math对象</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">原型模式</a>
+                <a href="javascript:void(0)" class="js-tag color3">原型</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">类型转换</a>
+                <a href="javascript:void(0)" class="js-tag color4">原型链</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">垃圾回收</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">内存图</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">qian'kao</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">浅拷贝</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">浅拷贝/</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">浅拷贝/深拷贝</a>
+                <a href="javascript:void(0)" class="js-tag color3">继承</a>
               </li>
             
             <div class="clearfix"></div>
@@ -670,7 +691,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
     
     	<section class="tools-section tools-section-me" q-show="aboutme">
   	  	
-  	  		<div class="aboutme-wrap" id="js-aboutme">很惭愧&lt;br&gt;&lt;br&gt;只做了一点微小的工作&lt;br&gt;谢谢大家</div>
+  	  		<div class="aboutme-wrap" id="js-aboutme">很惭愧&lt;br&gt;&lt;br&gt;只是一个肥宅&lt;br&gt;谢谢大家</div>
   	  	
     	</section>
     
