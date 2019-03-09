@@ -20,7 +20,7 @@
 <meta property="og:image" content="http://pntmc1hcw.bkt.clouddn.com/fn-3.png">
 <meta property="og:image" content="http://pntmc1hcw.bkt.clouddn.com/fn-4.png">
 <meta property="og:image" content="http://pntmc1hcw.bkt.clouddn.com/fn-5.png">
-<meta property="og:updated_time" content="2019-03-08T09:56:20.986Z">
+<meta property="og:updated_time" content="2019-03-09T08:02:14.354Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="函数笔记">
 <meta name="twitter:description" content="函数就是一段可以反复调用的代码块。 console.log(xxx) 只接受字符串，xxx 不是字符串就调用 toString()。 函数默认 return undefined。声明变量时也是如此。 函数的 name 属性为 关键字后的 标识符，匿名函数为变量名，奇葩：fn = new Funcition(...)，fn.name === “anonymous”">
@@ -215,14 +215,12 @@
 <h2 id="闭包"><a href="#闭包" class="headerlink" title="闭包"></a>闭包</h2><ul>
 <li>如果一个函数，使用了它范围外的变量，那么（这个函数 + 这个变量）就叫做闭包</li>
 </ul>
-<ol>
-<li>搜索：方应杭 闭包</li>
-<li></li>
-</ol>
 <h2 id="函数的本质"><a href="#函数的本质" class="headerlink" title="函数的本质"></a>函数的本质</h2><p><img src="http://pntmc1hcw.bkt.clouddn.com/fn-3.png" alt="fn-3.png"></p>
 <p>Function对象覆盖了从Object继承来的 <code>toString</code> 方法。对于用户定义的 Function 对象，toString方法返回一个字符串，其中包含用于定义函数的源文本段。</p>
 <p><img src="http://pntmc1hcw.bkt.clouddn.com/fn-4.png" alt="fn-4.png"></p>
 <p><img src="http://pntmc1hcw.bkt.clouddn.com/fn-5.png" alt="fn-5.png"></p>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>立即执行，不声明全局变量</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">// 推荐</span><br><span class="line">(function() &#123;</span><br><span class="line">    var parent = document.body</span><br><span class="line">    console.log(parent)</span><br><span class="line">&#125;).call()</span><br><span class="line"></span><br><span class="line">(function() &#123;</span><br><span class="line">    var parent = document.body</span><br><span class="line">    console.log(parent)</span><br><span class="line">&#125;)()</span><br></pre></td></tr></table></figure>
 
       
 
