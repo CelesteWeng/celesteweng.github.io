@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="DNS 缓存,TCP,页面渲染,chrome performance,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="浏览器查找域名对应的 IP 地址概念解释 IP 地址：IP 协议为互联网上的每一个网络和每一台主机分配的一个逻辑地址。IP 地址如同门牌号码，通过 IP 地址才能确定一台主机位置。服务器本质也是一台主机，想要访问某个服务器，必须先知道它的 IP 地址； 域名（ DN ）：IP 地址由四个数字组成，中间用点号连接，在使用过程中难记忆且易输入错误，所以用我们熟悉的字母和数字组合来代替纯数字的 IP 地">
+<meta name="keywords" content="DNS 缓存,TCP,页面渲染,chrome performance">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从输入URL到页面加载发生了什么">
+<meta property="og:url" content="https://celesteweng.github.io/2019/03/15/从输入URL到页面加载发生了什么/index.html">
+<meta property="og:site_name" content="Celeste&#39;s Blog">
+<meta property="og:description" content="浏览器查找域名对应的 IP 地址概念解释 IP 地址：IP 协议为互联网上的每一个网络和每一台主机分配的一个逻辑地址。IP 地址如同门牌号码，通过 IP 地址才能确定一台主机位置。服务器本质也是一台主机，想要访问某个服务器，必须先知道它的 IP 地址； 域名（ DN ）：IP 地址由四个数字组成，中间用点号连接，在使用过程中难记忆且易输入错误，所以用我们熟悉的字母和数字组合来代替纯数字的 IP 地">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-03-15T05:48:54.075Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="从输入URL到页面加载发生了什么">
+<meta name="twitter:description" content="浏览器查找域名对应的 IP 地址概念解释 IP 地址：IP 协议为互联网上的每一个网络和每一台主机分配的一个逻辑地址。IP 地址如同门牌号码，通过 IP 地址才能确定一台主机位置。服务器本质也是一台主机，想要访问某个服务器，必须先知道它的 IP 地址； 域名（ DN ）：IP 地址由四个数字组成，中间用点号连接，在使用过程中难记忆且易输入错误，所以用我们熟悉的字母和数字组合来代替纯数字的 IP 地">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://celesteweng.github.io/2019/03/15/从输入URL到页面加载发生了什么/">
+
+
+
+
+
+  <title>从输入URL到页面加载发生了什么 | Celeste's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Celeste's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://celesteweng.github.io/2019/03/15/从输入URL到页面加载发生了什么/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Celeste Weng">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/peanut.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Celeste's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">从输入URL到页面加载发生了什么</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-15T11:04:48+08:00">
+                2019-03-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="浏览器查找域名对应的-IP-地址"><a href="#浏览器查找域名对应的-IP-地址" class="headerlink" title="浏览器查找域名对应的 IP 地址"></a>浏览器查找域名对应的 IP 地址</h1><h2 id="概念解释"><a href="#概念解释" class="headerlink" title="概念解释"></a>概念解释</h2><ul>
+<li>IP 地址：IP 协议为互联网上的每一个网络和每一台主机分配的一个逻辑地址。IP 地址如同门牌号码，通过 IP 地址才能确定一台主机位置。服务器本质也是一台主机，想要访问某个服务器，必须先知道它的 IP 地址；</li>
+<li>域名（ DN ）：IP 地址由四个数字组成，中间用点号连接，在使用过程中难记忆且易输入错误，所以用我们熟悉的字母和数字组合来代替纯数字的 IP 地址，比如我们只会记住 <a href="http://www.baidu.com（百度域名）" target="_blank" rel="noopener">www.baidu.com（百度域名）</a> 而不是 220.181.112.244（百度的其中一个 IP 地址）；</li>
+<li>DNS（域名服务器）：每个域名都对应一个或多个提供相同服务服务器的 IP 地址，只有知道服务器 IP 地址才能建立连接，所以需要通过 DNS 把域名解析成一个 IP 地址。</li>
+</ul>
+<a id="more"></a>
+<h2 id="查找过程"><a href="#查找过程" class="headerlink" title="查找过程"></a>查找过程</h2><p>以查询 <a href="http://www.baidu.com" target="_blank" rel="noopener">www.baidu.com</a> 的 IP 地址为例，其中2、3、4步均在上一步未查询成功的情况下进行</p>
+<ol>
+<li>浏览器搜索自己的 DNS 缓存（维护一张域名与 IP 地址的对应表）；</li>
+<li>搜索操作系统中的 DNS 缓存（维护一张域名与 IP 地址的对应表）；</li>
+<li>搜索操作系统的 hosts 文件（ Windows 环境下，维护一张域名与 IP 地址的对应表）；</li>
+<li>操作系统将域名发送至 LDNS（本地区域名服务器，如果你在学校接入互联网，则 LDNS 服务器就在学校，如果通过电信接入互联网，则 LDNS 服务器就在你当地的电信那里。）LDNS 查询自己的 DNS 缓存（一般查找成功率在 80% 左右），查找成功则返回结果，失败则发起一个迭代 DNS 解析请求；<ol>
+<li>LDNS 向 Root Name Server （根域名服务器，其虽然没有每个域名的的具体信息，但存储了负责每个域，如 com、net、org等的解析的顶级域名服务器的地址）发起请求，此处，Root Name Server 返回 com 域的顶级域名服务器的地址；</li>
+<li>LDNS 向 com 域的顶级域名服务器发起请求，返回 baidu.com 域名服务器地址；</li>
+<li>LDNS 向 baidu.com 域名服务器发起请求，得到 <a href="http://www.baidu.com" target="_blank" rel="noopener">www.baidu.com</a> 的 IP 地址；</li>
+</ol>
+</li>
+<li>LDNS 将得到的 IP 地址返回给操作系统，同时自己也将 IP 地址缓存起来；</li>
+<li>操作系统将 IP 地址返回给浏览器，同时自己也将 IP 地址缓存起来；</li>
+<li><p>至此，浏览器已经得到了域名对应的 IP 地址。</p>
+<p><strong>补充</strong>：域名与 URL 是两个概念。IP 地址与域名不是一一对应的关系。</p>
+</li>
+</ol>
+<h1 id="建立连接–三次握手"><a href="#建立连接–三次握手" class="headerlink" title="建立连接–三次握手"></a>建立连接–三次握手</h1><h2 id="历程"><a href="#历程" class="headerlink" title="历程"></a>历程</h2><ol>
+<li>主机向服务器发送一个建立连接的请求（您好，我想认识您）；</li>
+<li>服务器接到请求后发送同意连接的信号（好的，很高兴认识您）；</li>
+<li><p>主机接到同意连接的信号后，再次向服务器发送了确认信号（我也很高兴认识您），自此，主机与服务器两者建立了连接。</p>
+<p><strong>补充</strong>：</p>
+<ul>
+<li><strong>TCP 协议</strong>：三次握手的过程采用 TCP 协议，其可以保证信息传输的可靠性，三次握手过程中，若一方收不到确认信号，协议会要求重新发送信号。</li>
+<li><strong>为什么要握手三次</strong>：确保 server 和 client 双方都能 发送请求 和 接收请求。</li>
+</ul>
+</li>
+</ol>
+<h1 id="网页请求与显示"><a href="#网页请求与显示" class="headerlink" title="网页请求与显示"></a>网页请求与显示</h1><p>当服务器与主机建立了连接之后，下面主机便与服务器进行通信。网页请求是一个单向请求的过程，即是一个主机向服务器请求数据，服务器返回相应的数据的过程。</p>
+<ol>
+<li>浏览器根据 URL 内容生成 HTTP 请求，请求中包含请求文件的位置、请求文件的方式等等；</li>
+<li>服务器接到请求后，会根据 HTTP 请求中的内容来决定如何获取相应的 HTML 文件；</li>
+<li>服务器将得到的 HTML 文件发送给浏览器；</li>
+<li>在浏览器还没有完全接收 HTML 文件时便开始<a href="http://www.ruanyifeng.com/blog/2015/09/web-page-performance-in-depth.html" target="_blank" rel="noopener">渲染</a>、显示网页；</li>
+<li><p>在执行 HTML 中代码时，根据需要，浏览器会继续请求图片、CSS、JavsScript等文件，过程同请求 HTML ；</p>
+<p><strong>补充</strong>：</p>
+<ul>
+<li>TCP 数据包的数据有大小限制（<strong>1400字节</strong>），一次性发送大量数据则分成多个包。TCP 协议为每个包编号（sequence number，SEQ）。第一个包的编号是<strong>随机数</strong>，下一个数据包的编号是 1号包编号+1号包字节数。</li>
+</ul>
+</li>
+</ol>
+<h1 id="断开连接–四次挥手"><a href="#断开连接–四次挥手" class="headerlink" title="断开连接–四次挥手"></a>断开连接–四次挥手</h1><ol>
+<li>主机向服务器发送一个断开连接的请求（不早了，我该走了）；</li>
+<li>服务器接到请求后发送确认收到请求的信号（知道了）；</li>
+<li>服务器向主机发送断开通知（我也该走了）；</li>
+<li><p>主机接到断开通知后断开连接并反馈一个确认信号（嗯，好的），服务器收到确认信号后断开连接；</p>
+<p><strong>补充</strong>：</p>
+<ul>
+<li>为什么服务器在接到断开请求时不立即同意断开：当服务器收到断开连接的请求时，可能仍然有数据未发送完毕，所以服务器先发送确认信号，等所有数据发送完毕后再同意断开。</li>
+<li>第四次握手后，主机发送确认信号后并没有立即断开连接，而是等待了 2 个报文传送周期，原因是：如果第四次握手的确认信息丢失，服务器将会重新发送第三次握手的断开连接的信号，而服务器发觉丢包与重新发送的断开连接到达主机的时间正好为 2 个报文传输周期。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h1 id="资料"><a href="#资料" class="headerlink" title="资料"></a>资料</h1><ol>
+<li><a href="http://www.ruanyifeng.com/blog/2015/09/web-page-performance-in-depth.html" target="_blank" rel="noopener">页面性能管理——阮一峰</a>（页面生成过程、性能优化等）</li>
+<li><a href="https://zhuanlan.zhihu.com/p/29879682" target="_blank" rel="noopener">Chrome Devtool Performance 使用指南（译文）</a>（原timeline）</li>
+<li><a href="http://www.ruanyifeng.com/blog/2014/09/illustration-ssl.html" target="_blank" rel="noopener">TLS/SSL握手过程——阮一峰</a></li>
+<li>关于该问题的两篇博客，：<br> <a href="https://zhuanlan.zhihu.com/p/23155051" target="_blank" rel="noopener">从输入URL到页面加载发生了什么 1</a>（这篇条理清晰，对于渲染略过了，可以结合第二篇、资料1）<br> <a href="https://segmentfault.com/a/1190000006879700" target="_blank" rel="noopener">从输入URL到页面加载发生了什么 2</a>（比上者更优之处：DNS 解析图、HTTP 请求）单词错误：repain =&gt; repaint<br> 关于 TCP 两篇都没怎么说，详见 资料6</li>
+<li><a href="http://restlet.com/company/blog/2015/11/18/navigating-http-status-codes/" target="_blank" rel="noopener">浏览 HTTP 状态码（地铁地图）</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2017/06/tcp-protocol.html" target="_blank" rel="noopener">TCP 协议简介——阮一峰</a></li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/DNS-缓存/" rel="tag"># DNS 缓存</a>
+          
+            <a href="/tags/TCP/" rel="tag"># TCP</a>
+          
+            <a href="/tags/页面渲染/" rel="tag"># 页面渲染</a>
+          
+            <a href="/tags/chrome-performance/" rel="tag"># chrome performance</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/03/13/请求/" rel="next" title="发送请求">
+                <i class="fa fa-chevron-left"></i> 发送请求
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/peanut.png" alt="Celeste Weng">
+            
+              <p class="site-author-name" itemprop="name">Celeste Weng</p>
+              <p class="site-description motion-element" itemprop="description">前端，学习中</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">49</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/celesteweng" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:673319951@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://celesteweng.com/resume/" target="_blank" title="Resume">
+                      
+                        <i class="fa fa-fw fa-globe"></i>Resume</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#浏览器查找域名对应的-IP-地址"><span class="nav-number">1.</span> <span class="nav-text">浏览器查找域名对应的 IP 地址</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#概念解释"><span class="nav-number">1.1.</span> <span class="nav-text">概念解释</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查找过程"><span class="nav-number">1.2.</span> <span class="nav-text">查找过程</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#建立连接–三次握手"><span class="nav-number">2.</span> <span class="nav-text">建立连接–三次握手</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#历程"><span class="nav-number">2.1.</span> <span class="nav-text">历程</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#网页请求与显示"><span class="nav-number">3.</span> <span class="nav-text">网页请求与显示</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#断开连接–四次挥手"><span class="nav-number">4.</span> <span class="nav-text">断开连接–四次挥手</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#资料"><span class="nav-number">5.</span> <span class="nav-text">资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Celeste Weng</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
