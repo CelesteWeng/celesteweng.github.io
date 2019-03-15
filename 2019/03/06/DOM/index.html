@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+  
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta name="author" content="董沅鑫, yuanxin.me@gmail.com">
+  
+  
+  
+  <title>JavaScript 教程 - DOM api 归档 | Celeste&#39;s Blog</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="心痛,">
+  
+
+  <script>
+    console.log('\n%c Hexo-theme-bmw v4.0 ' + '%c 🎉 https://github.com/dongyuanxin/theme-bmw 🎉\n' + '\n%c View demo online ' + '%c 🔍 https://godbmw.com/ 🔍  \n' , 'color: #fadfa3; background: #030307; padding:3px 0;', '', 'color: #fadfa3; background: #030307; padding:3px 0;', '');
+  </script>
+
+  
+    <meta name="description" content="前端，学习中">
+  
+
+  
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+    <link rel="apple-touch-icon" href="/images/peanut.png">
+  
+
+  <link href="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/icon/iconfont.css">
+<link rel="stylesheet" href="/css/github-markdown.css">
+<link rel="stylesheet" href="/css/highlight.css">
+
+  <script src="/js/util.js"></script>
+<script src="/js/valine.min.js"></script>
+
+  
+
+  
+    <link href="https://cdn.bootcss.com/aplayer/1.10.1/APlayer.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/aplayer/1.10.1/APlayer.min.js" async></script>
+  
+
+  
+    <link href="https://cdn.bootcss.com/social-share.js/1.0.16/css/share.min.css" rel="stylesheet">
+  
+  
+  <script src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js" async></script>
+  
+  
+    <script src="//cdn.jsdelivr.net/npm/leancloud-storage@3.11.0/dist/av-min.js"></script>
+  
+
+</head>
+
+  <body>
+
+    
+
+    <div id="app">
+
+      <div class="header-wrap">
+  <header>
+    <div class="site-brand">
+      <div class="site-title">
+        <a href="/">Celeste&#39;s Blog</a>
+      </div>
+    </div>
+    <nav class="site-navigation">
+      <ul class="nav-menu">
+      
+        <li class="nav-item" data-path="/">
+          
+            <a href="/" target="_self">
+              主页
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          
+            <a href="/archives/" target="_self">
+              归档
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          
+            <a href="/tags/" target="_self">
+              标签
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path>
+          
+            <a href="javascript:void(0);" v-else>抓到我</a>
+            <ul class="nav-menu--dropdown">
+              
+                <li>
+                  <a href="https://github.com/celesteweng" target="_blank">
+                    Github
+                  </a>
+                </li>
+              
+            </ul>
+          
+        </li>
+      
+      </ul>
+    </nav>
+    <i class="iconfont icon-menu"></i>
+  </header>
+</div>
+
+<script>
+  let links = document.querySelectorAll('.nav-item');
+  for(let link of links){
+    let childrenLink = link.querySelector('ul');
+    link.addEventListener('mouseenter', () => {
+      if(childrenLink) {
+        childrenLink.className = "nav-menu--dropdown active";
+      }
+    })
+    link.addEventListener('mouseleave', () => {
+      if(childrenLink) {
+        childrenLink.className = "nav-menu--dropdown";
+      }
+    })
+  }
+  let rootRealPath = getRealPath(window.location.pathname, true);
+  for(let link of links) {
+    let linkPath = link.getAttribute("data-path");
+    if(linkPath && getRealPath(linkPath, true) === rootRealPath) {
+      link.className = "nav-item hover";
+    }
+  }
+
+  let iconMenu = document.querySelector("i.iconfont.icon-menu"),
+    iconMenuClicked = false;
+  let navDOM = document.querySelector("nav.site-navigation");
+  iconMenu.addEventListener("click", () => {
+    iconMenuClicked 
+      ? navDOM.className = "site-navigation active"
+      : navDOM.className = "site-navigation";
+    iconMenuClicked = !iconMenuClicked;
+  })
+</script>
+
+      
+
+
+
+
+
+
+
+
+<div class="container post-index">
+
+  
+
+<div class="post">
+  <h1 class="article-title">
+    <span>JavaScript 教程 - DOM api 归档</span>
+  </h1>
+  <div class="article-top-meta">
+    <span>
+      发布 : 
+      2019-03-06
+    </span>
+    
+    
+      <span>
+        浏览 : <span class="article-timer" data-identity="DOM"></span>
+      </span>
+    
+  </div>
+
+  
+
+  <div class="article-content">
+    <div class="markdown-body">
+      <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><h2 id="DOM"><a href="#DOM" class="headerlink" title="DOM"></a>DOM</h2><p>DOM 是 JavaScript 操作网页的接口，全称为“文档对象模型”（Document Object Model）。</p>
+<h2 id="节点"><a href="#节点" class="headerlink" title="节点"></a>节点</h2><p>DOM 的最小组成单位叫做节点（node）。</p>
+<p>节点的类型有七种。</p>
+<ul>
+<li>Document：整个文档树的顶层节点</li>
+<li>DocumentType：doctype标签（比如<code>&lt;!DOCTYPE html&gt;</code>）</li>
+<li>Element：网页的各种HTML标签（比如<code>&lt;body&gt;</code>、<code>&lt;a&gt;</code>等）</li>
+<li>Attribute：网页元素的属性（比如class=”right”）</li>
+<li>Text：标签之间或标签包含的文本</li>
+<li>Comment：注释</li>
+<li>DocumentFragment：文档的片段</li>
+</ul>
+<p>浏览器提供一个原生的节点对象Node，七种节点都继承了Node，因此具有一些共同的属性和方法。</p>
+<h2 id="节点树"><a href="#节点树" class="headerlink" title="节点树"></a>节点树</h2><p>DOM 树：节点按所在层级，抽象成树状结构。<br>根节点：<code>&lt;html&gt;</code>。<br>除根节点，其他节点有三种层关系。</p>
+<ul>
+<li>父节点关系（parentNode）：直接的那个上级节点</li>
+<li>子节点关系（childNodes）：直接的下级节点</li>
+<li>同级节点关系（sibling）：拥有同一个父节点的节点</li>
+</ul>
+<h1 id="Node-接口"><a href="#Node-接口" class="headerlink" title="Node 接口"></a>Node 接口</h1><p>  均为 Node.prototype.xxx，不重复写了。</p>
+<ul>
+<li>属性<ul>
+<li><strong>nodeType</strong>：整数，节点类型。(文档-9，元素-1，属性-2，文本-3，文档片断-11，文档类型-10，注释-8），有对应常量(e.g.,Node.DOCUMENT_NODE)。</li>
+<li><strong>nodeName</strong>：节点名，元素大写（e.g.,DIV），#xxx 等。</li>
+<li><strong>nodeValue</strong>：返回字符串，节点文本值，可读写，text、comment、attr 有值，别的 null。div要读儿子的文本。</li>
+<li><strong>textContent</strong>：返回自己和子孙的文本，忽略 HTML 标签。写入时对 HTML 标签转义。有节点该属性为 null。和<code>innerText</code>（IE）有差异，innerText 不包括 style 标签、script 标签，不展示隐藏文本。</li>
+<li><strong>baseURI</strong>：字符串，网页绝对路径。只读。<code>&lt;base&gt;</code> &gt; <code>window.location</code>。</li>
+<li><strong>ownerDocument</strong>：找出我的祖宗。顶层文档对象，即document对象。<code>document.ownerDocument === null</code>。</li>
+<li><strong>nextSibling</strong>：我后面的兄弟。包括文本节点和注释节点。空格也是兄弟。可用来遍历。</li>
+<li><strong>previousSibling</strong>：我前面的兄弟。之后同上。</li>
+<li><strong>parentNode</strong>：找爸爸。有人没爸爸 null。生出来没上户口的 null。<code>node.parentNode.removeChild(node);</code>自己不想活了。</li>
+<li><strong>parentElement</strong>：只要是 element 的爸爸，document 和 documentfragment 滚蛋。</li>
+<li><strong>firstChild</strong>，<strong>lastChild</strong>：第一个儿子（element or text or comment），没有就 null。</li>
+<li><strong>childNodes</strong>：类数组对象，把我的儿子们（text 和 comment 弱鸡也是我的儿子）打包。没儿子给个空包。动态集合。</li>
+<li><strong>isConnected</strong>：布尔值，看看我上户口了没。</li>
+</ul>
+</li>
+<li>方法<ul>
+<li><strong>appendChild</strong>()：喜当爹，送你个娃。返回值是这个娃。例外：娃 是 DocumentFragment 时，自己查。</li>
+<li><strong>hasChildNodes</strong>()：布尔值，我有没有娃（还有2种方法）。</li>
+<li><strong>cloneNode</strong>(deep)：造一个同卵双胞胎。有唯一属性要改、监听\事件\回调 不能克隆。cloneNode(true) 深拷贝</li>
+<li><strong>insertBefore</strong>()：插入父节点内指定元素前。</li>
+<li><strong>removeChild</strong>()：把这个儿子赶出家门。(把不是儿子的人赶出家门会报错)。只是从页面上消失，还是存在于内存中的。</li>
+<li><strong>replaceChild</strong>()：辣鸡，我要换个人做儿子。</li>
+<li><strong>contains</strong>()：布尔值，看看我和子孙们上族谱了没。</li>
+<li><strong>compareDocumentPosition</strong>()：返回一个六个比特位的二进制值，表示参数节点与当前节点的关系。两人可能关系复杂，返回数值为总和，需与掩码 与运算，具体判断。</li>
+<li><strong>isEqualNode</strong>()，<strong>isSameNode</strong>()：布尔值，是否相等。类型相同、属性相同、子节点相同。equal 看起来相同，same 真的是同一个节点。</li>
+<li><strong>isEqualNode</strong>()，<strong>isSameNode</strong>()：布尔值，是否相等。类型相同、属性相同、子节点相同。equal 看起来相同，same 真的是同一个节点。</li>
+<li><strong>normalize</strong>()：去除空文本节点，毗邻的文本节点合并。Text.splitText的逆方法。</li>
+<li><strong>getRootNode</strong>()：作用等于 ownerDocument，but，<code>document.getRootNode() // document</code>。</li>
+</ul>
+</li>
+</ul>
+<h1 id="NodeList-接口，HTMLCollection-接口"><a href="#NodeList-接口，HTMLCollection-接口" class="headerlink" title="NodeList 接口，HTMLCollection 接口"></a>NodeList 接口，HTMLCollection 接口</h1><p>  节点集合：NodeList(contain the various types node) 和 HTMLCollection（HTML element node only）。</p>
+<ul>
+<li><p>NodeList 接口（NodeList.prototype.xxxxx）</p>
+<ul>
+<li>概述：<ul>
+<li>NodeList实例是类数组对象，成员为节点对象。</li>
+<li>创建NodeList实例：（1）Node.childNodes；（2）document.querySelectorAll()等节点搜索方法。</li>
+<li>转为真正的数组：<code>var nodeArr = Array.prototype.slice.call(document.body.childNodes);</code>。</li>
+<li>Node.childNodes 动态集合，别的为静态集合。</li>
+</ul>
+</li>
+<li>length：返回节点数。</li>
+<li>forEach()：用法同数组 forEach()。</li>
+<li>item()：返回该位置成员。</li>
+<li>keys()，values()，entries()：类似 Object.xxx。</li>
+</ul>
+</li>
+<li><p>HTMLCollection 接口（HTMLCollection.prototype.xxx）</p>
+<ul>
+<li>概述：<ul>
+<li>只有元素节点，类数组对象，只能 for 循环遍历。</li>
+<li>HTMLCollection 实例都为动态集合。</li>
+</ul>
+</li>
+<li>length：成员数量。</li>
+<li>item()：返回该位置成员。</li>
+<li>namedItem()：返回 id 或 name 为指定字符串的元素节点，没有就 null。</li>
+</ul>
+</li>
+</ul>
+<p>mdwoyaokantule</p>
+<h1 id="ParentNode-接口，ChildNode-接口"><a href="#ParentNode-接口，ChildNode-接口" class="headerlink" title="ParentNode 接口，ChildNode 接口"></a>ParentNode 接口，ChildNode 接口</h1><ul>
+<li>ParentNode 接口（ParentNode.xxx）<ul>
+<li>children：all child element nodes.</li>
+<li>firstElementChild： nothing special.</li>
+<li>lastElementChild：nothing special..</li>
+<li>childElementCount：nothing special…</li>
+<li>append()，prepend()：添加 元素 or 文字子节点。往后加 / 往前加。</li>
+</ul>
+</li>
+<li>ChildNode 接口（有爸爸就能用）<ul>
+<li>ChildNode.remove()：让自己从世界消失。</li>
+<li>ChildNode.before()，ChildNode.after()：insert sibling before or after myself.</li>
+<li>ChildNode.replaceWith()：替换节点。</li>
+</ul>
+</li>
+</ul>
+<h1 id="Document-节点"><a href="#Document-节点" class="headerlink" title="Document 节点"></a>Document 节点</h1><ul>
+<li>概述：document 节点 -&gt; 整个文档。document 对象有不同办法获取，详情见Google。</li>
+<li><p>属性（document.xxx）</p>
+<ul>
+<li><p>快捷方式属性：</p>
+<ul>
+<li>defaultView：返回 document 对象所属的 window 对象，无则 null。</li>
+<li>doctype：指向<code>&lt;DOCTYPE&gt;</code>节点。</li>
+<li>documentElement：返回当前文档的 根元素节点，一般为 <code>&lt;html&gt;</code> 节点。</li>
+<li>body，head：指向相应节点，代码里不写，浏览器给你加。可写。</li>
+<li>scrollingElement：当前文档的滚动元素。</li>
+<li>activeElement：获得焦点的 DOM 元素。e.g.,<code>&lt;input&gt;</code>、<code>&lt;textarea&gt;</code>、<code>&lt;select&gt;</code>等表单元素。无返回  <code>&lt;body&gt;</code> 或 <code>null</code>。</li>
+<li>fullscreenElement：全屏展示的 DOM 元素。比如查看 <code>&lt;video&gt;</code> 元素是否为全屏状态。</li>
+</ul>
+</li>
+<li><p>节点集合属性：</p>
+<ul>
+<li>links：所有设定了 href 属性的 <code>&lt;a&gt;</code> 及 <code>&lt;area&gt;</code> 节点。</li>
+<li>forms：所有 <code>&lt;form&gt;</code> 节点。可用 id 和 name 来引用。</li>
+<li>images：所有图片节点。可以用 imgList[i].src === ‘xxx’ 来查找某张图。</li>
+<li>embeds，plugins：所有 <code>&lt;embed&gt;</code> 节点。</li>
+<li>scripts：所有。。。</li>
+<li>styleSheets：文档内嵌或引入的样式表集合。</li>
+<li>小结：除了document.styleSheets，别的都返回 HTMLCollection 实例。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>我挂了，这篇博客先太监吧，IDE 你要学会自己写代码呀</p>
+<pre><code>- 文档静态信息属性：
+- 文档状态属性：
+- cookie：
+- designMode：
+- implementation：
+</code></pre><ul>
+<li>方法（document.xxx）<ul>
+<li>open()，close()：open -&gt; write -&gt; close,异步操作时，使用 document.write 容易把页面冲掉</li>
+<li>write()，writeln()：</li>
+<li>querySelector()，querySelectorAll()：</li>
+<li>getElementsByTagName()：</li>
+<li>getElementsByClassName()：</li>
+<li>getElementsByName()：</li>
+<li>getElementById()：</li>
+<li>elementFromPoint()，elementsFromPoint()：</li>
+<li>caretPositionFromPoint()：</li>
+<li>createElement()：</li>
+<li>createTextNode()：</li>
+<li>createAttribute()：</li>
+<li>createComment()：</li>
+<li>createDocumentFragment()：</li>
+<li>createEvent()：</li>
+<li>addEventListener()，removeEventListener()，dispatchEvent()：</li>
+<li>hasFocus()：</li>
+<li>adoptNode()，importNode()：</li>
+<li>createNodeIterator()：</li>
+<li>createTreeWalker()：</li>
+<li>execCommand()，queryCommandSupported()，queryCommandEnabled()：</li>
+<li>getSelection()：</li>
+</ul>
+</li>
+</ul>
+<h1 id="Element-节点"><a href="#Element-节点" class="headerlink" title="Element 节点"></a>Element 节点</h1><ul>
+<li>实例属性<br>元素特性的相关属性<br>元素状态的相关属性<br>Element.attributes<br>Element.className，Element.classList<br>Element.dataset<br>Element.innerHTML<br>Element.outerHTML<br>Element.clientHeight，Element.clientWidth<br>Element.clientLeft，Element.clientTop<br>Element.scrollHeight，Element.scrollWidth<br>Element.scrollLeft，Element.scrollTop<br>Element.offsetParent<br>Element.offsetHeight，Element.offsetWidth<br>Element.offsetLeft，Element.offsetTop<br>Element.style<br>Element.children，Element.childElementCount<br>Element.firstElementChild，Element.lastElementChild<br>Element.nextElementSibling，Element.previousElementSibling</li>
+<li>实例方法<br>属性相关方法<br>Element.querySelector()<br>Element.querySelectorAll()<br>Element.getElementsByClassName()<br>Element.getElementsByTagName()<br>Element.closest()<br>Element.matches()<br>事件相关方法<br>Element.scrollIntoView()<br>Element.getBoundingClientRect()<br>Element.getClientRects()<br>Element.insertAdjacentElement()<br>Element.insertAdjacentHTML()，Element.insertAdjacentText()<br>Element.remove()<br>Element.focus()，Element.blur()<br>Element.click()</li>
+<li>参考链接</li>
+</ul>
+<h1 id="属性的操作"><a href="#属性的操作" class="headerlink" title="属性的操作"></a>属性的操作</h1><ul>
+<li>Element.attributes 属性</li>
+<li>元素的标准属性</li>
+<li>属性操作的标准方法<br>概述<br>Element.getAttribute()<br>Element.getAttributeNames()<br>Element.setAttribute()<br>Element.hasAttribute()<br>Element.hasAttributes()<br>Element.removeAttribute()</li>
+<li>dataset 属性</li>
+</ul>
+<h1 id="Text-节点和-DocumentFragment-节点"><a href="#Text-节点和-DocumentFragment-节点" class="headerlink" title="Text 节点和 DocumentFragment 节点"></a>Text 节点和 DocumentFragment 节点</h1><ul>
+<li>Text 节点的概念</li>
+<li>Text 节点的属性<ul>
+<li>data</li>
+<li>wholeText</li>
+<li>length</li>
+<li>nextElementSibling，previousElementSibling</li>
+</ul>
+</li>
+<li>Text 节点的方法<ul>
+<li>appendData()，deleteData()，insertData()，replaceData()，subStringData()</li>
+<li>remove()</li>
+<li>splitText()</li>
+</ul>
+</li>
+<li>DocumentFragment 节点</li>
+</ul>
+<h1 id="CSS-操作"><a href="#CSS-操作" class="headerlink" title="CSS 操作"></a>CSS 操作</h1><ul>
+<li>HTML 元素的 style 属性</li>
+<li>CSSStyleDeclaration 接口<ul>
+<li>简介</li>
+<li>CSSStyleDeclaration 实例属性</li>
+<li>CSSStyleDeclaration 实例方法</li>
+</ul>
+</li>
+<li>CSS 模块的侦测</li>
+<li>CSS 对象<ul>
+<li>CSS.escape()</li>
+<li>CSS.supports()</li>
+</ul>
+</li>
+<li>window.getComputedStyle()</li>
+<li>CSS 伪元素</li>
+<li>StyleSheet 接口<ul>
+<li>概述</li>
+<li>实例属性</li>
+<li>实例方法</li>
+</ul>
+</li>
+<li>实例：添加样式表</li>
+<li>CSSRuleList 接口</li>
+<li>CSSRule 接口<ul>
+<li>概述</li>
+<li>CSSRule 实例的属性</li>
+<li>CSSStyleRule 接口</li>
+<li>CSSMediaRule 接口</li>
+</ul>
+</li>
+<li>window.matchMedia()<ul>
+<li>基本用法</li>
+<li>MediaQueryList 接口的实例属性</li>
+<li>MediaQueryList 接口的实例方法</li>
+</ul>
+</li>
+</ul>
+<h1 id="Mutation-Observer-API"><a href="#Mutation-Observer-API" class="headerlink" title="Mutation Observer API"></a>Mutation Observer API</h1><ul>
+<li>概述</li>
+<li>MutationObserver 构造函数</li>
+<li>MutationObserver 的实例方法<ul>
+<li>observe()</li>
+<li>disconnect()，takeRecords（）</li>
+</ul>
+</li>
+<li>MutationRecord 对象</li>
+<li>应用示例<ul>
+<li>子元素的变动</li>
+<li>属性的变动</li>
+<li>取代 DOMContentLoaded 事件</li>
+</ul>
+</li>
+<li>参考链接</li>
+</ul>
+    </div>
+  </div>
+  
+    <div class="copy-right">
+      <div class="markdown-body">
+        <blockquote>
+        
+        
+          本文作者 : Celeste Weng <br>
+        
+        原文链接 : <a href>https://celesteweng.github.io/2019/03/06/DOM/</a><br>
+        版权声明 : 本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！
+        </blockquote>
+      </div>
+    </div>
+  
+  
+  
+    <div class="social-share" style="margin-top: -2rem" data-wechat-qrcode-title="<p>微信扫一扫</p>" data-wechat-qrcode-helper="<p>微信右上角, 扫一扫分享</p>" data-sites="qzone, qq, weibo, wechat, douban, google, facebook, twitter">
+  <span style="color: #6b7487; font-size: 1.4rem;">分享到: </span>
+</div>
+<script src="https://cdn.bootcss.com/social-share.js/1.0.16/js/social-share.min.js" async></script>
+  
+
+  
+    <div id="reward">
+  
+  <button id="reward-btn">
+    
+    <span>投食</span>
+  </button>
+  <div id="reward-qrcode">
+    
+      <div class="reward-qrcode--container">
+        <img class="qrcode-img" src="/images/wechat.png" alt="微信扫一扫, 向我投食">
+        <p class="qrcode-meta">微信扫一扫, 向我投食</p>
+      </div>
+    
+      <div class="reward-qrcode--container">
+        <img class="qrcode-img" src="/images/alipay.png" alt="支付宝扫一扫, 向我投食">
+        <p class="qrcode-meta">支付宝扫一扫, 向我投食</p>
+      </div>
+    
+  </div>
+
+</div>
+
+<script>
+  (() => {
+    let button = document.querySelector('#reward-btn'),
+      qrcode = document.querySelector('#reward-qrcode'),
+      display = false;
+    
+    button.addEventListener('click', () => {
+      qrcode.style.display = display ? 'none' : 'block'
+      display = !display
+    }, false)
+  })()
+</script>
+  
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+      <span>
+        
+          <i class="iconfont icon-06tags"></i>标签: 
+          
+          <span class="span--tag">
+            <a href="/tags/心痛/">
+              #心痛
+            </a>
+          </span>
+          
+        
+      </span>
+    </div>
+    <div class="article-meta pull-right">
+    </div>
+  </div>
+</div>
+
+
+  <aside id="sidebar">
+    <p id="sidebar-header"></p>
+    <ol id="sidebar-toc"></ol>
+  </aside>
+  <script async>setTimeout(generateToc, 10);</script>
+
+
+  <nav class="post-navigation">
+    
+      <div class="nav-pre">
+        <i class="iconfont icon-prev"></i>
+        上一篇:
+        <a href="/2019/03/05/原型与原型链/" target="_self">原型与原型链</a>
+      </div>
+    
+    
+      <div class="nav-next">
+        下一篇:
+        <a href="/2019/03/07/Array笔记/" target="_self">Array笔记</a>
+        <i class="iconfont icon-next"></i>
+      </div>
+    
+  </nav>
+
+  
+    <a href="#comment" class="comment-anchor"></a>
+<div class="comment-title"><i class="iconfont icon-footprint"></i> 留下足迹 <i class="iconfont icon-footprint"></i></div>
+<div id="vcomments"></div>
+
+<script defer>
+  if( true ) {
+    let path = getRealPath()
+    new Valine({
+      el: "#vcomments",
+      appId: "5t4xu3HBz1CCS0dWUdEaYl1T-gzGzoHsz",
+      appKey: "2je5yKJYh98beKd80936XS8g",
+      notify: false,
+      verify: false,
+      avatar: "robohash",
+      placeholder: "正确填写邮箱, 才能及时收到回复哦♪(^∇^*)",
+      path
+    });
+  }
+</script>
+   
+
+  
+    <script defer>
+const valineAPI = (() => {
+  try {
+    AV.init("5t4xu3HBz1CCS0dWUdEaYl1T-gzGzoHsz", "2je5yKJYh98beKd80936XS8g");
+  } catch(error) {}
+  const isExist = (identity) => {
+    identity = identity || getRealPath();
+    let query = new AV.Query('Timer');
+    return new Promise((resolve, reject) => {
+      query.equalTo("identity", identity);
+      query.find().then(results => {
+        resolve(results.length > 0);
+      }, error => reject(error));
+    })
+  }
+
+  const _get = (identity) => {
+    let query = null;
+    if(identity && identity instanceof Array){
+      let querys = [];
+      for(let i = 0; i < identity.length; ++i) {
+        querys[i] = new AV.Query('Timer');
+        querys[i].equalTo('identity', identity[i]);
+      }
+      query = AV.Query.or.apply(null ,querys);
+    } else {
+      identity = identity || getRealPath();
+      query = new AV.Query("Timer");
+      query.equalTo("identity", identity);
+    }
+
+    return new Promise((resolve, reject) => {
+      query.find()
+      .then(results => resolve(results))
+      .catch(error => reject(error))
+    })
+  }
+
+  const create = (identity) => {
+    identity = identity || getRealPath();
+    return new Promise((resolve, reject) => {
+      let Todo = AV.Object.extend('Timer');
+      let todo = new Todo();
+      todo.set("times", 1);
+      todo.set("identity", identity);
+      todo.save().then(res => resolve(true), error => reject(error));
+    })
+  }
+
+  const update = (identity) => {
+    identity = identity || getRealPath();
+    return new Promise((resolve, reject) => {
+      let query = new AV.Query('Timer');
+      query.equalTo("identity", identity);
+      query.find().then(todos => {
+        todos.forEach(todo => {
+          todo.set("times", todo.attributes.times + 1);
+        });
+        return AV.Object.saveAll(todos);
+      }).then(todos => resolve(true), error => reject(error));
+    })
+  }
+
+  return {
+    isExist,
+    _get,
+    update,
+    create
+  }
+})()
+
+const calcAndWriteTimes = () => {
+  let isPost = true;
+
+  let timerAllDOM = document.querySelectorAll(".article-timer");
+
+  if(isPost) {
+    let identity = timerAllDOM[0].getAttribute("data-identity");
+    valineAPI.isExist(identity)
+    .then(exist => {
+      if(exist) {
+        return valineAPI.update(identity);
+      }
+      return new Promise(resolve => resolve(true));
+    })
+    .then( succuess => valineAPI._get(identity))
+    .then( result => timerAllDOM[0].innerText = result[0].attributes.times)
+    .catch(error => console.log(error.message))
+    return ;
+  }
+
+  let timerDOMCache = {};
+
+  for(let timerDOM of timerAllDOM) {
+    let identity = timerDOM.getAttribute("data-identity");
+    if(timerDOMCache.hasOwnProperty(identity)){
+      timerDOMCache[identity].dom.push(timerDOM);
+    }else{
+      timerDOMCache[identity] = {
+        dom: [timerDOM],
+        times: undefined
+      };
+    }
+  }
+
+  let identities = Object.keys(timerDOMCache);
+  valineAPI._get(identities).then(results => {
+    for(let result of results) {
+      let {identity, times} = result.attributes;
+      timerDOMCache[identity].times = times;
+      timerDOMCache[identity].dom.map(item => item.innerText = times);
+    }
+    for(let identity of identities) {
+      if(timerDOMCache[identity].times){
+        continue;
+      }
+      timerDOMCache[identity].dom.map(item => item.innerText = 1);
+      valineAPI.create(identity);
+    }
+  }).catch(error => console.log(error.message))
+}
+
+if(true){
+  calcAndWriteTimes();
+}
+</script>
+   
+
+</div>
+
+
+      <footer>
+  <p class="site-info">
+    博客已萌萌哒运行<span id="time-to-now"></span><span class="my-face">(●'◡'●)ﾉ♥</span>
+    <br>
+    Theme - <a href="https://github.com/dongyuanxin/theme-bmw">BMW</a> | Made With 💗 | Powered by <a href="https://godbmw.com/">GodBMW</a>
+    <br>
+    
+  </p>
+</footer>
+
+
+
+<script>
+const timeToNowDOM = document.querySelector("#time-to-now");
+const startTimestamp = new Date(2017, 7, 10).getTime();
+
+const updateTimeStr = () => {
+  let offset = parseInt(
+      (new Date().getTime() - startTimestamp) / 1000,
+      10
+    ),
+    day = Math.floor(offset / 86400),
+    hour = Math.floor((offset % 86400) / 3600),
+    minute = Math.floor(((offset % 86400) % 3600) / 60),
+    second = Math.floor(((offset % 86400) % 3600) % 60);
+  timeToNowDOM.innerHTML =
+    day + "天" + hour + "小时" + minute + "分钟" + second + "秒";
+  setTimeout(updateTimeStr, 500);
+}
+
+setTimeout(updateTimeStr, 500);
+</script>
+
+
+      <div class="back-to-top hidden">
+  <span>
+    <i class="iconfont icon-60"></i><span></span>%
+  </span>
+</div>
+
+<script>
+const updateIconToTop = percent => {
+  let dom = document.querySelector(".back-to-top span span");
+  dom.innerText = percent;
+  if(percent < 1) {
+    document.querySelector(".back-to-top").className = "back-to-top hidden";
+  } else {
+    document.querySelector(".back-to-top").className = "back-to-top";
+  }
+}
+
+const handleScoll = () => {
+  let isRunning = false;
+  return () => {
+    if (isRunning) return;
+    isRunning = true;
+    window.requestAnimationFrame(timestamp => {
+      let scrollTop =
+          document.documentElement.scrollTop || document.body.scrollTop,
+        scrollHeight =
+          document.documentElement.scrollHeight ||
+          document.body.scrollHeight,
+        clientHeight =
+          document.documentElement.clientHeight ||
+          document.body.clientHeight;
+      isRunning = false;
+      if (scrollTop <= 1) {
+        updateIconToTop(0);
+        return;
+      }
+      if (scrollTop + clientHeight >= scrollHeight) {
+        updateIconToTop(100);
+      } else {
+        updateIconToTop(parseInt(
+          100 * scrollTop / (scrollHeight - clientHeight),
+          10
+        ));
+      }
+    });
+  };
+}
+
+const backToTop = () => {
+  let scrollTop =
+      document.documentElement.scrollTop || document.body.scrollTop,
+    delay = 10,
+    time = 200;
+  if (scrollTop <= 20) {
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    return;
+  }
+  let step = Math.ceil(scrollTop * delay / time);
+  let timer = setInterval(() => {
+    scrollTop =
+      document.documentElement.scrollTop || document.body.scrollTop;
+    if (scrollTop - step <= 0) {
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      clearInterval(timer);
+    } else {
+      document.documentElement.scrollTop = scrollTop - step;
+      document.body.scrollTop = scrollTop - step;
+    }
+  }, delay);
+}
+
+document.addEventListener("scroll", handleScoll(), false);
+
+document.querySelector(".back-to-top").addEventListener("click", backToTop, false);
+
+</script>
+
+    </div>
+
+    
+      <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+<script>
+  (() => {
+    const mathjaxConfig = {
+      showProcessingMessages: false, //关闭js加载过程信息
+      messageStyle: "none", //不显示信息
+      jax: ["input/TeX", "output/HTML-CSS"],
+      tex2jax: {
+        inlineMath: [["$", "$"], ["\\(", "\\)"]], //行内公式选择符
+        displayMath: [["$$", "$$"], ["\\[", "\\]"]], //段内公式选择符
+        skipTags: ["script", "noscript", "style", "textarea", "pre", "code", "a"] //避开某些标签
+      },
+      "HTML-CSS": {
+        availableFonts: ["STIX", "TeX"], //可选字体
+        showMathMenu: false //关闭右击菜单显示
+      }
+    }
+
+    let mathjaxInterval = setInterval(() => {
+      if(!window.MathJax){
+        return;
+      }
+      window.MathJax.Hub.Config(mathjaxConfig)
+      window.MathJax.Hub.Queue(["Typeset", MathJax.Hub, document.getElementById('app')])
+
+      clearInterval(mathjaxInterval)
+    }, 10)    
+  })()
+</script>
+    
+
+    <script src="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.js" async></script>
+<script async>
+  let fancyTimer = setInterval(function(){
+    if(!window.$){
+      return;
+    }
+    $(document).ready(function() {
+      $(".post img").each(function () {
+        if($(this).parent().get(0).tagName.toLowerCase() === "a") {
+          return;
+        }
+        // $(this).attr("data-fancybox", "gallery"); // if you add 'data-fancybox', img will display after showed
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "gallery");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      });
+      
+      clearInterval(fancyTimer);
+    });
+  }, 10);
+</script>
+
+    
+  </body>
+
+</html>

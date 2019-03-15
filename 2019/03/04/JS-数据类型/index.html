@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+  
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta name="author" content="董沅鑫, yuanxin.me@gmail.com">
+  
+  
+  
+  <title>JS_数据类型 | Celeste&#39;s Blog</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="JS的历史,JS数据类型,">
+  
+
+  <script>
+    console.log('\n%c Hexo-theme-bmw v4.0 ' + '%c 🎉 https://github.com/dongyuanxin/theme-bmw 🎉\n' + '\n%c View demo online ' + '%c 🔍 https://godbmw.com/ 🔍  \n' , 'color: #fadfa3; background: #030307; padding:3px 0;', '', 'color: #fadfa3; background: #030307; padding:3px 0;', '');
+  </script>
+
+  
+    <meta name="description" content="前端，学习中">
+  
+
+  
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+    <link rel="apple-touch-icon" href="/images/peanut.png">
+  
+
+  <link href="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/icon/iconfont.css">
+<link rel="stylesheet" href="/css/github-markdown.css">
+<link rel="stylesheet" href="/css/highlight.css">
+
+  <script src="/js/util.js"></script>
+<script src="/js/valine.min.js"></script>
+
+  
+
+  
+    <link href="https://cdn.bootcss.com/aplayer/1.10.1/APlayer.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/aplayer/1.10.1/APlayer.min.js" async></script>
+  
+
+  
+    <link href="https://cdn.bootcss.com/social-share.js/1.0.16/css/share.min.css" rel="stylesheet">
+  
+  
+  <script src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js" async></script>
+  
+  
+    <script src="//cdn.jsdelivr.net/npm/leancloud-storage@3.11.0/dist/av-min.js"></script>
+  
+
+</head>
+
+  <body>
+
+    
+
+    <div id="app">
+
+      <div class="header-wrap">
+  <header>
+    <div class="site-brand">
+      <div class="site-title">
+        <a href="/">Celeste&#39;s Blog</a>
+      </div>
+    </div>
+    <nav class="site-navigation">
+      <ul class="nav-menu">
+      
+        <li class="nav-item" data-path="/">
+          
+            <a href="/" target="_self">
+              主页
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          
+            <a href="/archives/" target="_self">
+              归档
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          
+            <a href="/tags/" target="_self">
+              标签
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path>
+          
+            <a href="javascript:void(0);" v-else>抓到我</a>
+            <ul class="nav-menu--dropdown">
+              
+                <li>
+                  <a href="https://github.com/celesteweng" target="_blank">
+                    Github
+                  </a>
+                </li>
+              
+            </ul>
+          
+        </li>
+      
+      </ul>
+    </nav>
+    <i class="iconfont icon-menu"></i>
+  </header>
+</div>
+
+<script>
+  let links = document.querySelectorAll('.nav-item');
+  for(let link of links){
+    let childrenLink = link.querySelector('ul');
+    link.addEventListener('mouseenter', () => {
+      if(childrenLink) {
+        childrenLink.className = "nav-menu--dropdown active";
+      }
+    })
+    link.addEventListener('mouseleave', () => {
+      if(childrenLink) {
+        childrenLink.className = "nav-menu--dropdown";
+      }
+    })
+  }
+  let rootRealPath = getRealPath(window.location.pathname, true);
+  for(let link of links) {
+    let linkPath = link.getAttribute("data-path");
+    if(linkPath && getRealPath(linkPath, true) === rootRealPath) {
+      link.className = "nav-item hover";
+    }
+  }
+
+  let iconMenu = document.querySelector("i.iconfont.icon-menu"),
+    iconMenuClicked = false;
+  let navDOM = document.querySelector("nav.site-navigation");
+  iconMenu.addEventListener("click", () => {
+    iconMenuClicked 
+      ? navDOM.className = "site-navigation active"
+      : navDOM.className = "site-navigation";
+    iconMenuClicked = !iconMenuClicked;
+  })
+</script>
+
+      
+
+
+
+
+
+
+
+
+<div class="container post-index">
+
+  
+
+<div class="post">
+  <h1 class="article-title">
+    <span>JS_数据类型</span>
+  </h1>
+  <div class="article-top-meta">
+    <span>
+      发布 : 
+      2019-03-04
+    </span>
+    
+    
+      <span>
+        浏览 : <span class="article-timer" data-identity="JS-数据类型"></span>
+      </span>
+    
+  </div>
+
+  
+
+  <div class="article-content">
+    <div class="markdown-body">
+      
+<li>JS 之父：Brendan Eich，JS 最初叫 Mocha -&gt; liveScript -&gt; JavaScript，10天完成了设计</li>
+<li>网景和 Sun 公司（发明 java）达成协议，JS 和 Java 一起发布</li>
+<li>此时 JS 还缺少很多模块，编码有问题，Unicode 在之后才发布了 UTF-8</li>
+<li>1996，MS IE -&gt; JScript</li>
+<li>网景 被打败，开源 -&gt; Firefox</li>
+<li>IE 5.5，MS 推出 JS 发请求功能</li>
+<li>2004，Gmail 利用 JS 发请求功能，做了网页上的程序。JS 变成正式的编程语言</li>
+<li>2010左右，中国 前端 Front-end</li>
+<li>网景为了打败 MS，向 ECMA 申报标准 （ECMAScript）</li>
+<li>JS 不行：全局变量（没有模块化）、标准库（内置代码少）</li>
+<li>ECMAScript 4 死了，ECMAScript 5 做了小升级，步子太小</li>
+<li>ES6：Rails 社区 Ruby —— CoffeeScript，JS 改良版。类，箭头函数</li>
+<li>ES5 不兼容 IE7，ES 6 不兼容 IE8</li>
+
+<h2 id="二、7种数据类型"><a href="#二、7种数据类型" class="headerlink" title="二、7种数据类型"></a>二、7种数据类型</h2><ul>
+<li>ECMAScript 的变量是松散类型的，所谓松散类型就是可以用来保存任何类型的数据。换句话说， 每个变量仅仅是一个用于保存值的占位符而已。</li>
+<li>Safari 5 及之前版本、Chrome 7 及之 前版本在对正则表达式调用 typeof 操作符时会返回”function”，而其他浏览器在这种情况下会返回 “object”。</li>
+</ul>
+<h3 id="1-Number-数字"><a href="#1-Number-数字" class="headerlink" title="1. Number 数字"></a>1. Number 数字</h3><ul>
+<li><code>.1</code> 可表示 0.1；</li>
+<li>0b 二进制，0o / 前导0 八进制，0x 十六进制</li>
+</ul>
+<h4 id="i-浮点数值"><a href="#i-浮点数值" class="headerlink" title="i. 浮点数值"></a>i. 浮点数值</h4><ul>
+<li>带小数点，但实际上为整型的变量会保存为整型。</li>
+<li>ECMASctipt 会将那些小数点后面带有 6 个零以上的浮点数值转换为以 e 表示法 表示的数值(例如，0.0000003 会被转换成 3e-7)。</li>
+<li>浮点数值的最高精度是 17 位小数，但在进行算术计算时其精确度远远不如整数。例如，0.1 加 0.2 的结果不是 0.3，而是 0.30000000000000004。这个小小的舍入误差会导致无法测试特定的浮点数值。</li>
+<li>我们测试的是两个数的和是不是等于 0.3。如果这两个数是 0.05 和 0.25，或者是 0.15 和 0.15 都不会有问题。而如前所述，如果这两个数是 0.1 和 0.2，那么测试将无法通过。因此，永远不 要测试某个特定的浮点数值。</li>
+<li>关于浮点数值计算会产生舍入误差的问题，有一点需要明确:这是使用基于 IEEE754 数值的浮点计算的通病，ECMAScript 并非独此一家;其他使用相同数值格 式的语言也存在这个问题。</li>
+</ul>
+<h4 id="ii-数值范围"><a href="#ii-数值范围" class="headerlink" title="ii. 数值范围"></a>ii. 数值范围</h4><ul>
+<li>ECMAScript 能够表示的最小数值保 存在 Number.MIN_VALUE 中——在大多数浏览器中，这个值是 5e-324。</li>
+<li>能够表示的最大数值保存在 Number.MAX_VALUE 中——在大多数浏览器中，这个值是 1.7976931348623157e+308。</li>
+<li>要想确定一个数值是不是有穷的(换句话说，是不是位于最 小和最大的数值之间)，可以使用 isFinite()函数。返 回 Boolean 值。</li>
+<li>访问 Number.NEGATIVE_INFINITY 和 Number.POSITIVE_INFINITY 也可以 得到负和正 Infinity 的值。可以想见，这两个属性中分别保存着-Infinity 和 Infinity。</li>
+</ul>
+<h4 id="iii-NaN"><a href="#iii-NaN" class="headerlink" title="iii. NaN"></a>iii. NaN</h4><p>  在 ECMAScript 中，任何数值除以 0 会返回 NaN<br>  （但实际上只有 0 除以 0 才会返回 NaN，正数除以 0 返回 Infinity，负数除以 0 返回-Infinity。）<br>  NaN，即非数值(Not a Number)是一个特殊的数值<br>  NaN 与任何值都不相等，包括 NaN 本身<br>  isNaN()函数 ：判断是否为 NaN<br>  parseInt() 函数<br>  var num1 = parseInt(“10”, 2);<br>  var num2 = parseInt(“10”, 8);<br>  var num3 = parseInt(“10”, 10);<br>  var num4 = parseInt(“10”, 16);<br>  //2 (按二进制解析) //8 (按八进制解析) //10(按十进制解析) //16(按十六进制解析) </p>
+<h3 id="2-String-字符串"><a href="#2-String-字符串" class="headerlink" title="2. String 字符串"></a>2. String 字符串</h3><ul>
+<li>空字符串 长度为0，空格字符串 长度为1；</li>
+<li>转义：<code>\</code> + <code>xxx</code>，<code>\n</code> 回车，<code>\t</code> Tab 制表符，长度为1</li>
+<li>多行字符串（不是字符串里有回车）：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">// 坑</span><br><span class="line">var s = &apos;1234 \</span><br><span class="line">        5678&apos;</span><br><span class="line"></span><br><span class="line">// 推荐</span><br><span class="line">var s2 = &apos;1234&apos; +</span><br><span class="line">        &apos;5678&apos;</span><br><span class="line"></span><br><span class="line">// 很多空格 会报错，因为没有闭合</span><br><span class="line">var s3 = &apos;1234 \______ </span><br><span class="line">          5678&apos;</span><br><span class="line"></span><br><span class="line">// ES6 特性 模板字符串包含回车 length: 9</span><br><span class="line">var s4 = `1234</span><br><span class="line">6789`</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="3-Boolean-布尔"><a href="#3-Boolean-布尔" class="headerlink" title="3. Boolean 布尔"></a>3. Boolean 布尔</h3><ul>
+<li>Boolean，数学家，下雨去上课没带伞，肺病死了。。。</li>
+<li><code>if (&quot;222&quot;) { console.log(&#39;代码执行到此处&#39;) }</code> 实际上打印的代码不会执行，<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness#Loose_equality_using" target="_blank">MDN 对于宽松相等有表格总结</a>，”222” -&gt; 222，true -&gt; 1，222 != 1；<br>建议：<br>（1）== 两端有 <code>true</code> 和 <code>false</code>，千万不要使用 == <br>（2）== 两端有 <code>[]</code>、<code>&quot;&quot;</code>，或者 <code>0</code>，尽量不要使用 ==</li>
+</ul>
+<h3 id="4-Symbol-符号"><a href="#4-Symbol-符号" class="headerlink" title="4. Symbol(符号)"></a>4. Symbol(符号)</h3><p>  Symbol 生成一个全局唯一的值。Symbol 的值和名字没有关系。<br>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">var a1 = Symbol(&apos;a&apos;)</span><br><span class="line">var a2 = Symbol(&apos;a&apos;)</span><br><span class="line">a1 !== a2 // true</span><br></pre></td></tr></table></figure></p>
+<h3 id="5-Null-对象"><a href="#5-Null-对象" class="headerlink" title="5. Null(对象)"></a>5. Null(对象)</h3><ul>
+<li>要保存对象的变量还没真正保存对象，空对象指针</li>
+<li>调用 typeof null 会返回”object”</li>
+</ul>
+<h3 id="6-Undefined-声明变量后没赋值-没有声明该变量"><a href="#6-Undefined-声明变量后没赋值-没有声明该变量" class="headerlink" title="6. Undefined(声明变量后没赋值 / 没有声明该变量)"></a>6. Undefined(声明变量后没赋值 / 没有声明该变量)</h3><ul>
+<li>未初始化的变量会自动被赋予 undefined 值，显式地初始化变化更为明智。如此在 typeof 操作符返回 ‘undefined’ 值时，可知道被检测变量还未被声明。</li>
+</ul>
+<h3 id="7-Object-对象"><a href="#7-Object-对象" class="headerlink" title="7. Object 对象"></a>7. Object 对象</h3><ul>
+<li>key 不加引号，要遵守标识符的规则: <br>（1）不能数字开头；（2）不能有空格；（3）合法字符</li>
+<li>key 符合标识符的情况下可用 <code>obj.key</code>，其余 <code>obj[&#39;key&#39;]</code></li>
+<li><code>delete obj[&#39;key&#39;]</code> 删除 key，<code>obj[&#39;key&#39;] = undefined</code> 只是将值置为 undefined</li>
+</ul>
+<h2 id="typeof-操作符"><a href="#typeof-操作符" class="headerlink" title="typeof 操作符"></a>typeof 操作符</h2><p>“undefined”——如果这个值未定义;<br>“boolean”——如果这个值是布尔值;<br>“number”——如果这个值是数值;<br>“object”——如果这个值是对象或 <code>null</code>;<br>“function”——如果这个值是函数。 // function 不在7种类型中</p>
+<p>调用 typeof null 会返回”object”，因为特殊值 null 被认为是一个空的对象引用。 </p>
+<p>Safari 5 及之前版本、Chrome 7 及之 前版本在对正则表达式调用 typeof 操作符时会返回”function”，而其他浏览器在这种情况下会返回 “object”。</p>
+    </div>
+  </div>
+  
+    <div class="copy-right">
+      <div class="markdown-body">
+        <blockquote>
+        
+        
+          本文作者 : Celeste Weng <br>
+        
+        原文链接 : <a href>https://celesteweng.github.io/2019/03/04/JS-数据类型/</a><br>
+        版权声明 : 本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！
+        </blockquote>
+      </div>
+    </div>
+  
+  
+  
+    <div class="social-share" style="margin-top: -2rem" data-wechat-qrcode-title="<p>微信扫一扫</p>" data-wechat-qrcode-helper="<p>微信右上角, 扫一扫分享</p>" data-sites="qzone, qq, weibo, wechat, douban, google, facebook, twitter">
+  <span style="color: #6b7487; font-size: 1.4rem;">分享到: </span>
+</div>
+<script src="https://cdn.bootcss.com/social-share.js/1.0.16/js/social-share.min.js" async></script>
+  
+
+  
+    <div id="reward">
+  
+  <button id="reward-btn">
+    
+    <span>投食</span>
+  </button>
+  <div id="reward-qrcode">
+    
+      <div class="reward-qrcode--container">
+        <img class="qrcode-img" src="/images/wechat.png" alt="微信扫一扫, 向我投食">
+        <p class="qrcode-meta">微信扫一扫, 向我投食</p>
+      </div>
+    
+      <div class="reward-qrcode--container">
+        <img class="qrcode-img" src="/images/alipay.png" alt="支付宝扫一扫, 向我投食">
+        <p class="qrcode-meta">支付宝扫一扫, 向我投食</p>
+      </div>
+    
+  </div>
+
+</div>
+
+<script>
+  (() => {
+    let button = document.querySelector('#reward-btn'),
+      qrcode = document.querySelector('#reward-qrcode'),
+      display = false;
+    
+    button.addEventListener('click', () => {
+      qrcode.style.display = display ? 'none' : 'block'
+      display = !display
+    }, false)
+  })()
+</script>
+  
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+      <span>
+        
+          <i class="iconfont icon-06tags"></i>标签: 
+          
+          <span class="span--tag">
+            <a href="/tags/JS的历史/">
+              #JS的历史
+            </a>
+          </span>
+          
+          <span class="span--tag">
+            <a href="/tags/JS数据类型/">
+              #JS数据类型
+            </a>
+          </span>
+          
+        
+      </span>
+    </div>
+    <div class="article-meta pull-right">
+    </div>
+  </div>
+</div>
+
+
+  <aside id="sidebar">
+    <p id="sidebar-header"></p>
+    <ol id="sidebar-toc"></ol>
+  </aside>
+  <script async>setTimeout(generateToc, 10);</script>
+
+
+  <nav class="post-navigation">
+    
+      <div class="nav-pre">
+        <i class="iconfont icon-prev"></i>
+        上一篇:
+        <a href="/2019/02/28/算法初级/" target="_self">算法初级 & 数据结构</a>
+      </div>
+    
+    
+      <div class="nav-next">
+        下一篇:
+        <a href="/2019/03/04/CSS-深入浅出-笔记/" target="_self">CSS_深入浅出_笔记</a>
+        <i class="iconfont icon-next"></i>
+      </div>
+    
+  </nav>
+
+  
+    <a href="#comment" class="comment-anchor"></a>
+<div class="comment-title"><i class="iconfont icon-footprint"></i> 留下足迹 <i class="iconfont icon-footprint"></i></div>
+<div id="vcomments"></div>
+
+<script defer>
+  if( true ) {
+    let path = getRealPath()
+    new Valine({
+      el: "#vcomments",
+      appId: "5t4xu3HBz1CCS0dWUdEaYl1T-gzGzoHsz",
+      appKey: "2je5yKJYh98beKd80936XS8g",
+      notify: false,
+      verify: false,
+      avatar: "robohash",
+      placeholder: "正确填写邮箱, 才能及时收到回复哦♪(^∇^*)",
+      path
+    });
+  }
+</script>
+   
+
+  
+    <script defer>
+const valineAPI = (() => {
+  try {
+    AV.init("5t4xu3HBz1CCS0dWUdEaYl1T-gzGzoHsz", "2je5yKJYh98beKd80936XS8g");
+  } catch(error) {}
+  const isExist = (identity) => {
+    identity = identity || getRealPath();
+    let query = new AV.Query('Timer');
+    return new Promise((resolve, reject) => {
+      query.equalTo("identity", identity);
+      query.find().then(results => {
+        resolve(results.length > 0);
+      }, error => reject(error));
+    })
+  }
+
+  const _get = (identity) => {
+    let query = null;
+    if(identity && identity instanceof Array){
+      let querys = [];
+      for(let i = 0; i < identity.length; ++i) {
+        querys[i] = new AV.Query('Timer');
+        querys[i].equalTo('identity', identity[i]);
+      }
+      query = AV.Query.or.apply(null ,querys);
+    } else {
+      identity = identity || getRealPath();
+      query = new AV.Query("Timer");
+      query.equalTo("identity", identity);
+    }
+
+    return new Promise((resolve, reject) => {
+      query.find()
+      .then(results => resolve(results))
+      .catch(error => reject(error))
+    })
+  }
+
+  const create = (identity) => {
+    identity = identity || getRealPath();
+    return new Promise((resolve, reject) => {
+      let Todo = AV.Object.extend('Timer');
+      let todo = new Todo();
+      todo.set("times", 1);
+      todo.set("identity", identity);
+      todo.save().then(res => resolve(true), error => reject(error));
+    })
+  }
+
+  const update = (identity) => {
+    identity = identity || getRealPath();
+    return new Promise((resolve, reject) => {
+      let query = new AV.Query('Timer');
+      query.equalTo("identity", identity);
+      query.find().then(todos => {
+        todos.forEach(todo => {
+          todo.set("times", todo.attributes.times + 1);
+        });
+        return AV.Object.saveAll(todos);
+      }).then(todos => resolve(true), error => reject(error));
+    })
+  }
+
+  return {
+    isExist,
+    _get,
+    update,
+    create
+  }
+})()
+
+const calcAndWriteTimes = () => {
+  let isPost = true;
+
+  let timerAllDOM = document.querySelectorAll(".article-timer");
+
+  if(isPost) {
+    let identity = timerAllDOM[0].getAttribute("data-identity");
+    valineAPI.isExist(identity)
+    .then(exist => {
+      if(exist) {
+        return valineAPI.update(identity);
+      }
+      return new Promise(resolve => resolve(true));
+    })
+    .then( succuess => valineAPI._get(identity))
+    .then( result => timerAllDOM[0].innerText = result[0].attributes.times)
+    .catch(error => console.log(error.message))
+    return ;
+  }
+
+  let timerDOMCache = {};
+
+  for(let timerDOM of timerAllDOM) {
+    let identity = timerDOM.getAttribute("data-identity");
+    if(timerDOMCache.hasOwnProperty(identity)){
+      timerDOMCache[identity].dom.push(timerDOM);
+    }else{
+      timerDOMCache[identity] = {
+        dom: [timerDOM],
+        times: undefined
+      };
+    }
+  }
+
+  let identities = Object.keys(timerDOMCache);
+  valineAPI._get(identities).then(results => {
+    for(let result of results) {
+      let {identity, times} = result.attributes;
+      timerDOMCache[identity].times = times;
+      timerDOMCache[identity].dom.map(item => item.innerText = times);
+    }
+    for(let identity of identities) {
+      if(timerDOMCache[identity].times){
+        continue;
+      }
+      timerDOMCache[identity].dom.map(item => item.innerText = 1);
+      valineAPI.create(identity);
+    }
+  }).catch(error => console.log(error.message))
+}
+
+if(true){
+  calcAndWriteTimes();
+}
+</script>
+   
+
+</div>
+
+
+      <footer>
+  <p class="site-info">
+    博客已萌萌哒运行<span id="time-to-now"></span><span class="my-face">(●'◡'●)ﾉ♥</span>
+    <br>
+    Theme - <a href="https://github.com/dongyuanxin/theme-bmw">BMW</a> | Made With 💗 | Powered by <a href="https://godbmw.com/">GodBMW</a>
+    <br>
+    
+  </p>
+</footer>
+
+
+
+<script>
+const timeToNowDOM = document.querySelector("#time-to-now");
+const startTimestamp = new Date(2017, 7, 10).getTime();
+
+const updateTimeStr = () => {
+  let offset = parseInt(
+      (new Date().getTime() - startTimestamp) / 1000,
+      10
+    ),
+    day = Math.floor(offset / 86400),
+    hour = Math.floor((offset % 86400) / 3600),
+    minute = Math.floor(((offset % 86400) % 3600) / 60),
+    second = Math.floor(((offset % 86400) % 3600) % 60);
+  timeToNowDOM.innerHTML =
+    day + "天" + hour + "小时" + minute + "分钟" + second + "秒";
+  setTimeout(updateTimeStr, 500);
+}
+
+setTimeout(updateTimeStr, 500);
+</script>
+
+
+      <div class="back-to-top hidden">
+  <span>
+    <i class="iconfont icon-60"></i><span></span>%
+  </span>
+</div>
+
+<script>
+const updateIconToTop = percent => {
+  let dom = document.querySelector(".back-to-top span span");
+  dom.innerText = percent;
+  if(percent < 1) {
+    document.querySelector(".back-to-top").className = "back-to-top hidden";
+  } else {
+    document.querySelector(".back-to-top").className = "back-to-top";
+  }
+}
+
+const handleScoll = () => {
+  let isRunning = false;
+  return () => {
+    if (isRunning) return;
+    isRunning = true;
+    window.requestAnimationFrame(timestamp => {
+      let scrollTop =
+          document.documentElement.scrollTop || document.body.scrollTop,
+        scrollHeight =
+          document.documentElement.scrollHeight ||
+          document.body.scrollHeight,
+        clientHeight =
+          document.documentElement.clientHeight ||
+          document.body.clientHeight;
+      isRunning = false;
+      if (scrollTop <= 1) {
+        updateIconToTop(0);
+        return;
+      }
+      if (scrollTop + clientHeight >= scrollHeight) {
+        updateIconToTop(100);
+      } else {
+        updateIconToTop(parseInt(
+          100 * scrollTop / (scrollHeight - clientHeight),
+          10
+        ));
+      }
+    });
+  };
+}
+
+const backToTop = () => {
+  let scrollTop =
+      document.documentElement.scrollTop || document.body.scrollTop,
+    delay = 10,
+    time = 200;
+  if (scrollTop <= 20) {
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    return;
+  }
+  let step = Math.ceil(scrollTop * delay / time);
+  let timer = setInterval(() => {
+    scrollTop =
+      document.documentElement.scrollTop || document.body.scrollTop;
+    if (scrollTop - step <= 0) {
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      clearInterval(timer);
+    } else {
+      document.documentElement.scrollTop = scrollTop - step;
+      document.body.scrollTop = scrollTop - step;
+    }
+  }, delay);
+}
+
+document.addEventListener("scroll", handleScoll(), false);
+
+document.querySelector(".back-to-top").addEventListener("click", backToTop, false);
+
+</script>
+
+    </div>
+
+    
+      <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+<script>
+  (() => {
+    const mathjaxConfig = {
+      showProcessingMessages: false, //关闭js加载过程信息
+      messageStyle: "none", //不显示信息
+      jax: ["input/TeX", "output/HTML-CSS"],
+      tex2jax: {
+        inlineMath: [["$", "$"], ["\\(", "\\)"]], //行内公式选择符
+        displayMath: [["$$", "$$"], ["\\[", "\\]"]], //段内公式选择符
+        skipTags: ["script", "noscript", "style", "textarea", "pre", "code", "a"] //避开某些标签
+      },
+      "HTML-CSS": {
+        availableFonts: ["STIX", "TeX"], //可选字体
+        showMathMenu: false //关闭右击菜单显示
+      }
+    }
+
+    let mathjaxInterval = setInterval(() => {
+      if(!window.MathJax){
+        return;
+      }
+      window.MathJax.Hub.Config(mathjaxConfig)
+      window.MathJax.Hub.Queue(["Typeset", MathJax.Hub, document.getElementById('app')])
+
+      clearInterval(mathjaxInterval)
+    }, 10)    
+  })()
+</script>
+    
+
+    <script src="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.js" async></script>
+<script async>
+  let fancyTimer = setInterval(function(){
+    if(!window.$){
+      return;
+    }
+    $(document).ready(function() {
+      $(".post img").each(function () {
+        if($(this).parent().get(0).tagName.toLowerCase() === "a") {
+          return;
+        }
+        // $(this).attr("data-fancybox", "gallery"); // if you add 'data-fancybox', img will display after showed
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "gallery");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      });
+      
+      clearInterval(fancyTimer);
+    });
+  }, 10);
+</script>
+
+    
+  </body>
+
+</html>

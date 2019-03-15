@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+  
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta name="author" content="董沅鑫, yuanxin.me@gmail.com">
+  
+  
+  
+  <title>HTML标签 | Celeste&#39;s Blog</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="HTML,">
+  
+
+  <script>
+    console.log('\n%c Hexo-theme-bmw v4.0 ' + '%c 🎉 https://github.com/dongyuanxin/theme-bmw 🎉\n' + '\n%c View demo online ' + '%c 🔍 https://godbmw.com/ 🔍  \n' , 'color: #fadfa3; background: #030307; padding:3px 0;', '', 'color: #fadfa3; background: #030307; padding:3px 0;', '');
+  </script>
+
+  
+    <meta name="description" content="前端，学习中">
+  
+
+  
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+    <link rel="apple-touch-icon" href="/images/peanut.png">
+  
+
+  <link href="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/icon/iconfont.css">
+<link rel="stylesheet" href="/css/github-markdown.css">
+<link rel="stylesheet" href="/css/highlight.css">
+
+  <script src="/js/util.js"></script>
+<script src="/js/valine.min.js"></script>
+
+  
+
+  
+    <link href="https://cdn.bootcss.com/aplayer/1.10.1/APlayer.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/aplayer/1.10.1/APlayer.min.js" async></script>
+  
+
+  
+    <link href="https://cdn.bootcss.com/social-share.js/1.0.16/css/share.min.css" rel="stylesheet">
+  
+  
+  <script src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js" async></script>
+  
+  
+    <script src="//cdn.jsdelivr.net/npm/leancloud-storage@3.11.0/dist/av-min.js"></script>
+  
+
+</head>
+
+  <body>
+
+    
+
+    <div id="app">
+
+      <div class="header-wrap">
+  <header>
+    <div class="site-brand">
+      <div class="site-title">
+        <a href="/">Celeste&#39;s Blog</a>
+      </div>
+    </div>
+    <nav class="site-navigation">
+      <ul class="nav-menu">
+      
+        <li class="nav-item" data-path="/">
+          
+            <a href="/" target="_self">
+              主页
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          
+            <a href="/archives/" target="_self">
+              归档
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          
+            <a href="/tags/" target="_self">
+              标签
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path>
+          
+            <a href="javascript:void(0);" v-else>抓到我</a>
+            <ul class="nav-menu--dropdown">
+              
+                <li>
+                  <a href="https://github.com/celesteweng" target="_blank">
+                    Github
+                  </a>
+                </li>
+              
+            </ul>
+          
+        </li>
+      
+      </ul>
+    </nav>
+    <i class="iconfont icon-menu"></i>
+  </header>
+</div>
+
+<script>
+  let links = document.querySelectorAll('.nav-item');
+  for(let link of links){
+    let childrenLink = link.querySelector('ul');
+    link.addEventListener('mouseenter', () => {
+      if(childrenLink) {
+        childrenLink.className = "nav-menu--dropdown active";
+      }
+    })
+    link.addEventListener('mouseleave', () => {
+      if(childrenLink) {
+        childrenLink.className = "nav-menu--dropdown";
+      }
+    })
+  }
+  let rootRealPath = getRealPath(window.location.pathname, true);
+  for(let link of links) {
+    let linkPath = link.getAttribute("data-path");
+    if(linkPath && getRealPath(linkPath, true) === rootRealPath) {
+      link.className = "nav-item hover";
+    }
+  }
+
+  let iconMenu = document.querySelector("i.iconfont.icon-menu"),
+    iconMenuClicked = false;
+  let navDOM = document.querySelector("nav.site-navigation");
+  iconMenu.addEventListener("click", () => {
+    iconMenuClicked 
+      ? navDOM.className = "site-navigation active"
+      : navDOM.className = "site-navigation";
+    iconMenuClicked = !iconMenuClicked;
+  })
+</script>
+
+      
+
+
+
+
+
+
+
+
+<div class="container post-index">
+
+  
+
+<div class="post">
+  <h1 class="article-title">
+    <span>HTML标签</span>
+  </h1>
+  <div class="article-top-meta">
+    <span>
+      发布 : 
+      2019-02-25
+    </span>
+    
+    
+      <span>
+        浏览 : <span class="article-timer" data-identity="HTML标签"></span>
+      </span>
+    
+  </div>
+
+  
+
+  <div class="article-content">
+    <div class="markdown-body">
+      <h2 id="a-标签"><a href="#a-标签" class="headerlink" title="a 标签"></a>a 标签</h2><p>跳转页面（HTTP GET 请求）</p>
+<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/a" target="_blank">a 的更多属性见 &gt;&gt; MDN</a></p>
+<ol>
+<li><p>target 属性（结合 iframe 理解）</p>
+<ul>
+<li><code>_self</code>：在当前页面打开（默认）</li>
+<li><code>_blank</code>：在空页面打开</li>
+<li><code>_partent</code>：父框架集或父窗口打开</li>
+<li><code>_top</code>：祖宗窗口中打开</li>
+<li>framename：在指定的 <code>iframe</code> 标签中打开</li>
+</ul>
+</li>
+<li><p>href 可以输入的内容</p>
+<ul>
+<li>使用 http 协议或 https 协议：<code>http://qq.com</code>  <code>https://qq.com</code></li>
+<li>使用和当前页面相同的协议，无协议绝对地址: <code>//qq.com</code> (直接预览为 file 协议，使用 http-server: <code>npm i -g http-server</code>, <code>http-server</code> or <code>hs</code> 可直接执行，<code>http-server -c-1</code> 不要缓存)</li>
+<li>相对路径 (跳转到 /xxx.html)：<code>xxx.html</code></li>
+<li>锚点（不会发送请求，页面内跳转，别的都要发起请求）：<code>#xxx</code></li>
+<li>查询参数：<code>?name=qqqq</code></li>
+<li>伪协议：<code>javascript:alert(1);</code> （执行 js 代码）；<code>javascript:;</code>(需要写a标签，但是点击之后不需要跳转。直接写 <code>href=&quot;#&quot;</code> 会跳到页面顶部，<code>href=&quot;&quot;</code> 回刷新当前页，不写 href，a 标签变 span)</li>
+</ul>
+<p>错误的：</p>
+<ul>
+<li><code>qq.com</code>：为相对位置，当文件打开</li>
+</ul>
+</li>
+<li><p>download 属性：将链接变成可下载的。</p>
+<blockquote>
+<p>另一方法：HTTP 响应头中设置 <code>Content-Type: application/octet-stream</code>，浏览器默认处理字节流的方式是下载</p>
+</blockquote>
+</li>
+<li><p>title 属性：规定额外信息，通常鼠标移到元素上显示这些信息。</p>
+</li>
+</ol>
+<h2 id="form-标签"><a href="#form-标签" class="headerlink" title="form 标签"></a>form 标签</h2><p>跳转页面（HTTP POST 请求）</p>
+<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/form" target="_blank">form 的更多属性见 &gt;&gt; MDN</a></p>
+<ol>
+<li>和 a 标签的区别是发起请求的类型不同。action 类似于 href，target 和 a标签的一样</li>
+<li>GET 请求：表单信息变成查询参数，会出现在 url 里，请求头中无法有第四部分（Form Data）；<br>POST 请求：表单信息作为 HTTP 请求的第四部分提交到服务器，如果要写查询参数，可直接写在 action 属性中， <code>action=&quot;users?age=33&quot;</code></li>
+<li>method=”post”，默认为 get，自己改。</li>
+<li>请求头中 <code>Content-Type: application/x-www-form-urlencoded (key=value&amp;key=value</code>，form 中 input 的 name 为 key)</li>
+<li>提交的内容在 Form Data 中，HTTP 不靠谱，密码为明文。英文之外的都会转义，utf-8 变长编码，英文1个字节，中文3个字节，每个字节前有 <code>%</code></li>
+<li>如果 form 表单里没有提交按钮（input 标签，type=”submit”），则无法提交</li>
+<li>如果1个 <code>&lt;form&gt;</code> 里面只有一个按钮(<code>&lt;button&gt;</code>)，会自动升级为提交按钮，但如果 button 标签写了 <code>type=&quot;button&quot;</code>，表单则无法提交</li>
+</ol>
+<h2 id="input"><a href="#input" class="headerlink" title="input"></a>input</h2><ul>
+<li>input / button 区别：是否为「空标签」</li>
+</ul>
+<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/Input" target="_blank">input 的更多属性&gt;&gt;</a><br><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/button" target="_blank">button 的更多属性&gt;&gt;</a></p>
+<table>
+<thead>
+<tr>
+<th>type</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>button</td>
+<td>定义可点击按钮（多数情况下，用于通过 JavaScript 启动脚本）。<br>和 button 标签在 form 表单中有区别，无法自动升级为提交按钮，看起来和 type=”submit” 的 input 一样</td>
+</tr>
+<tr>
+<td>checkbox</td>
+<td>定义复选框。<br>（1） id=”xxx” <code>&lt;label for=&quot;xxx&quot;&gt;你是白痴吗&lt;/label&gt;</code><br>（2） 用label 包 input ，这样就不用 id 关联，老司机推荐<br><code>&lt;label for=&quot;xxx&quot;&gt;你是白痴吗&lt;input type=&quot;checkbox&quot; name=&quot;user&quot;&gt;&lt;/label&gt;</code><br>（3） 在 form 中，checked: inputName=on, !cheked: 无内容<br>（4）多选，name 相同，value 不同，勾选的会被提交。如：<br>name=”animal”, value=[“panda”, “dog”, “fish”] // 选了前两个，Form Data: animal=panda&amp;animal=fish</td>
+</tr>
+<tr>
+<td>file</td>
+<td>定义输入字段和 “浏览”按钮，供文件上传。</td>
+</tr>
+<tr>
+<td>hidden</td>
+<td>定义隐藏的输入字段。<a href="https://blog.csdn.net/kuangruike/article/details/52127450" target="_blank" rel="noopener">https://blog.csdn.net/kuangruike/article/details/52127450</a></td>
+</tr>
+<tr>
+<td>image</td>
+<td>定义图像形式的提交按钮。</td>
+</tr>
+<tr>
+<td>password</td>
+<td>定义密码字段。该字段中的字符被掩码。只是在 html 看不见，实际上还是明文的</td>
+</tr>
+<tr>
+<td>radio</td>
+<td>定义单选按钮。similar to checkbox</td>
+</tr>
+<tr>
+<td>reset</td>
+<td>定义重置按钮。重置按钮会清除表单中的所有数据。</td>
+</tr>
+<tr>
+<td>submit</td>
+<td>定义提交按钮。提交按钮会把表单数据发送到服务器。</td>
+</tr>
+<tr>
+<td>text</td>
+<td>定义单行的输入字段，用户可在其中输入文本。默认宽度为 20 个字符。</td>
+</tr>
+<tr>
+<td>HTML5</td>
+<td>新类型，不支持的浏览器显示为常规的文本域</td>
+</tr>
+<tr>
+<td>email</td>
+<td>要有 “@”，并且 “@” 前后都要有字符，且不能为中文（别的没试）</td>
+</tr>
+<tr>
+<td>url</td>
+<td>粗糙测试，要有 http:// or https://</td>
+</tr>
+<tr>
+<td>number</td>
+<td>能够设定对所接受的数字的限定 min=”1” max=”10”</td>
+</tr>
+<tr>
+<td>range</td>
+<td>滑动条，min max 设定范围，value 默认值，step 间隔</td>
+</tr>
+<tr>
+<td>Date pickers (date, month, week, time, datetime, datetime-local)</td>
+<td>date - 选取日、月、年<br>month - 选取月、年<br>week - 选取周和年<br>time - 选取时间（小时和分钟）<br>datetime - 选取时间、日、月、年（UTC 时间）<br>datetime-local - 选取时间、日、月、年（本地时间）</td>
+</tr>
+<tr>
+<td>search</td>
+<td>右边多个叉叉，点了清空内容</td>
+</tr>
+<tr>
+<td>color</td>
+<td>只有 Opera 支持，应该没有卵用</td>
+</tr>
+</tbody>
+</table>
+<h2 id="select-标签"><a href="#select-标签" class="headerlink" title="select 标签"></a>select 标签</h2><p>下拉选择</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">select</span> <span class="attr">name</span>=<span class="string">"group"</span> <span class="attr">multiple</span>&gt;</span> // multiple 可多选</span><br><span class="line">    <span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">""</span>&gt;</span>-<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">"1"</span>&gt;</span>item1<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">"2"</span>&gt;</span>item2<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">"3"</span> <span class="attr">disabled</span>&gt;</span>item3<span class="tag">&lt;/<span class="name">option</span>&gt;</span> // disabled 不可选</span><br><span class="line">    <span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">"4"</span> <span class="attr">selected</span>&gt;</span>item4<span class="tag">&lt;/<span class="name">option</span>&gt;</span> // selected 默认选中</span><br><span class="line"><span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br><span class="line"></span><br><span class="line">// 在 form 中提交格式为 selectName=selectedOptionValue</span><br></pre></td></tr></table></figure>
+<h2 id="textarea-标签"><a href="#textarea-标签" class="headerlink" title="textarea 标签"></a>textarea 标签</h2><p>输入多行内容</p>
+<table>
+<thead>
+<tr>
+<th>需求</th>
+<th>操作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>大小不可改变</td>
+<td>CSS  resize: none;</td>
+</tr>
+<tr>
+<td>设置大小</td>
+<td>(CSS  width/height) or (col/rows  不准，一般不用)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="table-标签示例"><a href="#table-标签示例" class="headerlink" title="table 标签示例"></a>table 标签示例</h2><p>用于展示数据</p>
+<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/table" target="_blank">input 的更多属性&gt;&gt;</a></p>
+<ol>
+<li>HTML 规定 <code>&lt;table&gt;</code> 中只可以有3个元素：<code>&lt;thead&gt; &lt;tbody&gt; &lt;tfoot&gt;</code></li>
+<li>tbody 标签不写，浏览器会自动补上</li>
+<li>表格边框的间隙默认有，不要则设置 table { border-collapse: collapse; }</li>
+</ol>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- table row 行 tr --&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- table data 数据 td --&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- table header 表头的标题 --&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">table</span> <span class="attr">border</span>=<span class="string">1</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- colgroup 里面有元素就是有标签的元素 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">colgroup</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- col 指定列的宽度 --&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- col 有 bgcolor 属性，设置改列的背景色 --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">col</span> <span class="attr">width</span>=<span class="string">100</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">col</span> <span class="attr">bgcolor</span>=<span class="string">red</span> <span class="attr">width</span>=<span class="string">200</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">col</span> <span class="attr">width</span>=<span class="string">100</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">col</span> <span class="attr">width</span>=<span class="string">70</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">colgroup</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">thead</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">th</span>&gt;</span>项目<span class="tag">&lt;/<span class="name">th</span>&gt;</span><span class="tag">&lt;<span class="name">th</span>&gt;</span>姓名<span class="tag">&lt;/<span class="name">th</span>&gt;</span><span class="tag">&lt;<span class="name">th</span>&gt;</span>性别<span class="tag">&lt;/<span class="name">th</span>&gt;</span><span class="tag">&lt;<span class="name">th</span>&gt;</span>年龄<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">thead</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">tbody</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">th</span>&gt;</span><span class="tag">&lt;/<span class="name">th</span>&gt;</span><span class="tag">&lt;<span class="name">td</span>&gt;</span>如花<span class="tag">&lt;/<span class="name">td</span>&gt;</span><span class="tag">&lt;<span class="name">td</span>&gt;</span>1<span class="tag">&lt;/<span class="name">td</span>&gt;</span><span class="tag">&lt;<span class="name">td</span>&gt;</span>90<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">th</span>&gt;</span><span class="tag">&lt;/<span class="name">th</span>&gt;</span><span class="tag">&lt;<span class="name">td</span>&gt;</span>狗蛋<span class="tag">&lt;/<span class="name">td</span>&gt;</span><span class="tag">&lt;<span class="name">td</span>&gt;</span>2<span class="tag">&lt;/<span class="name">td</span>&gt;</span><span class="tag">&lt;<span class="name">td</span>&gt;</span>92<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">th</span>&gt;</span>平均分<span class="tag">&lt;/<span class="name">th</span>&gt;</span><span class="tag">&lt;<span class="name">td</span>&gt;</span><span class="tag">&lt;/<span class="name">td</span>&gt;</span><span class="tag">&lt;<span class="name">td</span>&gt;</span><span class="tag">&lt;/<span class="name">td</span>&gt;</span><span class="tag">&lt;<span class="name">td</span>&gt;</span><span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">tbody</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">tfoot</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">th</span>&gt;</span>总分<span class="tag">&lt;/<span class="name">th</span>&gt;</span><span class="tag">&lt;<span class="name">td</span>&gt;</span><span class="tag">&lt;/<span class="name">td</span>&gt;</span><span class="tag">&lt;<span class="name">td</span>&gt;</span><span class="tag">&lt;/<span class="name">td</span>&gt;</span><span class="tag">&lt;<span class="name">td</span>&gt;</span><span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">tfoot</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">table</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><a href="http://www.w3school.com.cn/html5/html5_reference.asp" title="HTML 5 参考手册" target="_blank" rel="noopener">HTML5 新标签 完整列表&gt;&gt;</a></p>
+    </div>
+  </div>
+  
+    <div class="copy-right">
+      <div class="markdown-body">
+        <blockquote>
+        
+        
+          本文作者 : Celeste Weng <br>
+        
+        原文链接 : <a href>https://celesteweng.github.io/2019/02/25/HTML标签/</a><br>
+        版权声明 : 本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！
+        </blockquote>
+      </div>
+    </div>
+  
+  
+  
+    <div class="social-share" style="margin-top: -2rem" data-wechat-qrcode-title="<p>微信扫一扫</p>" data-wechat-qrcode-helper="<p>微信右上角, 扫一扫分享</p>" data-sites="qzone, qq, weibo, wechat, douban, google, facebook, twitter">
+  <span style="color: #6b7487; font-size: 1.4rem;">分享到: </span>
+</div>
+<script src="https://cdn.bootcss.com/social-share.js/1.0.16/js/social-share.min.js" async></script>
+  
+
+  
+    <div id="reward">
+  
+  <button id="reward-btn">
+    
+    <span>投食</span>
+  </button>
+  <div id="reward-qrcode">
+    
+      <div class="reward-qrcode--container">
+        <img class="qrcode-img" src="/images/wechat.png" alt="微信扫一扫, 向我投食">
+        <p class="qrcode-meta">微信扫一扫, 向我投食</p>
+      </div>
+    
+      <div class="reward-qrcode--container">
+        <img class="qrcode-img" src="/images/alipay.png" alt="支付宝扫一扫, 向我投食">
+        <p class="qrcode-meta">支付宝扫一扫, 向我投食</p>
+      </div>
+    
+  </div>
+
+</div>
+
+<script>
+  (() => {
+    let button = document.querySelector('#reward-btn'),
+      qrcode = document.querySelector('#reward-qrcode'),
+      display = false;
+    
+    button.addEventListener('click', () => {
+      qrcode.style.display = display ? 'none' : 'block'
+      display = !display
+    }, false)
+  })()
+</script>
+  
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+      <span>
+        
+          <i class="iconfont icon-06tags"></i>标签: 
+          
+          <span class="span--tag">
+            <a href="/tags/HTML/">
+              #HTML
+            </a>
+          </span>
+          
+        
+      </span>
+    </div>
+    <div class="article-meta pull-right">
+    </div>
+  </div>
+</div>
+
+
+  <aside id="sidebar">
+    <p id="sidebar-header"></p>
+    <ol id="sidebar-toc"></ol>
+  </aside>
+  <script async>setTimeout(generateToc, 10);</script>
+
+
+  <nav class="post-navigation">
+    
+      <div class="nav-pre">
+        <i class="iconfont icon-prev"></i>
+        上一篇:
+        <a href="/2019/02/25/什么是可替换标签/" target="_self">什么是可替换标签(replaced element)</a>
+      </div>
+    
+    
+      <div class="nav-next">
+        下一篇:
+        <a href="/2019/02/26/CSS学习资源/" target="_self">CSS学习资源</a>
+        <i class="iconfont icon-next"></i>
+      </div>
+    
+  </nav>
+
+  
+    <a href="#comment" class="comment-anchor"></a>
+<div class="comment-title"><i class="iconfont icon-footprint"></i> 留下足迹 <i class="iconfont icon-footprint"></i></div>
+<div id="vcomments"></div>
+
+<script defer>
+  if( true ) {
+    let path = getRealPath()
+    new Valine({
+      el: "#vcomments",
+      appId: "5t4xu3HBz1CCS0dWUdEaYl1T-gzGzoHsz",
+      appKey: "2je5yKJYh98beKd80936XS8g",
+      notify: false,
+      verify: false,
+      avatar: "robohash",
+      placeholder: "正确填写邮箱, 才能及时收到回复哦♪(^∇^*)",
+      path
+    });
+  }
+</script>
+   
+
+  
+    <script defer>
+const valineAPI = (() => {
+  try {
+    AV.init("5t4xu3HBz1CCS0dWUdEaYl1T-gzGzoHsz", "2je5yKJYh98beKd80936XS8g");
+  } catch(error) {}
+  const isExist = (identity) => {
+    identity = identity || getRealPath();
+    let query = new AV.Query('Timer');
+    return new Promise((resolve, reject) => {
+      query.equalTo("identity", identity);
+      query.find().then(results => {
+        resolve(results.length > 0);
+      }, error => reject(error));
+    })
+  }
+
+  const _get = (identity) => {
+    let query = null;
+    if(identity && identity instanceof Array){
+      let querys = [];
+      for(let i = 0; i < identity.length; ++i) {
+        querys[i] = new AV.Query('Timer');
+        querys[i].equalTo('identity', identity[i]);
+      }
+      query = AV.Query.or.apply(null ,querys);
+    } else {
+      identity = identity || getRealPath();
+      query = new AV.Query("Timer");
+      query.equalTo("identity", identity);
+    }
+
+    return new Promise((resolve, reject) => {
+      query.find()
+      .then(results => resolve(results))
+      .catch(error => reject(error))
+    })
+  }
+
+  const create = (identity) => {
+    identity = identity || getRealPath();
+    return new Promise((resolve, reject) => {
+      let Todo = AV.Object.extend('Timer');
+      let todo = new Todo();
+      todo.set("times", 1);
+      todo.set("identity", identity);
+      todo.save().then(res => resolve(true), error => reject(error));
+    })
+  }
+
+  const update = (identity) => {
+    identity = identity || getRealPath();
+    return new Promise((resolve, reject) => {
+      let query = new AV.Query('Timer');
+      query.equalTo("identity", identity);
+      query.find().then(todos => {
+        todos.forEach(todo => {
+          todo.set("times", todo.attributes.times + 1);
+        });
+        return AV.Object.saveAll(todos);
+      }).then(todos => resolve(true), error => reject(error));
+    })
+  }
+
+  return {
+    isExist,
+    _get,
+    update,
+    create
+  }
+})()
+
+const calcAndWriteTimes = () => {
+  let isPost = true;
+
+  let timerAllDOM = document.querySelectorAll(".article-timer");
+
+  if(isPost) {
+    let identity = timerAllDOM[0].getAttribute("data-identity");
+    valineAPI.isExist(identity)
+    .then(exist => {
+      if(exist) {
+        return valineAPI.update(identity);
+      }
+      return new Promise(resolve => resolve(true));
+    })
+    .then( succuess => valineAPI._get(identity))
+    .then( result => timerAllDOM[0].innerText = result[0].attributes.times)
+    .catch(error => console.log(error.message))
+    return ;
+  }
+
+  let timerDOMCache = {};
+
+  for(let timerDOM of timerAllDOM) {
+    let identity = timerDOM.getAttribute("data-identity");
+    if(timerDOMCache.hasOwnProperty(identity)){
+      timerDOMCache[identity].dom.push(timerDOM);
+    }else{
+      timerDOMCache[identity] = {
+        dom: [timerDOM],
+        times: undefined
+      };
+    }
+  }
+
+  let identities = Object.keys(timerDOMCache);
+  valineAPI._get(identities).then(results => {
+    for(let result of results) {
+      let {identity, times} = result.attributes;
+      timerDOMCache[identity].times = times;
+      timerDOMCache[identity].dom.map(item => item.innerText = times);
+    }
+    for(let identity of identities) {
+      if(timerDOMCache[identity].times){
+        continue;
+      }
+      timerDOMCache[identity].dom.map(item => item.innerText = 1);
+      valineAPI.create(identity);
+    }
+  }).catch(error => console.log(error.message))
+}
+
+if(true){
+  calcAndWriteTimes();
+}
+</script>
+   
+
+</div>
+
+
+      <footer>
+  <p class="site-info">
+    博客已萌萌哒运行<span id="time-to-now"></span><span class="my-face">(●'◡'●)ﾉ♥</span>
+    <br>
+    Theme - <a href="https://github.com/dongyuanxin/theme-bmw">BMW</a> | Made With 💗 | Powered by <a href="https://godbmw.com/">GodBMW</a>
+    <br>
+    
+  </p>
+</footer>
+
+
+
+<script>
+const timeToNowDOM = document.querySelector("#time-to-now");
+const startTimestamp = new Date(2017, 7, 10).getTime();
+
+const updateTimeStr = () => {
+  let offset = parseInt(
+      (new Date().getTime() - startTimestamp) / 1000,
+      10
+    ),
+    day = Math.floor(offset / 86400),
+    hour = Math.floor((offset % 86400) / 3600),
+    minute = Math.floor(((offset % 86400) % 3600) / 60),
+    second = Math.floor(((offset % 86400) % 3600) % 60);
+  timeToNowDOM.innerHTML =
+    day + "天" + hour + "小时" + minute + "分钟" + second + "秒";
+  setTimeout(updateTimeStr, 500);
+}
+
+setTimeout(updateTimeStr, 500);
+</script>
+
+
+      <div class="back-to-top hidden">
+  <span>
+    <i class="iconfont icon-60"></i><span></span>%
+  </span>
+</div>
+
+<script>
+const updateIconToTop = percent => {
+  let dom = document.querySelector(".back-to-top span span");
+  dom.innerText = percent;
+  if(percent < 1) {
+    document.querySelector(".back-to-top").className = "back-to-top hidden";
+  } else {
+    document.querySelector(".back-to-top").className = "back-to-top";
+  }
+}
+
+const handleScoll = () => {
+  let isRunning = false;
+  return () => {
+    if (isRunning) return;
+    isRunning = true;
+    window.requestAnimationFrame(timestamp => {
+      let scrollTop =
+          document.documentElement.scrollTop || document.body.scrollTop,
+        scrollHeight =
+          document.documentElement.scrollHeight ||
+          document.body.scrollHeight,
+        clientHeight =
+          document.documentElement.clientHeight ||
+          document.body.clientHeight;
+      isRunning = false;
+      if (scrollTop <= 1) {
+        updateIconToTop(0);
+        return;
+      }
+      if (scrollTop + clientHeight >= scrollHeight) {
+        updateIconToTop(100);
+      } else {
+        updateIconToTop(parseInt(
+          100 * scrollTop / (scrollHeight - clientHeight),
+          10
+        ));
+      }
+    });
+  };
+}
+
+const backToTop = () => {
+  let scrollTop =
+      document.documentElement.scrollTop || document.body.scrollTop,
+    delay = 10,
+    time = 200;
+  if (scrollTop <= 20) {
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    return;
+  }
+  let step = Math.ceil(scrollTop * delay / time);
+  let timer = setInterval(() => {
+    scrollTop =
+      document.documentElement.scrollTop || document.body.scrollTop;
+    if (scrollTop - step <= 0) {
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      clearInterval(timer);
+    } else {
+      document.documentElement.scrollTop = scrollTop - step;
+      document.body.scrollTop = scrollTop - step;
+    }
+  }, delay);
+}
+
+document.addEventListener("scroll", handleScoll(), false);
+
+document.querySelector(".back-to-top").addEventListener("click", backToTop, false);
+
+</script>
+
+    </div>
+
+    
+      <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+<script>
+  (() => {
+    const mathjaxConfig = {
+      showProcessingMessages: false, //关闭js加载过程信息
+      messageStyle: "none", //不显示信息
+      jax: ["input/TeX", "output/HTML-CSS"],
+      tex2jax: {
+        inlineMath: [["$", "$"], ["\\(", "\\)"]], //行内公式选择符
+        displayMath: [["$$", "$$"], ["\\[", "\\]"]], //段内公式选择符
+        skipTags: ["script", "noscript", "style", "textarea", "pre", "code", "a"] //避开某些标签
+      },
+      "HTML-CSS": {
+        availableFonts: ["STIX", "TeX"], //可选字体
+        showMathMenu: false //关闭右击菜单显示
+      }
+    }
+
+    let mathjaxInterval = setInterval(() => {
+      if(!window.MathJax){
+        return;
+      }
+      window.MathJax.Hub.Config(mathjaxConfig)
+      window.MathJax.Hub.Queue(["Typeset", MathJax.Hub, document.getElementById('app')])
+
+      clearInterval(mathjaxInterval)
+    }, 10)    
+  })()
+</script>
+    
+
+    <script src="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.js" async></script>
+<script async>
+  let fancyTimer = setInterval(function(){
+    if(!window.$){
+      return;
+    }
+    $(document).ready(function() {
+      $(".post img").each(function () {
+        if($(this).parent().get(0).tagName.toLowerCase() === "a") {
+          return;
+        }
+        // $(this).attr("data-fancybox", "gallery"); // if you add 'data-fancybox', img will display after showed
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "gallery");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      });
+      
+      clearInterval(fancyTimer);
+    });
+  }, 10);
+</script>
+
+    
+  </body>
+
+</html>

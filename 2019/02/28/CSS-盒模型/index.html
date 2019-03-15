@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+  
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta name="author" content="董沅鑫, yuanxin.me@gmail.com">
+  
+  
+  
+  <title>CSS_盒模型 | Celeste&#39;s Blog</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="清除浮动的原理,BFC,JS获取宽高,IE模型,标准模型,">
+  
+
+  <script>
+    console.log('\n%c Hexo-theme-bmw v4.0 ' + '%c 🎉 https://github.com/dongyuanxin/theme-bmw 🎉\n' + '\n%c View demo online ' + '%c 🔍 https://godbmw.com/ 🔍  \n' , 'color: #fadfa3; background: #030307; padding:3px 0;', '', 'color: #fadfa3; background: #030307; padding:3px 0;', '');
+  </script>
+
+  
+    <meta name="description" content="前端，学习中">
+  
+
+  
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+    <link rel="apple-touch-icon" href="/images/peanut.png">
+  
+
+  <link href="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/icon/iconfont.css">
+<link rel="stylesheet" href="/css/github-markdown.css">
+<link rel="stylesheet" href="/css/highlight.css">
+
+  <script src="/js/util.js"></script>
+<script src="/js/valine.min.js"></script>
+
+  
+
+  
+    <link href="https://cdn.bootcss.com/aplayer/1.10.1/APlayer.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/aplayer/1.10.1/APlayer.min.js" async></script>
+  
+
+  
+    <link href="https://cdn.bootcss.com/social-share.js/1.0.16/css/share.min.css" rel="stylesheet">
+  
+  
+  <script src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js" async></script>
+  
+  
+    <script src="//cdn.jsdelivr.net/npm/leancloud-storage@3.11.0/dist/av-min.js"></script>
+  
+
+</head>
+
+  <body>
+
+    
+
+    <div id="app">
+
+      <div class="header-wrap">
+  <header>
+    <div class="site-brand">
+      <div class="site-title">
+        <a href="/">Celeste&#39;s Blog</a>
+      </div>
+    </div>
+    <nav class="site-navigation">
+      <ul class="nav-menu">
+      
+        <li class="nav-item" data-path="/">
+          
+            <a href="/" target="_self">
+              主页
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          
+            <a href="/archives/" target="_self">
+              归档
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          
+            <a href="/tags/" target="_self">
+              标签
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path>
+          
+            <a href="javascript:void(0);" v-else>抓到我</a>
+            <ul class="nav-menu--dropdown">
+              
+                <li>
+                  <a href="https://github.com/celesteweng" target="_blank">
+                    Github
+                  </a>
+                </li>
+              
+            </ul>
+          
+        </li>
+      
+      </ul>
+    </nav>
+    <i class="iconfont icon-menu"></i>
+  </header>
+</div>
+
+<script>
+  let links = document.querySelectorAll('.nav-item');
+  for(let link of links){
+    let childrenLink = link.querySelector('ul');
+    link.addEventListener('mouseenter', () => {
+      if(childrenLink) {
+        childrenLink.className = "nav-menu--dropdown active";
+      }
+    })
+    link.addEventListener('mouseleave', () => {
+      if(childrenLink) {
+        childrenLink.className = "nav-menu--dropdown";
+      }
+    })
+  }
+  let rootRealPath = getRealPath(window.location.pathname, true);
+  for(let link of links) {
+    let linkPath = link.getAttribute("data-path");
+    if(linkPath && getRealPath(linkPath, true) === rootRealPath) {
+      link.className = "nav-item hover";
+    }
+  }
+
+  let iconMenu = document.querySelector("i.iconfont.icon-menu"),
+    iconMenuClicked = false;
+  let navDOM = document.querySelector("nav.site-navigation");
+  iconMenu.addEventListener("click", () => {
+    iconMenuClicked 
+      ? navDOM.className = "site-navigation active"
+      : navDOM.className = "site-navigation";
+    iconMenuClicked = !iconMenuClicked;
+  })
+</script>
+
+      
+
+
+
+
+
+
+
+
+<div class="container post-index">
+
+  
+
+<div class="post">
+  <h1 class="article-title">
+    <span>CSS_盒模型</span>
+  </h1>
+  <div class="article-top-meta">
+    <span>
+      发布 : 
+      2019-02-28
+    </span>
+    
+    
+      <span>
+        浏览 : <span class="article-timer" data-identity="CSS-盒模型"></span>
+      </span>
+    
+  </div>
+
+  
+
+  <div class="article-content">
+    <div class="markdown-body">
+      <h2 id="二、JS如何设置盒模型对应的宽和高"><a href="#二、JS如何设置盒模型对应的宽和高" class="headerlink" title="二、JS如何设置盒模型对应的宽和高"></a>二、JS如何设置盒模型对应的宽和高</h2><ul>
+<li>dom.style.width/height: 只能获取内联样式，不够准确。</li>
+<li>dom.currentStyle.width/height：浏览器渲染之后的样式，不管之前样式是怎么获取的，比较准确，但只有IE支持。</li>
+<li>window.getComputedStyle(dom).width/height: 和上一个api原理相似，只不过可以兼容FireFox和chome。</li>
+<li><strong>dom.getBoundingClientRect().width/height</strong>: 这个api也可以获取准确的属性值，可以获取相对视窗的绝对位置（左上角），有4个属性：<ol>
+<li>top</li>
+<li>left</li>
+<li>width</li>
+<li>height</li>
+</ol>
+</li>
+</ul>
+<h2 id="三、边距重叠问题"><a href="#三、边距重叠问题" class="headerlink" title="三、边距重叠问题"></a>三、边距重叠问题</h2><ol>
+<li>取较大值</li>
+<li><p>利用如下实例说明</p>
+ <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">//父级 height:100px; </span><br><span class="line">//子集 height：100px; 有 margin-top:10px;</span><br><span class="line">//且父级的背景色不显示</span><br><span class="line"><span class="tag">&lt;<span class="name">section</span> <span class="attr">id</span>=<span class="string">"sec"</span>&gt;</span> </span><br><span class="line">    <span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="css">        <span class="selector-id">#sec</span>&#123;</span></span><br><span class="line"><span class="undefined">            background: red;</span></span><br><span class="line"><span class="undefined">        &#125;</span></span><br><span class="line"><span class="css">        <span class="selector-class">.child</span>&#123;</span></span><br><span class="line"><span class="css">            <span class="selector-tag">height</span><span class="selector-pseudo">:100px</span>;</span></span><br><span class="line"><span class="css">            <span class="selector-tag">margin-top</span><span class="selector-pseudo">:10px</span>;</span></span><br><span class="line"><span class="css">            <span class="selector-tag">background</span><span class="selector-pseudo">:yellow</span>;</span></span><br><span class="line"><span class="undefined">        &#125;</span></span><br><span class="line"><span class="undefined">    </span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">article</span> <span class="attr">class</span>=<span class="string">"child"</span>&gt;</span><span class="tag">&lt;/<span class="name">article</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">section</span>&gt;</span></span><br></pre></td></tr></table></figure>
+ <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">//父级高度变为 110px；</span><br><span class="line">// BFC(边距重叠解决方案)</span><br><span class="line"><span class="tag">&lt;<span class="name">section</span> <span class="attr">id</span>=<span class="string">"sec"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="css">        <span class="selector-id">#sec</span>&#123;</span></span><br><span class="line"><span class="undefined">            background: red;</span></span><br><span class="line"><span class="undefined">            overflow: hidden; //增加该属性</span></span><br><span class="line"><span class="undefined">        &#125;</span></span><br><span class="line"><span class="css">        <span class="selector-class">.child</span>&#123;</span></span><br><span class="line"><span class="css">            <span class="selector-tag">height</span><span class="selector-pseudo">:100px</span>;</span></span><br><span class="line"><span class="css">            <span class="selector-tag">margin-top</span><span class="selector-pseudo">:10px</span>;</span></span><br><span class="line"><span class="css">            <span class="selector-tag">background</span><span class="selector-pseudo">:yellow</span>;</span></span><br><span class="line"><span class="undefined">        &#125;</span></span><br><span class="line"><span class="undefined">    </span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">article</span> <span class="attr">class</span>=<span class="string">"child"</span>&gt;</span><span class="tag">&lt;/<span class="name">article</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">section</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<ul>
+<li>BFC的<strong>概念</strong>：块级元素格式化上下文(相应的-IFC-内联元素格式化上下文)</li>
+<li>BFC的<strong>原理</strong>（渲染规则）<ol>
+<li>在BFC这个元素的垂直方向的边距会产生重叠</li>
+<li>BFC的区域不会与浮动元素的box重叠（用来清除浮动）</li>
+<li>BFC在页面上是一个独立的容器，外面的元素不会影响它里面的元素，反之亦然</li>
+<li>计算BFC高度时，浮动元素也会参与计算</li>
+</ol>
+</li>
+<li>如何<strong>创建</strong>BFC<ol>
+<li>float值不为none；</li>
+<li>position的值不是static或relative；</li>
+<li>display值为table、table-cell等和table有关的，block, list-item；</li>
+<li>overflow值不为visible，即hidden、scroll、auto都可，inherit(从父元素继承 overflow属性的值,所以不确定，因为可能继承到visible)</li>
+</ol>
+</li>
+<li>BFC的<strong>使用场景</strong>：<ol>
+<li>边距重叠：给元素添加一个父级，并给父级创建BFC。（测试发现直接对元素创建BFC不管用，还是需要父级）</li>
+<li>浮动元素重叠：2个浮动的元素，高度固定，当其中一块的内容超出，该元素会与另一浮动元素重叠，++对高度超出的元素创建BFC++，可解决该问题</li>
+<li>清除浮动：BFC子元素即使是float，也会参与高度计算。（例子：子元素浮动，高度为100px，在浏览器F12发现父级高度为0，原因是float脱离文档流，没有参与计算，当给父级创建BFC，BFC计算高度时，浮动元素也会参与计算，此时父级高度变为了100px；若子元素为文字，父级有背景色，在清除浮动后，父级的背景色才可见。这就是之前用overflow：hidden；清除浮动的原理）</li>
+</ol>
+</li>
+</ul>
+<hr>
+<h3 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h3><ul>
+<li>float: left/right/none/inherit</li>
+<li>position:<br>  absolute: 绝对定位, 相对于 static 定位以外的第一个父元素进行定位。<br>  fixed: 绝对定位, 相对于浏览器窗口进行定位。<br>  relative: 相对定位, 相对于其正常位置进行定位。<br>  static: 默认值。没有定位，元素出现在正常的流中。<br>  inherit: 从父元素继承 position 属性的值。</li>
+<li>overflow:<br>  visible: 默认值。内容不会被修剪，会呈现在元素框之外。<br>  hidden: 内容会被修剪，并且其余内容是不可见的。<br>  scroll: 内容会被修剪，但是浏览器会显示滚动条以便查看其余的内容。<br>  auto: 如果内容被修剪，则浏览器会显示滚动条以便查看其余的内容。<br>  inherit: 从父元素继承 overflow 属性的值。</li>
+<li>display:</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>值</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>none</td>
+<td>此元素不会被显示。</td>
+</tr>
+<tr>
+<td>block</td>
+<td>此元素将显示为块级元素，此元素前后会带有换行符。</td>
+</tr>
+<tr>
+<td>inline</td>
+<td>默认。此元素会被显示为内联元素，元素前后没有换行符。</td>
+</tr>
+<tr>
+<td>inline-block</td>
+<td>行内块元素。（CSS2.1 新增的值）。</td>
+</tr>
+<tr>
+<td>list-item</td>
+<td>此元素会作为列表显示。</td>
+</tr>
+<tr>
+<td>run-in</td>
+<td>此元素会根据上下文作为块级元素或内联元素显示。</td>
+</tr>
+<tr>
+<td>compact</td>
+<td>CSS中有值compact，不过由于缺乏广泛支持，已经从CSS2.1中删除。</td>
+</tr>
+<tr>
+<td>marker</td>
+<td>CSS 中有值 marker，不过由于缺乏广泛支持，已经从 CSS2.1 中删除。</td>
+</tr>
+<tr>
+<td>table</td>
+<td>此元素会作为块级表格来显示（类似table），表格前后带有换行符。</td>
+</tr>
+<tr>
+<td>inline-table</td>
+<td>此元素会作为内联表格来显示（类似table），表格前后没有换行符。</td>
+</tr>
+<tr>
+<td>table-row-group</td>
+<td>此元素会作为一个或多个行的分组来显示（类似tbody）。</td>
+</tr>
+<tr>
+<td>table-header-group</td>
+<td>此元素会作为一个或多个行的分组来显示（类似thead）。</td>
+</tr>
+<tr>
+<td>table-footer-group</td>
+<td>此元素会作为一个或多个行的分组来显示（类似tfoot）。</td>
+</tr>
+<tr>
+<td>table-row</td>
+<td>此元素会作为一个表格行显示（类似 tr）。</td>
+</tr>
+<tr>
+<td>table-column-group</td>
+<td>此元素会作为一个或多个列的分组来显示（类似colgroup）。</td>
+</tr>
+<tr>
+<td>table-column</td>
+<td>此元素会作为一个单元格列显示（类似 col）。</td>
+</tr>
+<tr>
+<td>table-cell</td>
+<td>此元素会作为一个表格单元格显示（类似 td 和 th）。</td>
+</tr>
+<tr>
+<td>table-caption</td>
+<td>此元素会作为一个表格标题显示（类似 caption）。</td>
+</tr>
+<tr>
+<td>inherit</td>
+<td>规定应该从父元素继承 display 属性的值。</td>
+</tr>
+</tbody>
+</table>
+    </div>
+  </div>
+  
+    <div class="copy-right">
+      <div class="markdown-body">
+        <blockquote>
+        
+        
+          本文作者 : Celeste Weng <br>
+        
+        原文链接 : <a href>https://celesteweng.github.io/2019/02/28/CSS-盒模型/</a><br>
+        版权声明 : 本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！
+        </blockquote>
+      </div>
+    </div>
+  
+  
+  
+    <div class="social-share" style="margin-top: -2rem" data-wechat-qrcode-title="<p>微信扫一扫</p>" data-wechat-qrcode-helper="<p>微信右上角, 扫一扫分享</p>" data-sites="qzone, qq, weibo, wechat, douban, google, facebook, twitter">
+  <span style="color: #6b7487; font-size: 1.4rem;">分享到: </span>
+</div>
+<script src="https://cdn.bootcss.com/social-share.js/1.0.16/js/social-share.min.js" async></script>
+  
+
+  
+    <div id="reward">
+  
+  <button id="reward-btn">
+    
+    <span>投食</span>
+  </button>
+  <div id="reward-qrcode">
+    
+      <div class="reward-qrcode--container">
+        <img class="qrcode-img" src="/images/wechat.png" alt="微信扫一扫, 向我投食">
+        <p class="qrcode-meta">微信扫一扫, 向我投食</p>
+      </div>
+    
+      <div class="reward-qrcode--container">
+        <img class="qrcode-img" src="/images/alipay.png" alt="支付宝扫一扫, 向我投食">
+        <p class="qrcode-meta">支付宝扫一扫, 向我投食</p>
+      </div>
+    
+  </div>
+
+</div>
+
+<script>
+  (() => {
+    let button = document.querySelector('#reward-btn'),
+      qrcode = document.querySelector('#reward-qrcode'),
+      display = false;
+    
+    button.addEventListener('click', () => {
+      qrcode.style.display = display ? 'none' : 'block'
+      display = !display
+    }, false)
+  })()
+</script>
+  
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+      <span>
+        
+          <i class="iconfont icon-06tags"></i>标签: 
+          
+          <span class="span--tag">
+            <a href="/tags/清除浮动的原理/">
+              #清除浮动的原理
+            </a>
+          </span>
+          
+          <span class="span--tag">
+            <a href="/tags/BFC/">
+              #BFC
+            </a>
+          </span>
+          
+          <span class="span--tag">
+            <a href="/tags/JS获取宽高/">
+              #JS获取宽高
+            </a>
+          </span>
+          
+          <span class="span--tag">
+            <a href="/tags/IE模型/">
+              #IE模型
+            </a>
+          </span>
+          
+          <span class="span--tag">
+            <a href="/tags/标准模型/">
+              #标准模型
+            </a>
+          </span>
+          
+        
+      </span>
+    </div>
+    <div class="article-meta pull-right">
+    </div>
+  </div>
+</div>
+
+
+  <aside id="sidebar">
+    <p id="sidebar-header"></p>
+    <ol id="sidebar-toc"></ol>
+  </aside>
+  <script async>setTimeout(generateToc, 10);</script>
+
+
+  <nav class="post-navigation">
+    
+      <div class="nav-pre">
+        <i class="iconfont icon-prev"></i>
+        上一篇:
+        <a href="/2019/02/28/CSS-布局-小技巧/" target="_self">CSS_布局&小技巧</a>
+      </div>
+    
+    
+      <div class="nav-next">
+        下一篇:
+        <a href="/2019/02/28/算法初级/" target="_self">算法初级 & 数据结构</a>
+        <i class="iconfont icon-next"></i>
+      </div>
+    
+  </nav>
+
+  
+    <a href="#comment" class="comment-anchor"></a>
+<div class="comment-title"><i class="iconfont icon-footprint"></i> 留下足迹 <i class="iconfont icon-footprint"></i></div>
+<div id="vcomments"></div>
+
+<script defer>
+  if( true ) {
+    let path = getRealPath()
+    new Valine({
+      el: "#vcomments",
+      appId: "5t4xu3HBz1CCS0dWUdEaYl1T-gzGzoHsz",
+      appKey: "2je5yKJYh98beKd80936XS8g",
+      notify: false,
+      verify: false,
+      avatar: "robohash",
+      placeholder: "正确填写邮箱, 才能及时收到回复哦♪(^∇^*)",
+      path
+    });
+  }
+</script>
+   
+
+  
+    <script defer>
+const valineAPI = (() => {
+  try {
+    AV.init("5t4xu3HBz1CCS0dWUdEaYl1T-gzGzoHsz", "2je5yKJYh98beKd80936XS8g");
+  } catch(error) {}
+  const isExist = (identity) => {
+    identity = identity || getRealPath();
+    let query = new AV.Query('Timer');
+    return new Promise((resolve, reject) => {
+      query.equalTo("identity", identity);
+      query.find().then(results => {
+        resolve(results.length > 0);
+      }, error => reject(error));
+    })
+  }
+
+  const _get = (identity) => {
+    let query = null;
+    if(identity && identity instanceof Array){
+      let querys = [];
+      for(let i = 0; i < identity.length; ++i) {
+        querys[i] = new AV.Query('Timer');
+        querys[i].equalTo('identity', identity[i]);
+      }
+      query = AV.Query.or.apply(null ,querys);
+    } else {
+      identity = identity || getRealPath();
+      query = new AV.Query("Timer");
+      query.equalTo("identity", identity);
+    }
+
+    return new Promise((resolve, reject) => {
+      query.find()
+      .then(results => resolve(results))
+      .catch(error => reject(error))
+    })
+  }
+
+  const create = (identity) => {
+    identity = identity || getRealPath();
+    return new Promise((resolve, reject) => {
+      let Todo = AV.Object.extend('Timer');
+      let todo = new Todo();
+      todo.set("times", 1);
+      todo.set("identity", identity);
+      todo.save().then(res => resolve(true), error => reject(error));
+    })
+  }
+
+  const update = (identity) => {
+    identity = identity || getRealPath();
+    return new Promise((resolve, reject) => {
+      let query = new AV.Query('Timer');
+      query.equalTo("identity", identity);
+      query.find().then(todos => {
+        todos.forEach(todo => {
+          todo.set("times", todo.attributes.times + 1);
+        });
+        return AV.Object.saveAll(todos);
+      }).then(todos => resolve(true), error => reject(error));
+    })
+  }
+
+  return {
+    isExist,
+    _get,
+    update,
+    create
+  }
+})()
+
+const calcAndWriteTimes = () => {
+  let isPost = true;
+
+  let timerAllDOM = document.querySelectorAll(".article-timer");
+
+  if(isPost) {
+    let identity = timerAllDOM[0].getAttribute("data-identity");
+    valineAPI.isExist(identity)
+    .then(exist => {
+      if(exist) {
+        return valineAPI.update(identity);
+      }
+      return new Promise(resolve => resolve(true));
+    })
+    .then( succuess => valineAPI._get(identity))
+    .then( result => timerAllDOM[0].innerText = result[0].attributes.times)
+    .catch(error => console.log(error.message))
+    return ;
+  }
+
+  let timerDOMCache = {};
+
+  for(let timerDOM of timerAllDOM) {
+    let identity = timerDOM.getAttribute("data-identity");
+    if(timerDOMCache.hasOwnProperty(identity)){
+      timerDOMCache[identity].dom.push(timerDOM);
+    }else{
+      timerDOMCache[identity] = {
+        dom: [timerDOM],
+        times: undefined
+      };
+    }
+  }
+
+  let identities = Object.keys(timerDOMCache);
+  valineAPI._get(identities).then(results => {
+    for(let result of results) {
+      let {identity, times} = result.attributes;
+      timerDOMCache[identity].times = times;
+      timerDOMCache[identity].dom.map(item => item.innerText = times);
+    }
+    for(let identity of identities) {
+      if(timerDOMCache[identity].times){
+        continue;
+      }
+      timerDOMCache[identity].dom.map(item => item.innerText = 1);
+      valineAPI.create(identity);
+    }
+  }).catch(error => console.log(error.message))
+}
+
+if(true){
+  calcAndWriteTimes();
+}
+</script>
+   
+
+</div>
+
+
+      <footer>
+  <p class="site-info">
+    博客已萌萌哒运行<span id="time-to-now"></span><span class="my-face">(●'◡'●)ﾉ♥</span>
+    <br>
+    Theme - <a href="https://github.com/dongyuanxin/theme-bmw">BMW</a> | Made With 💗 | Powered by <a href="https://godbmw.com/">GodBMW</a>
+    <br>
+    
+  </p>
+</footer>
+
+
+
+<script>
+const timeToNowDOM = document.querySelector("#time-to-now");
+const startTimestamp = new Date(2017, 7, 10).getTime();
+
+const updateTimeStr = () => {
+  let offset = parseInt(
+      (new Date().getTime() - startTimestamp) / 1000,
+      10
+    ),
+    day = Math.floor(offset / 86400),
+    hour = Math.floor((offset % 86400) / 3600),
+    minute = Math.floor(((offset % 86400) % 3600) / 60),
+    second = Math.floor(((offset % 86400) % 3600) % 60);
+  timeToNowDOM.innerHTML =
+    day + "天" + hour + "小时" + minute + "分钟" + second + "秒";
+  setTimeout(updateTimeStr, 500);
+}
+
+setTimeout(updateTimeStr, 500);
+</script>
+
+
+      <div class="back-to-top hidden">
+  <span>
+    <i class="iconfont icon-60"></i><span></span>%
+  </span>
+</div>
+
+<script>
+const updateIconToTop = percent => {
+  let dom = document.querySelector(".back-to-top span span");
+  dom.innerText = percent;
+  if(percent < 1) {
+    document.querySelector(".back-to-top").className = "back-to-top hidden";
+  } else {
+    document.querySelector(".back-to-top").className = "back-to-top";
+  }
+}
+
+const handleScoll = () => {
+  let isRunning = false;
+  return () => {
+    if (isRunning) return;
+    isRunning = true;
+    window.requestAnimationFrame(timestamp => {
+      let scrollTop =
+          document.documentElement.scrollTop || document.body.scrollTop,
+        scrollHeight =
+          document.documentElement.scrollHeight ||
+          document.body.scrollHeight,
+        clientHeight =
+          document.documentElement.clientHeight ||
+          document.body.clientHeight;
+      isRunning = false;
+      if (scrollTop <= 1) {
+        updateIconToTop(0);
+        return;
+      }
+      if (scrollTop + clientHeight >= scrollHeight) {
+        updateIconToTop(100);
+      } else {
+        updateIconToTop(parseInt(
+          100 * scrollTop / (scrollHeight - clientHeight),
+          10
+        ));
+      }
+    });
+  };
+}
+
+const backToTop = () => {
+  let scrollTop =
+      document.documentElement.scrollTop || document.body.scrollTop,
+    delay = 10,
+    time = 200;
+  if (scrollTop <= 20) {
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    return;
+  }
+  let step = Math.ceil(scrollTop * delay / time);
+  let timer = setInterval(() => {
+    scrollTop =
+      document.documentElement.scrollTop || document.body.scrollTop;
+    if (scrollTop - step <= 0) {
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      clearInterval(timer);
+    } else {
+      document.documentElement.scrollTop = scrollTop - step;
+      document.body.scrollTop = scrollTop - step;
+    }
+  }, delay);
+}
+
+document.addEventListener("scroll", handleScoll(), false);
+
+document.querySelector(".back-to-top").addEventListener("click", backToTop, false);
+
+</script>
+
+    </div>
+
+    
+      <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+<script>
+  (() => {
+    const mathjaxConfig = {
+      showProcessingMessages: false, //关闭js加载过程信息
+      messageStyle: "none", //不显示信息
+      jax: ["input/TeX", "output/HTML-CSS"],
+      tex2jax: {
+        inlineMath: [["$", "$"], ["\\(", "\\)"]], //行内公式选择符
+        displayMath: [["$$", "$$"], ["\\[", "\\]"]], //段内公式选择符
+        skipTags: ["script", "noscript", "style", "textarea", "pre", "code", "a"] //避开某些标签
+      },
+      "HTML-CSS": {
+        availableFonts: ["STIX", "TeX"], //可选字体
+        showMathMenu: false //关闭右击菜单显示
+      }
+    }
+
+    let mathjaxInterval = setInterval(() => {
+      if(!window.MathJax){
+        return;
+      }
+      window.MathJax.Hub.Config(mathjaxConfig)
+      window.MathJax.Hub.Queue(["Typeset", MathJax.Hub, document.getElementById('app')])
+
+      clearInterval(mathjaxInterval)
+    }, 10)    
+  })()
+</script>
+    
+
+    <script src="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.js" async></script>
+<script async>
+  let fancyTimer = setInterval(function(){
+    if(!window.$){
+      return;
+    }
+    $(document).ready(function() {
+      $(".post img").each(function () {
+        if($(this).parent().get(0).tagName.toLowerCase() === "a") {
+          return;
+        }
+        // $(this).attr("data-fancybox", "gallery"); // if you add 'data-fancybox', img will display after showed
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "gallery");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      });
+      
+      clearInterval(fancyTimer);
+    });
+  }, 10);
+</script>
+
+    
+  </body>
+
+</html>

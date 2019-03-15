@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+  
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta name="author" content="董沅鑫, yuanxin.me@gmail.com">
+  
+  
+  
+  <title>原型与原型链 | Celeste&#39;s Blog</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="单体内置对象,Global对象,Math对象,原型,原型链,继承,">
+  
+
+  <script>
+    console.log('\n%c Hexo-theme-bmw v4.0 ' + '%c 🎉 https://github.com/dongyuanxin/theme-bmw 🎉\n' + '\n%c View demo online ' + '%c 🔍 https://godbmw.com/ 🔍  \n' , 'color: #fadfa3; background: #030307; padding:3px 0;', '', 'color: #fadfa3; background: #030307; padding:3px 0;', '');
+  </script>
+
+  
+    <meta name="description" content="前端，学习中">
+  
+
+  
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+    <link rel="apple-touch-icon" href="/images/peanut.png">
+  
+
+  <link href="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/icon/iconfont.css">
+<link rel="stylesheet" href="/css/github-markdown.css">
+<link rel="stylesheet" href="/css/highlight.css">
+
+  <script src="/js/util.js"></script>
+<script src="/js/valine.min.js"></script>
+
+  
+
+  
+    <link href="https://cdn.bootcss.com/aplayer/1.10.1/APlayer.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/aplayer/1.10.1/APlayer.min.js" async></script>
+  
+
+  
+    <link href="https://cdn.bootcss.com/social-share.js/1.0.16/css/share.min.css" rel="stylesheet">
+  
+  
+  <script src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js" async></script>
+  
+  
+    <script src="//cdn.jsdelivr.net/npm/leancloud-storage@3.11.0/dist/av-min.js"></script>
+  
+
+</head>
+
+  <body>
+
+    
+
+    <div id="app">
+
+      <div class="header-wrap">
+  <header>
+    <div class="site-brand">
+      <div class="site-title">
+        <a href="/">Celeste&#39;s Blog</a>
+      </div>
+    </div>
+    <nav class="site-navigation">
+      <ul class="nav-menu">
+      
+        <li class="nav-item" data-path="/">
+          
+            <a href="/" target="_self">
+              主页
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          
+            <a href="/archives/" target="_self">
+              归档
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          
+            <a href="/tags/" target="_self">
+              标签
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path>
+          
+            <a href="javascript:void(0);" v-else>抓到我</a>
+            <ul class="nav-menu--dropdown">
+              
+                <li>
+                  <a href="https://github.com/celesteweng" target="_blank">
+                    Github
+                  </a>
+                </li>
+              
+            </ul>
+          
+        </li>
+      
+      </ul>
+    </nav>
+    <i class="iconfont icon-menu"></i>
+  </header>
+</div>
+
+<script>
+  let links = document.querySelectorAll('.nav-item');
+  for(let link of links){
+    let childrenLink = link.querySelector('ul');
+    link.addEventListener('mouseenter', () => {
+      if(childrenLink) {
+        childrenLink.className = "nav-menu--dropdown active";
+      }
+    })
+    link.addEventListener('mouseleave', () => {
+      if(childrenLink) {
+        childrenLink.className = "nav-menu--dropdown";
+      }
+    })
+  }
+  let rootRealPath = getRealPath(window.location.pathname, true);
+  for(let link of links) {
+    let linkPath = link.getAttribute("data-path");
+    if(linkPath && getRealPath(linkPath, true) === rootRealPath) {
+      link.className = "nav-item hover";
+    }
+  }
+
+  let iconMenu = document.querySelector("i.iconfont.icon-menu"),
+    iconMenuClicked = false;
+  let navDOM = document.querySelector("nav.site-navigation");
+  iconMenu.addEventListener("click", () => {
+    iconMenuClicked 
+      ? navDOM.className = "site-navigation active"
+      : navDOM.className = "site-navigation";
+    iconMenuClicked = !iconMenuClicked;
+  })
+</script>
+
+      
+
+
+
+
+
+
+
+
+<div class="container post-index">
+
+  
+
+<div class="post">
+  <h1 class="article-title">
+    <span>原型与原型链</span>
+  </h1>
+  <div class="article-top-meta">
+    <span>
+      发布 : 
+      2019-03-05
+    </span>
+    
+    
+      <span>
+        浏览 : <span class="article-timer" data-identity="原型与原型链"></span>
+      </span>
+    
+  </div>
+
+  
+
+  <div class="article-content">
+    <div class="markdown-body">
+      <p></p>
+<ol>
+<li><strong>URI编码方法</strong><br>encodeURI() : 将空格替换成 %20<br>encodeURIComponent()：使用对应的编码替换所有非字母数字字符。<br>对整个 URI 使用 encodeURI()，对添加在现有 URI 的字符串使用 encodeURIComponent()。<br>解码<br>decodeURI() 、decodeURIComponent()</li>
+<li><strong>eval()方法</strong><br>只接收一个参数，即要执行的ECMAScript（或JavaScript）字符串。<br><code>eval(“alert(‘hello’)”)</code> 等价于 <code>alert(“hello”)</code><br><strong>严格模式</strong>下，在外部访问不到创建在 eval() 中的任何变量和函数；为eval赋值也会导致错误。</li>
+<li><strong>Global对象的属性</strong><br>特殊值：NaN、Infinity、undefined；<br>构造函数：Object, Array, Function, Boolean, String, Number, Date, RegExp, Error, EvalError, RangeError, ReferenceError, SyntaxError, TypeError, URIError</li>
+<li><strong>window对象</strong><br>ECMAScript没有直接说如何访问Global对象，不过Web浏览器都是将Global对象作为window对象的一部分加以实现的。<br>取得Global对象的另一种方法（在任何执行环境下都可行）：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">var global = function() &#123;</span><br><span class="line">  return this;</span><br><span class="line">&#125; ();</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="Math对象"><a href="#Math对象" class="headerlink" title="Math对象"></a>Math对象</h3><p>Math对象：ECMAScript为保存数学公式和信息提供的公共位置。<br>Math对象提供的计算功能，比我们用JS编写的算法执行更快。</p>
+<ol>
+<li><strong>Math对象的属性</strong><br>数学计算中可能用到的特殊值。例：Math.E，即常量e的值。</li>
+<li><strong>min() 和 max()方法</strong><br>（1）可接受任意多个参数值，返回最大、最小值。<br>var max = Math.max(3, 45, 34, 32);<br>alert(max); // 45<br>（2）用来查询数组对象中的最大、最小值（结合apply()方法）<br>var values = [1, 3, 4, 5, 6];<br>var max = Math.max.apply(Math, values); // 关键是把 Math 对象作为 apply()的第一个参数，从而正确地设置 this 值 </li>
+<li><strong>舍入方法</strong><br>小数舍入为整数<br>Math.ceil(23.7)：向上 // 24<br>Math.floor(23.4)：向下 // 23<br>Math.round(78.5454)：四舍五入 // 79</li>
+<li><strong>random()方法</strong><br>Math.random() 返回一个 大于等于0 小于1的随机数<br>值 = Math.floor(Math.random() * 可能值的总数 + 第一个可能的值)</li>
+<li><strong>其他方法</strong><br>弦切角，绝对值，自然对数，平方根，幂等。</li>
+</ol>
+<h2 id="创建对象"><a href="#创建对象" class="headerlink" title="创建对象"></a>创建对象</h2><p><a href="https://celesteweng.com/2019/01/24/%E5%AF%B9%E5%88%9B%E5%BB%BA%E5%AF%B9%E8%B1%A1%E6%96%B9%E6%B3%95%E7%9A%84%E7%90%86%E8%A7%A3/" target="_blank">对创建对象方法的理解&gt;&gt;</a></p>
+<h2 id="对原型的理解"><a href="#对原型的理解" class="headerlink" title="对原型的理解"></a>对原型的理解</h2><ol>
+<li><strong>函数</strong>有 <strong>prototype</strong> 属性，prototype 属性为一个指针，指向<strong>原型对象</strong>。</li>
+<li><strong>原型对象</strong>默认有 <strong>constructor</strong> 属性，指向 prototype 属性所在的<strong>函数</strong>。</li>
+<li>自定义的构造函数，其原型对象默认只取得 constructor 属性，别的从 Object 继承。</li>
+<li>构造函数创建实例后，<strong>实例</strong>有内部属性 <strong>[[Prototype]]</strong>，指向构造函数的<strong>原型对象</strong>，脚本中没有标准的方式访问。但在 Firefox、Safari 和 Chrome 中，每个对象有属性 <strong><strong>proto</strong></strong>；其他实现中，该属性对脚本不可见。</li>
+<li>判断实例的 [[Prototype]] 属性是否指向某个原型对象（即 实例person1 是否为 构造函数Person 的实例）：<br><code>alert(Person.prototype.isPrototypeOf(person1));  //true</code></li>
+<li>获取实例的 [[Prototype]] 属性的指向 Object.getPrototypeOf(实例)<br><code>alert(Object.getPrototypeOf(person1) == Person.prototype); //true</code><br><code>alert(Object.getPrototypeOf(person1).name); //&quot;Nicholas&quot;</code></li>
+<li>读取实例的属性时，可以获取原型对象的同名属性的值的原因：和读取对象的属性值得过程有关。</li>
+<li><strong>读取</strong>某个对象某个属性的<strong>过程</strong>：<br>从对象实例开始查找，如果有该名字的属性，返回该属性的值；<br>若没有找到，则继续搜索指向的原型对象，如果有该名字的属性，则返回原型对象中同名属性的值。</li>
+<li>原型对象中的属性不能通过实例修改，但是可以给实例定义同名属性来<strong>覆盖</strong>原型对象中属性的值。</li>
+<li><strong>hasOwnProperty</strong>() 方法：判断<strong>实例</strong>是否有给定名字的<strong>属性</strong>，返回布尔值。<br>可以用来判断访问的是实例属性还是原型对象属性。<br>alert(person1.hasOwnProperty(“name”));  //false</li>
+<li>Object.<strong>getOwnPropertyDescriptors</strong>() 方法：获取<strong>实例属性</strong>的<strong>描述符</strong>，若要获取原型属性的描述符则需要对原型对象使用该方法。 // 此处发现一个bug hhhh，书中（红宝书）方法错了，结尾少了字母 ‘s’。</li>
+</ol>
+<p><img src="http://pntmc1hcw.bkt.clouddn.com/prototypeChat.jpeg" alt="prototype.jpeg"></p>
+<h2 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h2><p>许多OO语言都支持两种继承方式：接口继承和实现继承。</p>
+<ul>
+<li>接口继承只继承方法签名，实现继承则继承实际的方法。</li>
+<li>由于函数没有签名，ECMAScript中不能实现接口继承，ECMAScript 只支持实现继承，其实现继承的实现主要依靠原型链。</li>
+</ul>
+<h3 id="原型链"><a href="#原型链" class="headerlink" title="原型链"></a>原型链</h3><ul>
+<li>原型链的基本思想：利用原型让一个引用对象继承另一个引用对象的方法和属性。</li>
+<li>实现原型链有一种基本模式，其代码大致如下。</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">SuperType</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">	<span class="keyword">this</span>.property = <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">SuperType.prototype.getSuperValue = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">this</span>.property;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">SubType</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">	<span class="keyword">this</span>.subproperty = <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 继承了 SuperType</span></span><br><span class="line">SubType.prototype = <span class="keyword">new</span> SuperType();</span><br><span class="line"></span><br><span class="line">SubType.prototype.getSubValue = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">this</span>.subproperty;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> instance = <span class="keyword">new</span> SubType();</span><br><span class="line">alert(instance.getSuperType());    <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+<p> SubType 继承了 SuperType，继承是通过创建 SuperType 的实例，并将该实例赋给 SubType.prototype 实现的。</p>
+<p> 实现的本质是重写原型对象，代之以一个新类型的实例。（原来存在于 SuperType 实例中的所有方法和属性，现在也存在于 SubType.prototype 中了）</p>
+<p> 需要注意的是，现在 instance.constructor 指向的是 SuperType，因为 SubType.prototype 被重写为 SuperType 的实例。</p>
+<ol>
+<li>别忘记默认的原型<br>所有引用类型默认都继承了 Object，所有函数的默认原型都是 Object 的实例。因此默认原型都是包含一个内部指针，指向 Object.prototype，这也正是所有自定义类型都会继承一些默认方法的根本原因。</li>
+<li>确定原型和实例的关系<br>[1] instanceof 操作符：测试实例和原型链中出现过的构造函数，都会返回 true。<br><code>由于原型链的关系，我们可以说 instance 是 Object、SuperType 或 SubType 中任何一个类型 的实例。</code><br>[2] isPrototypeOf() 方法：只要是原型链中出现过的原型，都可以说是该原型链所派生的实例的原型，因此都会返回 true。<br> <code>alert(Object.prototype.isPrototypeOf(instance));    // true</code><br> <code>alert(SuperType.prototype.isPrototypeOf(instance));    // true</code><br> <code>alert(SubType.prototype.isPrototypeOf(instance));    // true</code></li>
+<li>谨慎地定义方法<br>给原型添加方法的代码一定要放在替换原型的语句之后。<br>在通过原型链继承时，不可以用对象字面量创建原型方法，这样会重写原型链。</li>
+<li>原型链的问题<br>没有办法在不影响所有对象实例的情况下，给超类型的构造函数传递参数。</li>
+</ol>
+<h3 id="借用构造函数（伪造对象或经典继承）"><a href="#借用构造函数（伪造对象或经典继承）" class="headerlink" title="借用构造函数（伪造对象或经典继承）"></a>借用构造函数（伪造对象或经典继承）</h3><p>通过使用apply()和call()方法，在新创建的对象上执行构造函数，由此来解决原型中包含引用类型的问题。</p>
+<p>(1) 传递参数<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">SuperType</span>(<span class="params">name</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.name = name;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">SubType</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="comment">//继承了 SuperType，同时还传递了参数 </span></span><br><span class="line">  SuperType.call(<span class="keyword">this</span>, <span class="string">"Nicholas"</span>);+</span><br><span class="line">  <span class="comment">//实例属性</span></span><br><span class="line">    <span class="keyword">this</span>.age = <span class="number">29</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> instance = <span class="keyword">new</span> SubType();</span><br><span class="line">alert(instance.name);    <span class="comment">//"Nicholas";</span></span><br><span class="line">alert(instance.age);     <span class="comment">//29</span></span><br></pre></td></tr></table></figure></p>
+<p>(2) 借用构造函数的问题<br>   方法都在构造函数中定义，无法实现函数复用。</p>
+<h2 id="组合继承（伪经典继承）"><a href="#组合继承（伪经典继承）" class="headerlink" title="组合继承（伪经典继承）"></a>组合继承（伪经典继承）</h2><ul>
+<li>将原型链和借用构造函数的技术结合。思路：使用原型链实现对原型方法和属性的继承，而通过对构造函数实现对实例属性的继承。</li>
+<li>intanceof 和 isPrototypeOf() 能够识别基于组合继承创建的对象。</li>
+</ul>
+<h2 id="原型式继承"><a href="#原型式继承" class="headerlink" title="原型式继承"></a>原型式继承</h2><p>借助原型可以已有的对象创建新对象，同时还不必因此创建自定义类型。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">object</span>(<span class="params">o</span>) </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">F</span>(<span class="params"></span>) </span>&#123;&#125;</span><br><span class="line">  F.prototype = o;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> F();</span><br><span class="line">&#125;</span><br><span class="line">  </span><br><span class="line"><span class="keyword">var</span> person = &#123;</span><br><span class="line">  name: <span class="string">"Nicholas"</span>,</span><br><span class="line">  friends: [<span class="string">"Shelby"</span>, <span class="string">"Court"</span>, <span class="string">"Van"</span>]</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> anotherPerson = object(person);</span><br><span class="line">anotherPerson.name = <span class="string">"Greg"</span>;</span><br><span class="line">anotherPerson.friends.push(<span class="string">"Rob"</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> yetAnotherPerson = object(person);</span><br><span class="line">yetAnotherPerson.name = <span class="string">"Linda"</span>;</span><br><span class="line">yetAnotherPerson.friends.push(<span class="string">"Barbie"</span>);</span><br><span class="line"></span><br><span class="line">alert(person.friends);   <span class="comment">//"Shelby,Court,Van,Rob,Barbie"</span></span><br></pre></td></tr></table></figure>
+<p>ECMAScript5新增的Object.create()，接收2个参数：要继承的对象和（可选）为对象添加额外属性的对象。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> person = &#123;</span><br><span class="line">  name: <span class="string">"peanut"</span>,</span><br><span class="line">  friends: [<span class="string">"aaa"</span>, <span class="string">"bbb"</span>]</span><br><span class="line">&#125;;</span><br><span class="line">  </span><br><span class="line"><span class="keyword">var</span> anotherPerson = <span class="built_in">Object</span>.create(person, &#123;</span><br><span class="line">  name: &#123;</span><br><span class="line">  value: <span class="string">"Greg"</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">alert(anotherPerson.name); <span class="comment">//"Greg"</span></span><br></pre></td></tr></table></figure>
+<h3 id="寄生式继承"><a href="#寄生式继承" class="headerlink" title="寄生式继承"></a>寄生式继承</h3><ul>
+<li>即创建一个仅用于封装继承过程的函数，该 函数在内部以某种方式来增强对象，最后再像真地是它做了所有工作一样返回对象。</li>
+<li>无法函数复用。</li>
+</ul>
+<h3 id="寄生组合式继承"><a href="#寄生组合式继承" class="headerlink" title="寄生组合式继承"></a>寄生组合式继承</h3><ul>
+<li>组合继承中会执行两次超类型的构造函数，导致子类型实例和子类型原型中存在相同的重复属性。</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">inheritPrototype</span>(<span class="params">subType, superType</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">var</span> prototype = object(superType.prototype); <span class="comment">//创建对象</span></span><br><span class="line">  prototype.constructor = subType; <span class="comment">//增强对象</span></span><br><span class="line">  subType.prototype = prototype; <span class="comment">//指定对象</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">SuperType</span>(<span class="params">name</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.name = name;</span><br><span class="line">  <span class="keyword">this</span>.colors = [<span class="string">"red"</span>, <span class="string">"blue"</span>, <span class="string">"green"</span>];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">SuperType.prototype.sayName = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  alert(<span class="keyword">this</span>.name);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">SubType</span>(<span class="params">name, age</span>)</span>&#123;</span><br><span class="line">  SuperType.call(<span class="keyword">this</span>, name);</span><br><span class="line">  <span class="keyword">this</span>.age = age;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">inheritPrototype(SubType, SuperType);</span><br><span class="line"></span><br><span class="line">SubType.prototype.sayAge = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  alert(<span class="keyword">this</span>.age);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>使用寄生组合继承子类型将通过原型链继承超类型的属性和方法，而在子类型实例中将不再有重复的属性。</p>
+</blockquote>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><ul>
+<li>继承：将超类型的实例赋值给子类型的 prototype 属性（此时子类型原型对象的 constructor 属性会指向超类型的构造函数），从而继承超类型的所有属性和方法。</li>
+<li>实现继承的方法：<ol>
+<li>原型链</li>
+<li>借用构造函数</li>
+<li>组合继承</li>
+<li>原型式继承</li>
+<li>寄生式继承</li>
+<li>寄生组合式继承</li>
+</ol>
+</li>
+</ul>
+    </div>
+  </div>
+  
+    <div class="copy-right">
+      <div class="markdown-body">
+        <blockquote>
+        
+        
+          本文作者 : Celeste Weng <br>
+        
+        原文链接 : <a href>https://celesteweng.github.io/2019/03/05/原型与原型链/</a><br>
+        版权声明 : 本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！
+        </blockquote>
+      </div>
+    </div>
+  
+  
+  
+    <div class="social-share" style="margin-top: -2rem" data-wechat-qrcode-title="<p>微信扫一扫</p>" data-wechat-qrcode-helper="<p>微信右上角, 扫一扫分享</p>" data-sites="qzone, qq, weibo, wechat, douban, google, facebook, twitter">
+  <span style="color: #6b7487; font-size: 1.4rem;">分享到: </span>
+</div>
+<script src="https://cdn.bootcss.com/social-share.js/1.0.16/js/social-share.min.js" async></script>
+  
+
+  
+    <div id="reward">
+  
+  <button id="reward-btn">
+    
+    <span>投食</span>
+  </button>
+  <div id="reward-qrcode">
+    
+      <div class="reward-qrcode--container">
+        <img class="qrcode-img" src="/images/wechat.png" alt="微信扫一扫, 向我投食">
+        <p class="qrcode-meta">微信扫一扫, 向我投食</p>
+      </div>
+    
+      <div class="reward-qrcode--container">
+        <img class="qrcode-img" src="/images/alipay.png" alt="支付宝扫一扫, 向我投食">
+        <p class="qrcode-meta">支付宝扫一扫, 向我投食</p>
+      </div>
+    
+  </div>
+
+</div>
+
+<script>
+  (() => {
+    let button = document.querySelector('#reward-btn'),
+      qrcode = document.querySelector('#reward-qrcode'),
+      display = false;
+    
+    button.addEventListener('click', () => {
+      qrcode.style.display = display ? 'none' : 'block'
+      display = !display
+    }, false)
+  })()
+</script>
+  
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+      <span>
+        
+          <i class="iconfont icon-06tags"></i>标签: 
+          
+          <span class="span--tag">
+            <a href="/tags/单体内置对象/">
+              #单体内置对象
+            </a>
+          </span>
+          
+          <span class="span--tag">
+            <a href="/tags/Global对象/">
+              #Global对象
+            </a>
+          </span>
+          
+          <span class="span--tag">
+            <a href="/tags/Math对象/">
+              #Math对象
+            </a>
+          </span>
+          
+          <span class="span--tag">
+            <a href="/tags/原型/">
+              #原型
+            </a>
+          </span>
+          
+          <span class="span--tag">
+            <a href="/tags/原型链/">
+              #原型链
+            </a>
+          </span>
+          
+          <span class="span--tag">
+            <a href="/tags/继承/">
+              #继承
+            </a>
+          </span>
+          
+        
+      </span>
+    </div>
+    <div class="article-meta pull-right">
+    </div>
+  </div>
+</div>
+
+
+  <aside id="sidebar">
+    <p id="sidebar-header"></p>
+    <ol id="sidebar-toc"></ol>
+  </aside>
+  <script async>setTimeout(generateToc, 10);</script>
+
+
+  <nav class="post-navigation">
+    
+      <div class="nav-pre">
+        <i class="iconfont icon-prev"></i>
+        上一篇:
+        <a href="/2019/03/04/普通类型和对象的区别/" target="_self">普通类型和对象的区别</a>
+      </div>
+    
+    
+      <div class="nav-next">
+        下一篇:
+        <a href="/2019/03/06/DOM/" target="_self">JavaScript 教程 - DOM api 归档</a>
+        <i class="iconfont icon-next"></i>
+      </div>
+    
+  </nav>
+
+  
+    <a href="#comment" class="comment-anchor"></a>
+<div class="comment-title"><i class="iconfont icon-footprint"></i> 留下足迹 <i class="iconfont icon-footprint"></i></div>
+<div id="vcomments"></div>
+
+<script defer>
+  if( true ) {
+    let path = getRealPath()
+    new Valine({
+      el: "#vcomments",
+      appId: "5t4xu3HBz1CCS0dWUdEaYl1T-gzGzoHsz",
+      appKey: "2je5yKJYh98beKd80936XS8g",
+      notify: false,
+      verify: false,
+      avatar: "robohash",
+      placeholder: "正确填写邮箱, 才能及时收到回复哦♪(^∇^*)",
+      path
+    });
+  }
+</script>
+   
+
+  
+    <script defer>
+const valineAPI = (() => {
+  try {
+    AV.init("5t4xu3HBz1CCS0dWUdEaYl1T-gzGzoHsz", "2je5yKJYh98beKd80936XS8g");
+  } catch(error) {}
+  const isExist = (identity) => {
+    identity = identity || getRealPath();
+    let query = new AV.Query('Timer');
+    return new Promise((resolve, reject) => {
+      query.equalTo("identity", identity);
+      query.find().then(results => {
+        resolve(results.length > 0);
+      }, error => reject(error));
+    })
+  }
+
+  const _get = (identity) => {
+    let query = null;
+    if(identity && identity instanceof Array){
+      let querys = [];
+      for(let i = 0; i < identity.length; ++i) {
+        querys[i] = new AV.Query('Timer');
+        querys[i].equalTo('identity', identity[i]);
+      }
+      query = AV.Query.or.apply(null ,querys);
+    } else {
+      identity = identity || getRealPath();
+      query = new AV.Query("Timer");
+      query.equalTo("identity", identity);
+    }
+
+    return new Promise((resolve, reject) => {
+      query.find()
+      .then(results => resolve(results))
+      .catch(error => reject(error))
+    })
+  }
+
+  const create = (identity) => {
+    identity = identity || getRealPath();
+    return new Promise((resolve, reject) => {
+      let Todo = AV.Object.extend('Timer');
+      let todo = new Todo();
+      todo.set("times", 1);
+      todo.set("identity", identity);
+      todo.save().then(res => resolve(true), error => reject(error));
+    })
+  }
+
+  const update = (identity) => {
+    identity = identity || getRealPath();
+    return new Promise((resolve, reject) => {
+      let query = new AV.Query('Timer');
+      query.equalTo("identity", identity);
+      query.find().then(todos => {
+        todos.forEach(todo => {
+          todo.set("times", todo.attributes.times + 1);
+        });
+        return AV.Object.saveAll(todos);
+      }).then(todos => resolve(true), error => reject(error));
+    })
+  }
+
+  return {
+    isExist,
+    _get,
+    update,
+    create
+  }
+})()
+
+const calcAndWriteTimes = () => {
+  let isPost = true;
+
+  let timerAllDOM = document.querySelectorAll(".article-timer");
+
+  if(isPost) {
+    let identity = timerAllDOM[0].getAttribute("data-identity");
+    valineAPI.isExist(identity)
+    .then(exist => {
+      if(exist) {
+        return valineAPI.update(identity);
+      }
+      return new Promise(resolve => resolve(true));
+    })
+    .then( succuess => valineAPI._get(identity))
+    .then( result => timerAllDOM[0].innerText = result[0].attributes.times)
+    .catch(error => console.log(error.message))
+    return ;
+  }
+
+  let timerDOMCache = {};
+
+  for(let timerDOM of timerAllDOM) {
+    let identity = timerDOM.getAttribute("data-identity");
+    if(timerDOMCache.hasOwnProperty(identity)){
+      timerDOMCache[identity].dom.push(timerDOM);
+    }else{
+      timerDOMCache[identity] = {
+        dom: [timerDOM],
+        times: undefined
+      };
+    }
+  }
+
+  let identities = Object.keys(timerDOMCache);
+  valineAPI._get(identities).then(results => {
+    for(let result of results) {
+      let {identity, times} = result.attributes;
+      timerDOMCache[identity].times = times;
+      timerDOMCache[identity].dom.map(item => item.innerText = times);
+    }
+    for(let identity of identities) {
+      if(timerDOMCache[identity].times){
+        continue;
+      }
+      timerDOMCache[identity].dom.map(item => item.innerText = 1);
+      valineAPI.create(identity);
+    }
+  }).catch(error => console.log(error.message))
+}
+
+if(true){
+  calcAndWriteTimes();
+}
+</script>
+   
+
+</div>
+
+
+      <footer>
+  <p class="site-info">
+    博客已萌萌哒运行<span id="time-to-now"></span><span class="my-face">(●'◡'●)ﾉ♥</span>
+    <br>
+    Theme - <a href="https://github.com/dongyuanxin/theme-bmw">BMW</a> | Made With 💗 | Powered by <a href="https://godbmw.com/">GodBMW</a>
+    <br>
+    
+  </p>
+</footer>
+
+
+
+<script>
+const timeToNowDOM = document.querySelector("#time-to-now");
+const startTimestamp = new Date(2017, 7, 10).getTime();
+
+const updateTimeStr = () => {
+  let offset = parseInt(
+      (new Date().getTime() - startTimestamp) / 1000,
+      10
+    ),
+    day = Math.floor(offset / 86400),
+    hour = Math.floor((offset % 86400) / 3600),
+    minute = Math.floor(((offset % 86400) % 3600) / 60),
+    second = Math.floor(((offset % 86400) % 3600) % 60);
+  timeToNowDOM.innerHTML =
+    day + "天" + hour + "小时" + minute + "分钟" + second + "秒";
+  setTimeout(updateTimeStr, 500);
+}
+
+setTimeout(updateTimeStr, 500);
+</script>
+
+
+      <div class="back-to-top hidden">
+  <span>
+    <i class="iconfont icon-60"></i><span></span>%
+  </span>
+</div>
+
+<script>
+const updateIconToTop = percent => {
+  let dom = document.querySelector(".back-to-top span span");
+  dom.innerText = percent;
+  if(percent < 1) {
+    document.querySelector(".back-to-top").className = "back-to-top hidden";
+  } else {
+    document.querySelector(".back-to-top").className = "back-to-top";
+  }
+}
+
+const handleScoll = () => {
+  let isRunning = false;
+  return () => {
+    if (isRunning) return;
+    isRunning = true;
+    window.requestAnimationFrame(timestamp => {
+      let scrollTop =
+          document.documentElement.scrollTop || document.body.scrollTop,
+        scrollHeight =
+          document.documentElement.scrollHeight ||
+          document.body.scrollHeight,
+        clientHeight =
+          document.documentElement.clientHeight ||
+          document.body.clientHeight;
+      isRunning = false;
+      if (scrollTop <= 1) {
+        updateIconToTop(0);
+        return;
+      }
+      if (scrollTop + clientHeight >= scrollHeight) {
+        updateIconToTop(100);
+      } else {
+        updateIconToTop(parseInt(
+          100 * scrollTop / (scrollHeight - clientHeight),
+          10
+        ));
+      }
+    });
+  };
+}
+
+const backToTop = () => {
+  let scrollTop =
+      document.documentElement.scrollTop || document.body.scrollTop,
+    delay = 10,
+    time = 200;
+  if (scrollTop <= 20) {
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    return;
+  }
+  let step = Math.ceil(scrollTop * delay / time);
+  let timer = setInterval(() => {
+    scrollTop =
+      document.documentElement.scrollTop || document.body.scrollTop;
+    if (scrollTop - step <= 0) {
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      clearInterval(timer);
+    } else {
+      document.documentElement.scrollTop = scrollTop - step;
+      document.body.scrollTop = scrollTop - step;
+    }
+  }, delay);
+}
+
+document.addEventListener("scroll", handleScoll(), false);
+
+document.querySelector(".back-to-top").addEventListener("click", backToTop, false);
+
+</script>
+
+    </div>
+
+    
+      <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+<script>
+  (() => {
+    const mathjaxConfig = {
+      showProcessingMessages: false, //关闭js加载过程信息
+      messageStyle: "none", //不显示信息
+      jax: ["input/TeX", "output/HTML-CSS"],
+      tex2jax: {
+        inlineMath: [["$", "$"], ["\\(", "\\)"]], //行内公式选择符
+        displayMath: [["$$", "$$"], ["\\[", "\\]"]], //段内公式选择符
+        skipTags: ["script", "noscript", "style", "textarea", "pre", "code", "a"] //避开某些标签
+      },
+      "HTML-CSS": {
+        availableFonts: ["STIX", "TeX"], //可选字体
+        showMathMenu: false //关闭右击菜单显示
+      }
+    }
+
+    let mathjaxInterval = setInterval(() => {
+      if(!window.MathJax){
+        return;
+      }
+      window.MathJax.Hub.Config(mathjaxConfig)
+      window.MathJax.Hub.Queue(["Typeset", MathJax.Hub, document.getElementById('app')])
+
+      clearInterval(mathjaxInterval)
+    }, 10)    
+  })()
+</script>
+    
+
+    <script src="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.js" async></script>
+<script async>
+  let fancyTimer = setInterval(function(){
+    if(!window.$){
+      return;
+    }
+    $(document).ready(function() {
+      $(".post img").each(function () {
+        if($(this).parent().get(0).tagName.toLowerCase() === "a") {
+          return;
+        }
+        // $(this).attr("data-fancybox", "gallery"); // if you add 'data-fancybox', img will display after showed
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "gallery");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      });
+      
+      clearInterval(fancyTimer);
+    });
+  }, 10);
+</script>
+
+    
+  </body>
+
+</html>
