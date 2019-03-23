@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+  
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta name="author" content="董沅鑫, yuanxin.me@gmail.com">
+  
+  
+  
+  <title>无分类笔记（解构赋值、立即执行函数、闭包、MVC、Promise） | Celeste&#39;s Blog</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="MVC,Promise,解构赋值,使用立即执行函数,使用闭包,封装 jQuery.ajax,">
+  
+
+  <script>
+    console.log('\n%c Hexo-theme-bmw v4.0 ' + '%c 🎉 https://github.com/dongyuanxin/theme-bmw 🎉\n' + '\n%c View demo online ' + '%c 🔍 https://godbmw.com/ 🔍  \n' , 'color: #fadfa3; background: #030307; padding:3px 0;', '', 'color: #fadfa3; background: #030307; padding:3px 0;', '');
+  </script>
+
+  
+    <meta name="description" content="前端，学习中">
+  
+
+  
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+    <link rel="apple-touch-icon" href="/images/touch-icon.png">
+  
+
+  <link href="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/icon/iconfont.css">
+<link rel="stylesheet" href="/css/github-markdown.css">
+<link rel="stylesheet" href="/css/highlight.css">
+
+  <script src="/js/util.js"></script>
+<script src="/js/valine.min.js"></script>
+
+  
+
+  
+    <link href="https://cdn.bootcss.com/aplayer/1.10.1/APlayer.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/aplayer/1.10.1/APlayer.min.js" async></script>
+  
+
+  
+    <link href="https://cdn.bootcss.com/social-share.js/1.0.16/css/share.min.css" rel="stylesheet">
+  
+  
+  <script src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js" async></script>
+  
+  
+    <script src="//cdn.jsdelivr.net/npm/leancloud-storage@3.11.0/dist/av-min.js"></script>
+  
+
+</head>
+
+  <body>
+
+    
+
+    <div id="app">
+
+      <div class="header-wrap">
+  <header>
+    <div class="site-brand">
+      <div class="site-title">
+        <a href="/">Celeste&#39;s Blog</a>
+      </div>
+    </div>
+    <nav class="site-navigation">
+      <ul class="nav-menu">
+      
+        <li class="nav-item" data-path="/">
+          
+            <a href="/" target="_self">
+              主页
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          
+            <a href="/archives/" target="_self">
+              归档
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          
+            <a href="/tags/" target="_self">
+              标签
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path>
+          
+            <a href="javascript:void(0);" v-else>抓到我</a>
+            <ul class="nav-menu--dropdown">
+              
+                <li>
+                  <a href="https://github.com/celesteweng" target="_blank">
+                    Github
+                  </a>
+                </li>
+              
+            </ul>
+          
+        </li>
+      
+      </ul>
+    </nav>
+    <i class="iconfont icon-menu"></i>
+  </header>
+</div>
+
+<script>
+  let links = document.querySelectorAll('.nav-item');
+  for(let link of links){
+    let childrenLink = link.querySelector('ul');
+    link.addEventListener('mouseenter', () => {
+      if(childrenLink) {
+        childrenLink.className = "nav-menu--dropdown active";
+      }
+    })
+    link.addEventListener('mouseleave', () => {
+      if(childrenLink) {
+        childrenLink.className = "nav-menu--dropdown";
+      }
+    })
+  }
+  let rootRealPath = getRealPath(window.location.pathname, true);
+  for(let link of links) {
+    let linkPath = link.getAttribute("data-path");
+    if(linkPath && getRealPath(linkPath, true) === rootRealPath) {
+      link.className = "nav-item hover";
+    }
+  }
+
+  let iconMenu = document.querySelector("i.iconfont.icon-menu"),
+    iconMenuClicked = false;
+  let navDOM = document.querySelector("nav.site-navigation");
+  iconMenu.addEventListener("click", () => {
+    iconMenuClicked 
+      ? navDOM.className = "site-navigation active"
+      : navDOM.className = "site-navigation";
+    iconMenuClicked = !iconMenuClicked;
+  })
+</script>
+
+      
+
+
+
+
+
+
+
+
+<div class="container post-index">
+
+  
+
+<div class="post">
+  <h1 class="article-title">
+    <span>无分类笔记（解构赋值、立即执行函数、闭包、MVC、Promise）</span>
+  </h1>
+  <div class="article-top-meta">
+    <span>
+      发布 : 
+      2019-03-16
+    </span>
+    
+    
+      <span>
+        浏览 : <span class="article-timer" data-identity="无分类笔记（解构赋值、立即执行函数、闭包、MVC、Promise）"></span>
+      </span>
+    
+  </div>
+
+  
+
+  <div class="article-content">
+    <div class="markdown-body">
+      <p>从作为函数实参的对象中提取数据</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 直接将第一个参数解构并声明，相当于用 let 声明</span></span><br><span class="line"><span class="keyword">var</span> fn = <span class="function"><span class="keyword">function</span>(<span class="params">&#123;url, method, body&#125;</span>)</span>&#123;</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>交换变量的值</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="string">'a'</span></span><br><span class="line"><span class="keyword">var</span> b = <span class="string">'b'</span></span><br><span class="line"></span><br><span class="line">[a, b] = [b, a]</span><br></pre></td></tr></table></figure>
+<p>其余功能：加<code>()</code>免声明（要在语句前加<code>;</code>）、修改属性名、忽略某个值（用<code>,</code>分割，空出下标对应项）、<code>...rest</code>剩余项赋值给一个变量、设置默认值（等号左边用<code>=</code>，等号右边用<code>:</code>）</p>
+<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment" target="_blank" rel="noopener">解构赋值–MDN</a></p>
+<h4 id="Promise-的意义"><a href="#Promise-的意义" class="headerlink" title="Promise 的意义"></a>Promise 的意义</h4><ol>
+<li>不用取名字。不用去记参数名，直接在 <code>.then()</code>中写，第一个参数为成功的回调，第二个参数为失败的回调。</li>
+<li><code>.then</code>可以对一个状态进行多次处理</li>
+</ol>
+<p><code>jQuery.ajax</code>中 responseText (“Content-Type”: “text/json”)，会自动转化为对象。</p>
+<p>封装 jQuery.ajax</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">window</span>.jQuery = <span class="function"><span class="keyword">function</span>(<span class="params">nodesOrSelector</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> nodes = &#123;&#125;</span><br><span class="line">  nodes.addClass = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;</span><br><span class="line">  node.textContent = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;</span><br><span class="line">  <span class="keyword">return</span> nodes</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">window</span>.$ = <span class="built_in">window</span>.jQuery</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">window</span>.jQuery.ajax = <span class="function"><span class="keyword">function</span>(<span class="params">&#123;url, method, headers, body, success, fail&#125;</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">let</span> request = <span class="keyword">new</span> XMLHttpRequest()</span><br><span class="line">  request.open(method, url)</span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">let</span> key <span class="keyword">in</span> headers) &#123;</span><br><span class="line">    <span class="keyword">let</span> value = headers[key]</span><br><span class="line">    request.setRequestHeader(key, value)</span><br><span class="line">  &#125;</span><br><span class="line">  request.onreadystatechange = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (request.readyState === <span class="number">4</span>) &#123;</span><br><span class="line">      <span class="keyword">if</span> (request.status &gt;= <span class="number">200</span> &amp;&amp; request.status &lt; <span class="number">300</span>) &#123;</span><br><span class="line">        success.call(<span class="literal">undefined</span>, request.responseText)</span><br><span class="line">      &#125; <span class="keyword">else</span> <span class="keyword">if</span> (request.status &gt;= <span class="number">400</span>) &#123;</span><br><span class="line">        fail.call(<span class="literal">undefined</span>, request)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  request.send()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">doSthIfSuccess</span>(<span class="params">responseText</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">myButton.addEventListener(<span class="string">'click'</span>, (e) =&gt; &#123;</span><br><span class="line">  $.ajax(&#123;</span><br><span class="line">    url: <span class="string">'/xxx'</span>,</span><br><span class="line">    method: <span class="string">'get'</span>,</span><br><span class="line">    headers: &#123;</span><br><span class="line">      <span class="string">'Content-ype'</span>: <span class="string">'application/x-www-form-urlencoded'</span>,</span><br><span class="line">      <span class="string">'Name'</span>: <span class="string">'Celeste'</span></span><br><span class="line">    &#125;,</span><br><span class="line">    success: <span class="function">(<span class="params">responseText</span>) =&gt;</span> &#123;</span><br><span class="line">      doSthIfSuccess.call(<span class="literal">undefined</span>, responseText)</span><br><span class="line">    &#125;,</span><br><span class="line">    fail: <span class="function">(<span class="params">response</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="built_in">console</span>.log(response, response.status, response.responseText)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<hr>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 自己封装 jQuery.ajax 满足 Promise 规则</span></span><br><span class="line"><span class="built_in">window</span>.jQuery.ajax = <span class="function"><span class="keyword">function</span>(<span class="params">&#123; url, method, body, headers &#125;</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span>(<span class="params">resolve, reject</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">let</span> request = <span class="keyword">new</span> XMLHttpRequest()</span><br><span class="line">        request.open(method, url)</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">let</span> key <span class="keyword">in</span> headers) &#123;</span><br><span class="line">            <span class="keyword">let</span> value = headers[key]</span><br><span class="line">            request.setRequestHeader(key, value)</span><br><span class="line">        &#125;</span><br><span class="line">        request.onreadystatechange = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (request.readyState === <span class="number">4</span>) &#123;</span><br><span class="line">                <span class="keyword">if</span> (request.status &gt;= <span class="number">200</span> &amp;&amp; request.status &lt; <span class="number">300</span>) &#123;</span><br><span class="line">                    resolve.call(<span class="literal">undefined</span>, request.responseText)</span><br><span class="line">                &#125; <span class="keyword">else</span> <span class="keyword">if</span> (request.status &gt;= <span class="number">400</span>) &#123;</span><br><span class="line">                    reject.call(<span class="literal">undefined</span>, request)</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            request.send()</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">myButton.addEventListener(<span class="string">'click'</span>, (e) =&gt; &#123;</span><br><span class="line">  <span class="keyword">let</span> promise = jQuery.ajax(&#123;</span><br><span class="line">    url: <span class="string">'/xxx'</span>,</span><br><span class="line">    method: <span class="string">'get'</span>,</span><br><span class="line">    headers: &#123;</span><br><span class="line">      <span class="string">'Content-Type'</span>: <span class="string">'application/x-www-form-urlencoded'</span>,</span><br><span class="line">      <span class="string">'Name'</span>: <span class="string">'Alice'</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  promise.then(</span><br><span class="line">    (text) =&gt; &#123; <span class="built_in">console</span>.log(text) &#125;,</span><br><span class="line">    (request) =&gt; &#123; <span class="built_in">console</span>.log(request) &#125;</span><br><span class="line">  )</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 上述代码相当于</span></span><br><span class="line">myButton.addEventListener(<span class="string">'click'</span>, (e) =&gt; &#123;</span><br><span class="line">  jQuery.ajax(&#123;</span><br><span class="line">    url: <span class="string">'/xxx'</span>,</span><br><span class="line">    method: <span class="string">'get'</span>,</span><br><span class="line">    headers: &#123;</span><br><span class="line">      <span class="string">'Content-Type'</span>: <span class="string">'application/x-www-form-urlencoded'</span>,</span><br><span class="line">      <span class="string">'Name'</span>: <span class="string">'Alice'</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;).then(</span><br><span class="line">    (text) =&gt; &#123; <span class="built_in">console</span>.log(text) &#125;,</span><br><span class="line">    (request) =&gt; &#123; <span class="built_in">console</span>.log(request) &#125;</span><br><span class="line">  )</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<h4 id="如何使用立即执行函数"><a href="#如何使用立即执行函数" class="headerlink" title="如何使用立即执行函数"></a>如何使用立即执行函数</h4><ol>
+<li>我们不想要全局变量</li>
+<li>我们要使用局部变量</li>
+<li>ES 5 里面，只有函数有局部变量</li>
+<li>于是我们声明一个 function xxx，然后 xxx.call()</li>
+<li>这个时候 xxx 是全局变量（全局函数）</li>
+<li>所以我们不能给这个函数名字</li>
+<li>function(){}.call()</li>
+<li>但是 Chrome 报错，语法错误</li>
+<li>试出来一种方法可以不报错:<br>i. !function(){}.call() (我们不在乎这个匿名函数的返回值，所以加个 ! 取反没关系)<br>ii. (function(){}).call() 方方不推荐<br>   xxx<br>   (function(){}).call() 报错<br>iii. frank192837192463981273912873098127912378.call() 不推荐</li>
+</ol>
+<h4 id="如何使用闭包"><a href="#如何使用闭包" class="headerlink" title="如何使用闭包"></a>如何使用闭包</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">!<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">var</span> person = &#123;</span><br><span class="line">    name: <span class="string">'xiaoming'</span>,</span><br><span class="line">    age: <span class="number">3</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="built_in">window</span>.personGrowUp = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    person.age += <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> person.age</span><br><span class="line">  &#125;</span><br><span class="line">&#125;.call()</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> accessor = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123; <span class="comment">// accessor 为 返回匿名函数 的 匿名函数</span></span><br><span class="line">  <span class="keyword">var</span> person = &#123;</span><br><span class="line">    name: <span class="string">'xiaoming'</span>,</span><br><span class="line">    age: <span class="number">3</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    person.age += <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> person.age</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> growUp = accessor.call() <span class="comment">// growUp 为函数</span></span><br><span class="line"></span><br><span class="line">growUp.call()</span><br></pre></td></tr></table></figure>
+<ol>
+<li>立即执行函数使得 person 无法被外部访问</li>
+<li>闭包使得匿名函数可以操作 person</li>
+<li>window.frankGrowUp 保存了匿名函数的地址</li>
+<li>任何地方都可以使用 window.frankGrowUp<br>=&gt; 任何地方都可以使用 window.frankGrowUp 操作 person，但是不能直接访问 person</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// MVC的M和V</span></span><br><span class="line">!<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">var</span> view = <span class="built_in">document</span>.querySelector(<span class="string">'#topNavBar'</span>)</span><br><span class="line">  <span class="keyword">var</span> controller = <span class="function"><span class="keyword">function</span>(<span class="params">view</span>)</span>&#123;</span><br><span class="line">    <span class="built_in">window</span>.addEventListener(<span class="string">'scroll'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">x</span>) </span>&#123;</span><br><span class="line">      <span class="comment">// ...  </span></span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">  controller.call(<span class="literal">undefined</span>, view)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 将 controller 变成对象</span></span><br><span class="line">!<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">var</span> view = <span class="built_in">document</span>.querySelector(<span class="string">'#topNavBar'</span>)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">var</span> controller = &#123;</span><br><span class="line">    view: <span class="literal">null</span>,</span><br><span class="line">    init: <span class="function"><span class="keyword">function</span>(<span class="params">view</span>) </span>&#123;</span><br><span class="line">      <span class="keyword">this</span>.view = view</span><br><span class="line">      <span class="keyword">this</span>.bindEvents()</span><br><span class="line">      <span class="comment">// this.bindEvents.call(this)</span></span><br><span class="line">    &#125;,</span><br><span class="line">    bindEvents: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="keyword">var</span> view = <span class="keyword">this</span>.view</span><br><span class="line">      <span class="built_in">window</span>.addEventListener(<span class="string">'scroll'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">window</span>.scrollY &gt; <span class="number">0</span>) &#123;</span><br><span class="line">          view.classList.add(<span class="string">'sticky'</span>)</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          view.classList.remove(<span class="string">'sticky'</span>)</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  controller.init(view)</span><br><span class="line">  <span class="comment">// controller.init.call(controller, view)</span></span><br><span class="line">&#125;.call()</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 将对 view 的操作全部放在 controller 的属性内，使代码的结构变得清晰</span></span><br><span class="line">!<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">var</span> view = <span class="built_in">document</span>.querySelector(<span class="string">'#topNavBar'</span>)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">var</span> controller = &#123;</span><br><span class="line">    view: <span class="literal">null</span>,</span><br><span class="line">    init: <span class="function"><span class="keyword">function</span>(<span class="params">view</span>) </span>&#123;</span><br><span class="line">      <span class="keyword">this</span>.view = view</span><br><span class="line">      <span class="keyword">this</span>.bindEvents()</span><br><span class="line">      <span class="comment">// this.bindEvents.call(this)</span></span><br><span class="line">    &#125;,</span><br><span class="line">    bindEvents: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="keyword">var</span> view = <span class="keyword">this</span>.view</span><br><span class="line">      <span class="built_in">window</span>.addEventListener(<span class="string">'scroll'</span>, (e) =&gt; &#123;</span><br><span class="line">        <span class="comment">// 1. 函数内 this 为触发事件的元素，使用 function()&#123;&#125; 需要绑定 this</span></span><br><span class="line">        <span class="comment">// function()&#123;&#125;.bind(this)</span></span><br><span class="line">        <span class="comment">// 2. 使用箭头函数。箭头函数没有 this，没有箭头函数的内外 this 是一样的</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">window</span>.scrollY &gt; <span class="number">0</span>) &#123;</span><br><span class="line">          <span class="keyword">this</span>.active()</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          <span class="keyword">this</span>.deactive()</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;，</span><br><span class="line">    active: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="keyword">this</span>.view.classList.add(<span class="string">'sticky'</span>)</span><br><span class="line">    &#125;,</span><br><span class="line">    deactive: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="keyword">this</span>.view.classList.remove(<span class="string">'sticky'</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  controller.init(view)</span><br><span class="line">  <span class="comment">// controller.init.call(controller, view)</span></span><br><span class="line">&#125;.call()</span><br></pre></td></tr></table></figure>
+<h4 id="MVC"><a href="#MVC" class="headerlink" title="MVC"></a>MVC</h4><p>MVC 是一种组织代码的思想，使代码结构更清晰，方便后续的修改的扩展。</p>
+<p><img src="http://pntmc1hcw.bkt.clouddn.com//blog/img/MVC.png" alt="MVC.png"></p>
+<p>MVC 将代码分成三块：</p>
+<ol>
+<li>控制器（Controller）- 负责转发请求，对请求进行处理（负责其他的所有事情）。</li>
+<li>视图（View） - 界面设计人员进行图形界面设计（你的代码长什么样子或者你的代码在哪一块）。</li>
+<li>模型（Model） - 程序员编写程序应有的功能（实现算法等等）、数据库专家进行数据管理和数据库设计(可以实现具体的功能)（一个操作数据的对象。初始化、获取和保存等）。</li>
+</ol>
+<p>Model 和服务器交互，Model 将得到的数据交给 Controller，Controller 把数据填入 View，并监听 View<br>用户操作 View，如点击按钮，Controller 就会接受到点击事件，Controller 这时会去调用 Model，Model 会与服务器交互，得到数据后返回给 Controller，Controller 得到数据就去更新 View。</p>
+<p>MVC模式是软件工程中一种软件架构模式，一般把软件模式分为三部分，模型(Model)+视图(View)+控制器(Controller);</p>
+<p>  模型：模型用于封装与应用程序的业务逻辑相关的数据以及对数据处理的方法。模型有对数据直接访问的权利。模型不依赖 “视图” 和 “控制器”, 也就是说 模型它不关心页面如何显示及如何被操作.</p>
+<p>  视图：视图层最主要的是监听模型层上的数据改变，并且实时的更新html页面。当然也包括一些事件的注册或者ajax请求操作(发布事件),都是放在视图层来完成。</p>
+<p>  控制器：控制器接收用户的操作，最主要是订阅视图层的事件，然后调用模型或视图去完成用户的操作;比如：当页面上触发一个事件，控制器不输出任何东西及对页面做任何处理; 它只是接收请求并决定调用模型中的那个方法去处理请求, 然后再确定调用那个视图中的方法来显示返回的数据。</p>
+<ol>
+<li><p>前端 MVC 是什么？</p>
+<p>答：MVC模式是软件工程中一种软件架构模式，一般把软件模式分为三部分，模型(Model)+视图(View)+控制器(Controller)</p>
+<p><strong>模型</strong>：模型用于封装与应用程序的业务逻辑相关的数据以及对数据处理的方法。模型有对数据直接访问的权利。模型不依赖 “视图” 和 “控制器”, 也就是说 模型它不关心页面如何显示及如何被操作.</p>
+<p><strong>视图</strong>：视图层最主要的是监听模型层上的数据改变，并且实时的更新html页面。当然也包括一些事件的注册或者ajax请求操作(发布事件),都是放在视图层来完成。</p>
+<p><strong>控制器</strong>：控制器接收用户的操作，最主要是订阅视图层的事件，然后调用模型或视图去完成用户的操作比如：当页面上触发一个事件，控制器不输出任何东西及对页面做任何处理 它只是接收请求并决定调用模型中的那个方法去处理请求, 然后再确定调用那个视图中的方法来显示返回的数据。</p>
+</li>
+<li><p>请用代码大概说明 MVC 三个对象分别有哪些重要属性和方法。</p>
+</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">View('.xxx')</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="built_in">window</span>.View = <span class="function"><span class="keyword">function</span> (<span class="params">selector</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">document</span>.querySelector(selector)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">Model(&#123;</span></span><br><span class="line"><span class="comment">  'resourceName': xxx</span></span><br><span class="line"><span class="comment">&#125;)</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="built_in">window</span>.Model = <span class="function"><span class="keyword">function</span>(<span class="params">object</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> resourceName = object.resourceName</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        init: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;,</span><br><span class="line">        fetch: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;,</span><br><span class="line">        save: <span class="function"><span class="keyword">function</span>(<span class="params">object</span>) </span>&#123;&#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">Controller(&#123;</span></span><br><span class="line"><span class="comment">    init: function(view, model) &#123;</span></span><br><span class="line"><span class="comment">        this.view = xxx</span></span><br><span class="line"><span class="comment">        this.model = xxx</span></span><br><span class="line"><span class="comment">        this.xxx()</span></span><br><span class="line"><span class="comment">        this.yyy()</span></span><br><span class="line"><span class="comment">    &#125;,</span></span><br><span class="line"><span class="comment">    <span class="doctag">xxx:</span> function() &#123;&#125;,</span></span><br><span class="line"><span class="comment">    yyy: function() &#123;&#125;</span></span><br><span class="line"><span class="comment">&#125;)</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="built_in">window</span>.Controller = <span class="function"><span class="keyword">function</span>(<span class="params">options</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> init = options.init</span><br><span class="line">    <span class="keyword">let</span> object = &#123;</span><br><span class="line">        view: <span class="literal">null</span>,</span><br><span class="line">        model: <span class="literal">null</span>,</span><br><span class="line">        init: <span class="function"><span class="keyword">function</span>(<span class="params">view, model</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.view = view</span><br><span class="line">            <span class="keyword">this</span>.model = model</span><br><span class="line">            <span class="keyword">this</span>.model.init()</span><br><span class="line">            init.call(<span class="keyword">this</span>, view, model)</span><br><span class="line">            <span class="comment">// this.bindEvents.call(this)</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> key <span class="keyword">in</span> options) &#123;</span><br><span class="line">        <span class="keyword">if</span> (key !== <span class="string">'init'</span>) &#123;</span><br><span class="line">            object[key] = options[key]</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> object</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    </div>
+  </div>
+  
+  
+  
+    <div class="social-share" style="margin-top: -2rem" data-wechat-qrcode-title="<p>微信扫一扫</p>" data-wechat-qrcode-helper="<p>微信右上角, 扫一扫分享</p>" data-sites="qzone, qq, weibo, wechat, douban, google, facebook, twitter">
+  <span style="color: #6b7487; font-size: 1.4rem;">分享到: </span>
+</div>
+<script src="https://cdn.bootcss.com/social-share.js/1.0.16/js/social-share.min.js" async></script>
+  
+
+  
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+      <span>
+        
+          <i class="iconfont icon-06tags"></i>标签: 
+          
+          <span class="span--tag">
+            <a href="/tags/MVC/">
+              #MVC
+            </a>
+          </span>
+          
+          <span class="span--tag">
+            <a href="/tags/Promise/">
+              #Promise
+            </a>
+          </span>
+          
+          <span class="span--tag">
+            <a href="/tags/解构赋值/">
+              #解构赋值
+            </a>
+          </span>
+          
+          <span class="span--tag">
+            <a href="/tags/使用立即执行函数/">
+              #使用立即执行函数
+            </a>
+          </span>
+          
+          <span class="span--tag">
+            <a href="/tags/使用闭包/">
+              #使用闭包
+            </a>
+          </span>
+          
+          <span class="span--tag">
+            <a href="/tags/封装-jQuery-ajax/">
+              #封装 jQuery.ajax
+            </a>
+          </span>
+          
+        
+      </span>
+    </div>
+    <div class="article-meta pull-right">
+    </div>
+  </div>
+</div>
+
+
+  <aside id="sidebar">
+    <p id="sidebar-header"></p>
+    <ol id="sidebar-toc"></ol>
+  </aside>
+  <script async>setTimeout(generateToc, 10);</script>
+
+
+  <nav class="post-navigation">
+    
+      <div class="nav-pre">
+        <i class="iconfont icon-prev"></i>
+        上一篇:
+        <a href="/2019/03/15/从输入URL到页面加载发生了什么/" target="_self">从输入URL到页面加载发生了什么</a>
+      </div>
+    
+    
+      <div class="nav-next">
+        下一篇:
+        <a href="/2019/03/18/无分类笔记-2（逻辑与或、命名空间、this、new）/" target="_self">无分类笔记-2（逻辑与或、命名空间、this、new、异步）</a>
+        <i class="iconfont icon-next"></i>
+      </div>
+    
+  </nav>
+
+   
+
+  
+    <script defer>
+const valineAPI = (() => {
+  try {
+    AV.init("5t4xu3HBz1CCS0dWUdEaYl1T-gzGzoHsz", "2je5yKJYh98beKd80936XS8g");
+  } catch(error) {}
+  const isExist = (identity) => {
+    identity = identity || getRealPath();
+    let query = new AV.Query('Timer');
+    return new Promise((resolve, reject) => {
+      query.equalTo("identity", identity);
+      query.find().then(results => {
+        resolve(results.length > 0);
+      }, error => reject(error));
+    })
+  }
+
+  const _get = (identity) => {
+    let query = null;
+    if(identity && identity instanceof Array){
+      let querys = [];
+      for(let i = 0; i < identity.length; ++i) {
+        querys[i] = new AV.Query('Timer');
+        querys[i].equalTo('identity', identity[i]);
+      }
+      query = AV.Query.or.apply(null ,querys);
+    } else {
+      identity = identity || getRealPath();
+      query = new AV.Query("Timer");
+      query.equalTo("identity", identity);
+    }
+
+    return new Promise((resolve, reject) => {
+      query.find()
+      .then(results => resolve(results))
+      .catch(error => reject(error))
+    })
+  }
+
+  const create = (identity) => {
+    identity = identity || getRealPath();
+    return new Promise((resolve, reject) => {
+      let Todo = AV.Object.extend('Timer');
+      let todo = new Todo();
+      todo.set("times", 1);
+      todo.set("identity", identity);
+      todo.save().then(res => resolve(true), error => reject(error));
+    })
+  }
+
+  const update = (identity) => {
+    identity = identity || getRealPath();
+    return new Promise((resolve, reject) => {
+      let query = new AV.Query('Timer');
+      query.equalTo("identity", identity);
+      query.find().then(todos => {
+        todos.forEach(todo => {
+          todo.set("times", todo.attributes.times + 1);
+        });
+        return AV.Object.saveAll(todos);
+      }).then(todos => resolve(true), error => reject(error));
+    })
+  }
+
+  return {
+    isExist,
+    _get,
+    update,
+    create
+  }
+})()
+
+const calcAndWriteTimes = () => {
+  let isPost = true;
+
+  let timerAllDOM = document.querySelectorAll(".article-timer");
+
+  if(isPost) {
+    let identity = timerAllDOM[0].getAttribute("data-identity");
+    valineAPI.isExist(identity)
+    .then(exist => {
+      if(exist) {
+        return valineAPI.update(identity);
+      }
+      return new Promise(resolve => resolve(true));
+    })
+    .then( succuess => valineAPI._get(identity))
+    .then( result => timerAllDOM[0].innerText = result[0].attributes.times)
+    .catch(error => console.log(error.message))
+    return ;
+  }
+
+  let timerDOMCache = {};
+
+  for(let timerDOM of timerAllDOM) {
+    let identity = timerDOM.getAttribute("data-identity");
+    if(timerDOMCache.hasOwnProperty(identity)){
+      timerDOMCache[identity].dom.push(timerDOM);
+    }else{
+      timerDOMCache[identity] = {
+        dom: [timerDOM],
+        times: undefined
+      };
+    }
+  }
+
+  let identities = Object.keys(timerDOMCache);
+  valineAPI._get(identities).then(results => {
+    for(let result of results) {
+      let {identity, times} = result.attributes;
+      timerDOMCache[identity].times = times;
+      timerDOMCache[identity].dom.map(item => item.innerText = times);
+    }
+    for(let identity of identities) {
+      if(timerDOMCache[identity].times){
+        continue;
+      }
+      timerDOMCache[identity].dom.map(item => item.innerText = 1);
+      valineAPI.create(identity);
+    }
+  }).catch(error => console.log(error.message))
+}
+
+if(true){
+  calcAndWriteTimes();
+}
+</script>
+   
+
+</div>
+
+
+      <footer>
+  <p class="site-info">
+    博客已萌萌哒运行<span id="time-to-now"></span><span class="my-face">(●'◡'●)ﾉ♥</span>
+    <br>
+    Theme - <a href="https://github.com/dongyuanxin/theme-bmw">BMW</a> | Made With 💗 | Powered by <a href="https://godbmw.com/">GodBMW</a>
+    <br>
+    
+  </p>
+</footer>
+
+
+
+<script>
+const timeToNowDOM = document.querySelector("#time-to-now");
+const startTimestamp = new Date(2017, 7, 10).getTime();
+
+const updateTimeStr = () => {
+  let offset = parseInt(
+      (new Date().getTime() - startTimestamp) / 1000,
+      10
+    ),
+    day = Math.floor(offset / 86400),
+    hour = Math.floor((offset % 86400) / 3600),
+    minute = Math.floor(((offset % 86400) % 3600) / 60),
+    second = Math.floor(((offset % 86400) % 3600) % 60);
+  timeToNowDOM.innerHTML =
+    day + "天" + hour + "小时" + minute + "分钟" + second + "秒";
+  setTimeout(updateTimeStr, 500);
+}
+
+setTimeout(updateTimeStr, 500);
+</script>
+
+
+      <div class="back-to-top hidden">
+  <span>
+    <i class="iconfont icon-60"></i><span></span>%
+  </span>
+</div>
+
+<script>
+const updateIconToTop = percent => {
+  let dom = document.querySelector(".back-to-top span span");
+  dom.innerText = percent;
+  if(percent < 1) {
+    document.querySelector(".back-to-top").className = "back-to-top hidden";
+  } else {
+    document.querySelector(".back-to-top").className = "back-to-top";
+  }
+}
+
+const handleScoll = () => {
+  let isRunning = false;
+  return () => {
+    if (isRunning) return;
+    isRunning = true;
+    window.requestAnimationFrame(timestamp => {
+      let scrollTop =
+          document.documentElement.scrollTop || document.body.scrollTop,
+        scrollHeight =
+          document.documentElement.scrollHeight ||
+          document.body.scrollHeight,
+        clientHeight =
+          document.documentElement.clientHeight ||
+          document.body.clientHeight;
+      isRunning = false;
+      if (scrollTop <= 1) {
+        updateIconToTop(0);
+        return;
+      }
+      if (scrollTop + clientHeight >= scrollHeight) {
+        updateIconToTop(100);
+      } else {
+        updateIconToTop(parseInt(
+          100 * scrollTop / (scrollHeight - clientHeight),
+          10
+        ));
+      }
+    });
+  };
+}
+
+const backToTop = () => {
+  let scrollTop =
+      document.documentElement.scrollTop || document.body.scrollTop,
+    delay = 10,
+    time = 200;
+  if (scrollTop <= 20) {
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    return;
+  }
+  let step = Math.ceil(scrollTop * delay / time);
+  let timer = setInterval(() => {
+    scrollTop =
+      document.documentElement.scrollTop || document.body.scrollTop;
+    if (scrollTop - step <= 0) {
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      clearInterval(timer);
+    } else {
+      document.documentElement.scrollTop = scrollTop - step;
+      document.body.scrollTop = scrollTop - step;
+    }
+  }, delay);
+}
+
+document.addEventListener("scroll", handleScoll(), false);
+
+document.querySelector(".back-to-top").addEventListener("click", backToTop, false);
+
+</script>
+
+    </div>
+
+    
+      <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+<script>
+  (() => {
+    const mathjaxConfig = {
+      showProcessingMessages: false, //关闭js加载过程信息
+      messageStyle: "none", //不显示信息
+      jax: ["input/TeX", "output/HTML-CSS"],
+      tex2jax: {
+        inlineMath: [["$", "$"], ["\\(", "\\)"]], //行内公式选择符
+        displayMath: [["$$", "$$"], ["\\[", "\\]"]], //段内公式选择符
+        skipTags: ["script", "noscript", "style", "textarea", "pre", "code", "a"] //避开某些标签
+      },
+      "HTML-CSS": {
+        availableFonts: ["STIX", "TeX"], //可选字体
+        showMathMenu: false //关闭右击菜单显示
+      }
+    }
+
+    let mathjaxInterval = setInterval(() => {
+      if(!window.MathJax){
+        return;
+      }
+      window.MathJax.Hub.Config(mathjaxConfig)
+      window.MathJax.Hub.Queue(["Typeset", MathJax.Hub, document.getElementById('app')])
+
+      clearInterval(mathjaxInterval)
+    }, 10)    
+  })()
+</script>
+    
+
+    <script src="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.js" async></script>
+<script async>
+  let fancyTimer = setInterval(function(){
+    if(!window.$){
+      return;
+    }
+    $(document).ready(function() {
+      $(".post img").each(function () {
+        if($(this).parent().get(0).tagName.toLowerCase() === "a") {
+          return;
+        }
+        // $(this).attr("data-fancybox", "gallery"); // if you add 'data-fancybox', img will display after showed
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "gallery");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      });
+      
+      clearInterval(fancyTimer);
+    });
+  }, 10);
+</script>
+
+    
+  </body>
+
+</html>

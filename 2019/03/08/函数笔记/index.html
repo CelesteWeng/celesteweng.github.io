@@ -211,7 +211,7 @@
 <li>箭头函数</li>
 </ul>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> f = <span class="function">(<span class="params">x,y</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> x+y</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> sum = <span class="function">(<span class="params">x,y</span>) =&gt;</span> x+y</span><br><span class="line"><span class="keyword">var</span> n2 = <span class="function"><span class="params">n</span> =&gt;</span> n*n</span><br></pre></td></tr></table></figure>
-<p>花括号和 return 可以一起去掉，不能只省略一个</p>
+<p>花括号和 return 可以一起去掉，不能只省略一个；<br>箭头函数没有 <code>arguments</code>。</p>
 <h2 id="如何调用函数"><a href="#如何调用函数" class="headerlink" title="如何调用函数"></a>如何调用函数</h2><p>f.call(asThis, input1,input2)<br>其中 asThis 会被当做 this，[input1,input2] 会被当做 arguments<br>禁止使用 f(input1, input2)，因为学会 .call 才能理解 this</p>
 <h2 id="this-和-arguments"><a href="#this-和-arguments" class="headerlink" title="this 和 arguments"></a>this 和 arguments</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line"><span class="meta">    'use strict'</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>)</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="built_in">arguments</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">undefined</span></span><br><span class="line">&#125;</span><br><span class="line">f.call(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>) <span class="comment">// this 为 1，arguments 为 [2,3]</span></span><br></pre></td></tr></table></figure>
 <h2 id="什么是-call-stack"><a href="#什么是-call-stack" class="headerlink" title="什么是 call stack"></a>什么是 call stack</h2><h2 id="作用域"><a href="#作用域" class="headerlink" title="作用域"></a>作用域</h2><ul>
@@ -298,26 +298,6 @@
     
   </nav>
 
-  
-    <a href="#comment" class="comment-anchor"></a>
-<div class="comment-title"><i class="iconfont icon-footprint"></i> 留下足迹 <i class="iconfont icon-footprint"></i></div>
-<div id="vcomments"></div>
-
-<script defer>
-  if( true ) {
-    let path = getRealPath()
-    new Valine({
-      el: "#vcomments",
-      appId: "5t4xu3HBz1CCS0dWUdEaYl1T-gzGzoHsz",
-      appKey: "2je5yKJYh98beKd80936XS8g",
-      notify: false,
-      verify: false,
-      avatar: "robohash",
-      placeholder: "正确填写邮箱, 才能及时收到回复哦♪(^∇^*)",
-      path
-    });
-  }
-</script>
    
 
   

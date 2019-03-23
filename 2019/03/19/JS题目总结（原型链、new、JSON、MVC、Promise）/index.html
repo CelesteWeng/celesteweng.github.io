@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+  
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta name="author" content="董沅鑫, yuanxin.me@gmail.com">
+  
+  
+  
+  <title>JS题目总结（原型链、new、JSON、MVC、Promise） | Celeste&#39;s Blog</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="原型链,new,JSON,MVC,Promise,">
+  
+
+  <script>
+    console.log('\n%c Hexo-theme-bmw v4.0 ' + '%c 🎉 https://github.com/dongyuanxin/theme-bmw 🎉\n' + '\n%c View demo online ' + '%c 🔍 https://godbmw.com/ 🔍  \n' , 'color: #fadfa3; background: #030307; padding:3px 0;', '', 'color: #fadfa3; background: #030307; padding:3px 0;', '');
+  </script>
+
+  
+    <meta name="description" content="前端，学习中">
+  
+
+  
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+    <link rel="apple-touch-icon" href="/images/touch-icon.png">
+  
+
+  <link href="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/icon/iconfont.css">
+<link rel="stylesheet" href="/css/github-markdown.css">
+<link rel="stylesheet" href="/css/highlight.css">
+
+  <script src="/js/util.js"></script>
+<script src="/js/valine.min.js"></script>
+
+  
+
+  
+    <link href="https://cdn.bootcss.com/aplayer/1.10.1/APlayer.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/aplayer/1.10.1/APlayer.min.js" async></script>
+  
+
+  
+    <link href="https://cdn.bootcss.com/social-share.js/1.0.16/css/share.min.css" rel="stylesheet">
+  
+  
+  <script src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js" async></script>
+  
+  
+    <script src="//cdn.jsdelivr.net/npm/leancloud-storage@3.11.0/dist/av-min.js"></script>
+  
+
+</head>
+
+  <body>
+
+    
+
+    <div id="app">
+
+      <div class="header-wrap">
+  <header>
+    <div class="site-brand">
+      <div class="site-title">
+        <a href="/">Celeste&#39;s Blog</a>
+      </div>
+    </div>
+    <nav class="site-navigation">
+      <ul class="nav-menu">
+      
+        <li class="nav-item" data-path="/">
+          
+            <a href="/" target="_self">
+              主页
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          
+            <a href="/archives/" target="_self">
+              归档
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          
+            <a href="/tags/" target="_self">
+              标签
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path>
+          
+            <a href="javascript:void(0);" v-else>抓到我</a>
+            <ul class="nav-menu--dropdown">
+              
+                <li>
+                  <a href="https://github.com/celesteweng" target="_blank">
+                    Github
+                  </a>
+                </li>
+              
+            </ul>
+          
+        </li>
+      
+      </ul>
+    </nav>
+    <i class="iconfont icon-menu"></i>
+  </header>
+</div>
+
+<script>
+  let links = document.querySelectorAll('.nav-item');
+  for(let link of links){
+    let childrenLink = link.querySelector('ul');
+    link.addEventListener('mouseenter', () => {
+      if(childrenLink) {
+        childrenLink.className = "nav-menu--dropdown active";
+      }
+    })
+    link.addEventListener('mouseleave', () => {
+      if(childrenLink) {
+        childrenLink.className = "nav-menu--dropdown";
+      }
+    })
+  }
+  let rootRealPath = getRealPath(window.location.pathname, true);
+  for(let link of links) {
+    let linkPath = link.getAttribute("data-path");
+    if(linkPath && getRealPath(linkPath, true) === rootRealPath) {
+      link.className = "nav-item hover";
+    }
+  }
+
+  let iconMenu = document.querySelector("i.iconfont.icon-menu"),
+    iconMenuClicked = false;
+  let navDOM = document.querySelector("nav.site-navigation");
+  iconMenu.addEventListener("click", () => {
+    iconMenuClicked 
+      ? navDOM.className = "site-navigation active"
+      : navDOM.className = "site-navigation";
+    iconMenuClicked = !iconMenuClicked;
+  })
+</script>
+
+      
+
+
+
+
+
+
+
+
+<div class="container post-index">
+
+  
+
+<div class="post">
+  <h1 class="article-title">
+    <span>JS题目总结（原型链、new、JSON、MVC、Promise）</span>
+  </h1>
+  <div class="article-top-meta">
+    <span>
+      发布 : 
+      2019-03-19
+    </span>
+    
+    
+      <span>
+        浏览 : <span class="article-timer" data-identity="JS题目总结（原型链、new、JSON、MVC、Promise）"></span>
+      </span>
+    
+  </div>
+
+  
+
+  <div class="article-content">
+    <div class="markdown-body">
+      <h2 id="第一题"><a href="#第一题" class="headerlink" title="第一题"></a>第一题</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> object = &#123;&#125;</span><br><span class="line">object.__proto__ === <span class="built_in">Object</span>.prototype <span class="comment">// 为 true</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> fn = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;</span><br><span class="line">fn.__proto__ === <span class="built_in">Function</span>.prototype  <span class="comment">// 为 true</span></span><br><span class="line">fn.__proto__.__proto__ === <span class="built_in">Object</span>.prototype <span class="comment">// 为 true</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> array = []</span><br><span class="line">array.__proto__ === <span class="built_in">Array</span>.prototype <span class="comment">// 为 true</span></span><br><span class="line">array.__proto__.__proto__ === <span class="built_in">Object</span>.prototype <span class="comment">// 为 true</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">Function</span>.__proto__ === <span class="built_in">Function</span>.prototype <span class="comment">// 为 true</span></span><br><span class="line"><span class="built_in">Array</span>.__proto__ === <span class="built_in">Function</span>.prototype <span class="comment">// 为 true</span></span><br><span class="line"><span class="built_in">Object</span>.__proto__ === <span class="built_in">Function</span>.prototype <span class="comment">// 为 true</span></span><br><span class="line"></span><br><span class="line"><span class="literal">true</span>.__proto__ === <span class="built_in">Boolean</span>.prototype <span class="comment">// 为 true</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">Function</span>.prototype.__proto__ === <span class="built_in">Object</span>.prototype <span class="comment">// 为 true</span></span><br></pre></td></tr></table></figure>
+<h2 id="第二题"><a href="#第二题" class="headerlink" title="第二题"></a>第二题</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">new</span> fn()</span><br></pre></td></tr></table></figure>
+<p>new fn() 会执行 fn，并打印出 this，请问这个 this 有哪些属性？这个 this 的原型有哪些属性？</p>
+<p>答：this 为构造函数 fn 的一个实例，有内置属性 <code>[[Prototype]]</code>，在部分浏览器中表现为 <code>__proto__</code> 属性；<br><code>this.__proto__ === fn.prototype // true</code>，this 的原型的属性有 <code>constructor</code>、<code>__proto__</code>。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 换成这样做</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> f1 = <span class="keyword">new</span> fn()</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'(f1.__proto__ === fn.prototype) =&gt;'</span>, f1.__proto__ === fn.prototype)</span><br><span class="line"><span class="built_in">console</span>.log(f1)</span><br><span class="line"><span class="built_in">console</span>.log(f1.__proto__)</span><br></pre></td></tr></table></figure>
+<h2 id="第三题"><a href="#第三题" class="headerlink" title="第三题"></a>第三题</h2><p>JSON vs JS =&gt; 博客-发送请求.md</p>
+<h2 id="第四题"><a href="#第四题" class="headerlink" title="第四题"></a>第四题</h2><ol>
+<li><p>前端 MVC 是什么？</p>
+<p>答：MVC模式是软件工程中一种软件架构模式，一般把软件模式分为三部分，模型(Model)+视图(View)+控制器(Controller)</p>
+<p><strong>模型</strong>：模型用于封装与应用程序的业务逻辑相关的数据以及对数据处理的方法。模型有对数据直接访问的权利。模型不依赖 “视图” 和 “控制器”, 也就是说 模型它不关心页面如何显示及如何被操作.</p>
+<p><strong>视图</strong>：视图层最主要的是监听模型层上的数据改变，并且实时的更新html页面。当然也包括一些事件的注册或者ajax请求操作(发布事件),都是放在视图层来完成。</p>
+<p><strong>控制器</strong>：控制器接收用户的操作，最主要是订阅视图层的事件，然后调用模型或视图去完成用户的操作比如：当页面上触发一个事件，控制器不输出任何东西及对页面做任何处理 它只是接收请求并决定调用模型中的那个方法去处理请求, 然后再确定调用那个视图中的方法来显示返回的数据。</p>
+</li>
+<li><p>请用代码大概说明 MVC 三个对象分别有哪些重要属性和方法。</p>
+</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">View('.xxx')</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="built_in">window</span>.View = <span class="function"><span class="keyword">function</span> (<span class="params">selector</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">document</span>.querySelector(selector)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">Model(&#123;</span></span><br><span class="line"><span class="comment">  'resourceName': xxx</span></span><br><span class="line"><span class="comment">&#125;)</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="built_in">window</span>.Model = <span class="function"><span class="keyword">function</span>(<span class="params">object</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> resourceName = object.resourceName</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        init: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;,</span><br><span class="line">        fetch: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;,</span><br><span class="line">        save: <span class="function"><span class="keyword">function</span>(<span class="params">object</span>) </span>&#123;&#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">Controller(&#123;</span></span><br><span class="line"><span class="comment">    init: function(view, model) &#123;</span></span><br><span class="line"><span class="comment">        this.view = xxx</span></span><br><span class="line"><span class="comment">        this.model = xxx</span></span><br><span class="line"><span class="comment">        this.xxx()</span></span><br><span class="line"><span class="comment">        this.yyy()</span></span><br><span class="line"><span class="comment">    &#125;,</span></span><br><span class="line"><span class="comment">    <span class="doctag">xxx:</span> function() &#123;&#125;,</span></span><br><span class="line"><span class="comment">    yyy: function() &#123;&#125;</span></span><br><span class="line"><span class="comment">&#125;)</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="built_in">window</span>.Controller = <span class="function"><span class="keyword">function</span>(<span class="params">options</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> init = options.init</span><br><span class="line">    <span class="keyword">let</span> object = &#123;</span><br><span class="line">        view: <span class="literal">null</span>,</span><br><span class="line">        model: <span class="literal">null</span>,</span><br><span class="line">        init: <span class="function"><span class="keyword">function</span>(<span class="params">view, model</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.view = view</span><br><span class="line">            <span class="keyword">this</span>.model = model</span><br><span class="line">            <span class="keyword">this</span>.model.init()</span><br><span class="line">            init.call(<span class="keyword">this</span>, view, model)</span><br><span class="line">            <span class="comment">// this.bindEvents.call(this)</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> key <span class="keyword">in</span> options) &#123;</span><br><span class="line">        <span class="keyword">if</span> (key !== <span class="string">'init'</span>) &#123;</span><br><span class="line">            object[key] = options[key]</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> object</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="第五题"><a href="#第五题" class="headerlink" title="第五题"></a>第五题</h2><p>如何在 ES5 中如何用函数模拟一个类？（10分）</p>
+<p>答：使用原型对象，构造函数，new来模拟类。</p>
+<p>将公共属性放到原型对象里，并且将构造函数的prototype属性指向原型对象。<br>私有属性(自有属性)放到构造函数里去定义。<br>将实例化的对象的<strong>proto</strong>指向原型对象。<br>这样当构造函数创建一个实例化的对象的时候，就即拥有自己的私有变量和方法，也有公有的变量和方法了，实例化出来的对象的私有方法和变量修改都不会互相有影响，只有在修改公有的变量和方法的时候是对所有实例生效的。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Dessert</span>(<span class="params">name</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.name = name</span><br><span class="line">&#125;</span><br><span class="line">Dessert.prototype.calorie = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;</span><br><span class="line"><span class="keyword">let</span> dessert = <span class="keyword">new</span> Dessert(<span class="string">'iceCream'</span>)</span><br></pre></td></tr></table></figure>
+<p>上面代码就是一个最简单的类，Dessert 构造函数创建出来的对象自身有 name 属性，其原型上面有一个 calorie 属性。</p>
+<h2 id="第六题"><a href="#第六题" class="headerlink" title="第六题"></a>第六题</h2><p>用过 Promise 吗？举例说明。<br>如果要你创建一个返回 Promise 对象的函数，你会怎么写？举例说明。</p>
+<p>答：用过，调用后端接口对获取到的数据进行处理、自己模仿 jQuery 封装 Ajax、MVC 中 Model 的 fetch 属性和 save 属性返回 Promise 对象；</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* yyy().then(successFn, failFn)</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">yyy</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span>(<span class="params">resolve, reject</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (success) &#123;</span><br><span class="line">           resolve.call(<span class="literal">undefined</span>, ...zzz)</span><br><span class="line">        &#125; </span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (fail) &#123;</span><br><span class="line">           reject.call(<span class="literal">undefined</span>, ...qqq)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    </div>
+  </div>
+  
+  
+  
+    <div class="social-share" style="margin-top: -2rem" data-wechat-qrcode-title="<p>微信扫一扫</p>" data-wechat-qrcode-helper="<p>微信右上角, 扫一扫分享</p>" data-sites="qzone, qq, weibo, wechat, douban, google, facebook, twitter">
+  <span style="color: #6b7487; font-size: 1.4rem;">分享到: </span>
+</div>
+<script src="https://cdn.bootcss.com/social-share.js/1.0.16/js/social-share.min.js" async></script>
+  
+
+  
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+      <span>
+        
+          <i class="iconfont icon-06tags"></i>标签: 
+          
+          <span class="span--tag">
+            <a href="/tags/原型链/">
+              #原型链
+            </a>
+          </span>
+          
+          <span class="span--tag">
+            <a href="/tags/new/">
+              #new
+            </a>
+          </span>
+          
+          <span class="span--tag">
+            <a href="/tags/JSON/">
+              #JSON
+            </a>
+          </span>
+          
+          <span class="span--tag">
+            <a href="/tags/MVC/">
+              #MVC
+            </a>
+          </span>
+          
+          <span class="span--tag">
+            <a href="/tags/Promise/">
+              #Promise
+            </a>
+          </span>
+          
+        
+      </span>
+    </div>
+    <div class="article-meta pull-right">
+    </div>
+  </div>
+</div>
+
+
+  <aside id="sidebar">
+    <p id="sidebar-header"></p>
+    <ol id="sidebar-toc"></ol>
+  </aside>
+  <script async>setTimeout(generateToc, 10);</script>
+
+
+  <nav class="post-navigation">
+    
+      <div class="nav-pre">
+        <i class="iconfont icon-prev"></i>
+        上一篇:
+        <a href="/2019/03/18/无分类笔记-2（逻辑与或、命名空间、this、new）/" target="_self">无分类笔记-2（逻辑与或、命名空间、this、new、异步）</a>
+      </div>
+    
+    
+  </nav>
+
+   
+
+  
+    <script defer>
+const valineAPI = (() => {
+  try {
+    AV.init("5t4xu3HBz1CCS0dWUdEaYl1T-gzGzoHsz", "2je5yKJYh98beKd80936XS8g");
+  } catch(error) {}
+  const isExist = (identity) => {
+    identity = identity || getRealPath();
+    let query = new AV.Query('Timer');
+    return new Promise((resolve, reject) => {
+      query.equalTo("identity", identity);
+      query.find().then(results => {
+        resolve(results.length > 0);
+      }, error => reject(error));
+    })
+  }
+
+  const _get = (identity) => {
+    let query = null;
+    if(identity && identity instanceof Array){
+      let querys = [];
+      for(let i = 0; i < identity.length; ++i) {
+        querys[i] = new AV.Query('Timer');
+        querys[i].equalTo('identity', identity[i]);
+      }
+      query = AV.Query.or.apply(null ,querys);
+    } else {
+      identity = identity || getRealPath();
+      query = new AV.Query("Timer");
+      query.equalTo("identity", identity);
+    }
+
+    return new Promise((resolve, reject) => {
+      query.find()
+      .then(results => resolve(results))
+      .catch(error => reject(error))
+    })
+  }
+
+  const create = (identity) => {
+    identity = identity || getRealPath();
+    return new Promise((resolve, reject) => {
+      let Todo = AV.Object.extend('Timer');
+      let todo = new Todo();
+      todo.set("times", 1);
+      todo.set("identity", identity);
+      todo.save().then(res => resolve(true), error => reject(error));
+    })
+  }
+
+  const update = (identity) => {
+    identity = identity || getRealPath();
+    return new Promise((resolve, reject) => {
+      let query = new AV.Query('Timer');
+      query.equalTo("identity", identity);
+      query.find().then(todos => {
+        todos.forEach(todo => {
+          todo.set("times", todo.attributes.times + 1);
+        });
+        return AV.Object.saveAll(todos);
+      }).then(todos => resolve(true), error => reject(error));
+    })
+  }
+
+  return {
+    isExist,
+    _get,
+    update,
+    create
+  }
+})()
+
+const calcAndWriteTimes = () => {
+  let isPost = true;
+
+  let timerAllDOM = document.querySelectorAll(".article-timer");
+
+  if(isPost) {
+    let identity = timerAllDOM[0].getAttribute("data-identity");
+    valineAPI.isExist(identity)
+    .then(exist => {
+      if(exist) {
+        return valineAPI.update(identity);
+      }
+      return new Promise(resolve => resolve(true));
+    })
+    .then( succuess => valineAPI._get(identity))
+    .then( result => timerAllDOM[0].innerText = result[0].attributes.times)
+    .catch(error => console.log(error.message))
+    return ;
+  }
+
+  let timerDOMCache = {};
+
+  for(let timerDOM of timerAllDOM) {
+    let identity = timerDOM.getAttribute("data-identity");
+    if(timerDOMCache.hasOwnProperty(identity)){
+      timerDOMCache[identity].dom.push(timerDOM);
+    }else{
+      timerDOMCache[identity] = {
+        dom: [timerDOM],
+        times: undefined
+      };
+    }
+  }
+
+  let identities = Object.keys(timerDOMCache);
+  valineAPI._get(identities).then(results => {
+    for(let result of results) {
+      let {identity, times} = result.attributes;
+      timerDOMCache[identity].times = times;
+      timerDOMCache[identity].dom.map(item => item.innerText = times);
+    }
+    for(let identity of identities) {
+      if(timerDOMCache[identity].times){
+        continue;
+      }
+      timerDOMCache[identity].dom.map(item => item.innerText = 1);
+      valineAPI.create(identity);
+    }
+  }).catch(error => console.log(error.message))
+}
+
+if(true){
+  calcAndWriteTimes();
+}
+</script>
+   
+
+</div>
+
+
+      <footer>
+  <p class="site-info">
+    博客已萌萌哒运行<span id="time-to-now"></span><span class="my-face">(●'◡'●)ﾉ♥</span>
+    <br>
+    Theme - <a href="https://github.com/dongyuanxin/theme-bmw">BMW</a> | Made With 💗 | Powered by <a href="https://godbmw.com/">GodBMW</a>
+    <br>
+    
+  </p>
+</footer>
+
+
+
+<script>
+const timeToNowDOM = document.querySelector("#time-to-now");
+const startTimestamp = new Date(2017, 7, 10).getTime();
+
+const updateTimeStr = () => {
+  let offset = parseInt(
+      (new Date().getTime() - startTimestamp) / 1000,
+      10
+    ),
+    day = Math.floor(offset / 86400),
+    hour = Math.floor((offset % 86400) / 3600),
+    minute = Math.floor(((offset % 86400) % 3600) / 60),
+    second = Math.floor(((offset % 86400) % 3600) % 60);
+  timeToNowDOM.innerHTML =
+    day + "天" + hour + "小时" + minute + "分钟" + second + "秒";
+  setTimeout(updateTimeStr, 500);
+}
+
+setTimeout(updateTimeStr, 500);
+</script>
+
+
+      <div class="back-to-top hidden">
+  <span>
+    <i class="iconfont icon-60"></i><span></span>%
+  </span>
+</div>
+
+<script>
+const updateIconToTop = percent => {
+  let dom = document.querySelector(".back-to-top span span");
+  dom.innerText = percent;
+  if(percent < 1) {
+    document.querySelector(".back-to-top").className = "back-to-top hidden";
+  } else {
+    document.querySelector(".back-to-top").className = "back-to-top";
+  }
+}
+
+const handleScoll = () => {
+  let isRunning = false;
+  return () => {
+    if (isRunning) return;
+    isRunning = true;
+    window.requestAnimationFrame(timestamp => {
+      let scrollTop =
+          document.documentElement.scrollTop || document.body.scrollTop,
+        scrollHeight =
+          document.documentElement.scrollHeight ||
+          document.body.scrollHeight,
+        clientHeight =
+          document.documentElement.clientHeight ||
+          document.body.clientHeight;
+      isRunning = false;
+      if (scrollTop <= 1) {
+        updateIconToTop(0);
+        return;
+      }
+      if (scrollTop + clientHeight >= scrollHeight) {
+        updateIconToTop(100);
+      } else {
+        updateIconToTop(parseInt(
+          100 * scrollTop / (scrollHeight - clientHeight),
+          10
+        ));
+      }
+    });
+  };
+}
+
+const backToTop = () => {
+  let scrollTop =
+      document.documentElement.scrollTop || document.body.scrollTop,
+    delay = 10,
+    time = 200;
+  if (scrollTop <= 20) {
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    return;
+  }
+  let step = Math.ceil(scrollTop * delay / time);
+  let timer = setInterval(() => {
+    scrollTop =
+      document.documentElement.scrollTop || document.body.scrollTop;
+    if (scrollTop - step <= 0) {
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      clearInterval(timer);
+    } else {
+      document.documentElement.scrollTop = scrollTop - step;
+      document.body.scrollTop = scrollTop - step;
+    }
+  }, delay);
+}
+
+document.addEventListener("scroll", handleScoll(), false);
+
+document.querySelector(".back-to-top").addEventListener("click", backToTop, false);
+
+</script>
+
+    </div>
+
+    
+      <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+<script>
+  (() => {
+    const mathjaxConfig = {
+      showProcessingMessages: false, //关闭js加载过程信息
+      messageStyle: "none", //不显示信息
+      jax: ["input/TeX", "output/HTML-CSS"],
+      tex2jax: {
+        inlineMath: [["$", "$"], ["\\(", "\\)"]], //行内公式选择符
+        displayMath: [["$$", "$$"], ["\\[", "\\]"]], //段内公式选择符
+        skipTags: ["script", "noscript", "style", "textarea", "pre", "code", "a"] //避开某些标签
+      },
+      "HTML-CSS": {
+        availableFonts: ["STIX", "TeX"], //可选字体
+        showMathMenu: false //关闭右击菜单显示
+      }
+    }
+
+    let mathjaxInterval = setInterval(() => {
+      if(!window.MathJax){
+        return;
+      }
+      window.MathJax.Hub.Config(mathjaxConfig)
+      window.MathJax.Hub.Queue(["Typeset", MathJax.Hub, document.getElementById('app')])
+
+      clearInterval(mathjaxInterval)
+    }, 10)    
+  })()
+</script>
+    
+
+    <script src="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.js" async></script>
+<script async>
+  let fancyTimer = setInterval(function(){
+    if(!window.$){
+      return;
+    }
+    $(document).ready(function() {
+      $(".post img").each(function () {
+        if($(this).parent().get(0).tagName.toLowerCase() === "a") {
+          return;
+        }
+        // $(this).attr("data-fancybox", "gallery"); // if you add 'data-fancybox', img will display after showed
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "gallery");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      });
+      
+      clearInterval(fancyTimer);
+    });
+  }, 10);
+</script>
+
+    
+  </body>
+
+</html>

@@ -189,10 +189,16 @@
   <div class="article-content">
     <div class="markdown-body">
       <h2 id="JSONP-为什么不支持-POST-请求"><a href="#JSONP-为什么不支持-POST-请求" class="headerlink" title="JSONP 为什么不支持 POST 请求"></a>JSONP 为什么不支持 POST 请求</h2><p>答：因为 JSONP 是通过动态创建 <code>&lt;script&gt;</code> 标签实现的，动态创建 scirpt 时只能用 GET，没办法 POST。</p>
-<h1 id="AJAX"><a href="#AJAX" class="headerlink" title="AJAX"></a>AJAX</h1><h2 id="请使用原生JS来发送AJAX请求"><a href="#请使用原生JS来发送AJAX请求" class="headerlink" title="请使用原生JS来发送AJAX请求"></a>请使用原生JS来发送AJAX请求</h2><h2 id="JSON-VS-JS"><a href="#JSON-VS-JS" class="headerlink" title="JSON VS JS"></a>JSON VS JS</h2><table>
+<h1 id="AJAX"><a href="#AJAX" class="headerlink" title="AJAX"></a>AJAX</h1><h2 id="请使用原生JS来发送AJAX请求"><a href="#请使用原生JS来发送AJAX请求" class="headerlink" title="请使用原生JS来发送AJAX请求"></a>请使用原生JS来发送AJAX请求</h2><h2 id="JSON-VS-JS"><a href="#JSON-VS-JS" class="headerlink" title="JSON VS JS"></a>JSON VS JS</h2><ul>
+<li><p>关系：JSON 是一门抄袭了 JavaScript 的语言，同时也是一种数据交互格式，JSON 是 JavaScript 的子集（或者说 JSON 只抄袭了一部分 JavaScript 语法，而且没有新增任何原创的语法）。</p>
+</li>
+<li><p>区别：JSON 的字符串首尾必须是 <code>&quot;</code>， 有 Object / Array / Number / String / Null / Boolean，没有 Funciton 和 Undefined，没有内置的 Date、Math、RegExp 等。</p>
+</li>
+</ul>
+<table>
 <thead>
 <tr>
-<th>JS</th>
+<th>JavaScript</th>
 <th>JSON</th>
 </tr>
 </thead>
@@ -218,7 +224,7 @@
 <td>{“name”: “frank”}</td>
 </tr>
 <tr>
-<td><code>var a = {}</code><br>a.self = a</td>
+<td><code>var a = {}</code><br><code>a.self = a</code></td>
 <td>搞不定（没有变量）</td>
 </tr>
 <tr>
@@ -227,10 +233,6 @@
 </tr>
 </tbody>
 </table>
-<ol>
-<li>JSON 没有抄袭 funciton 和 undefined</li>
-<li>JSON 的字符串首尾必须是 “</li>
-</ol>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">myButton.addEventListener(<span class="string">'click'</span>, (e) =&gt; &#123;</span><br><span class="line">  <span class="keyword">let</span> request = <span class="keyword">new</span> XMLHttpRequest()</span><br><span class="line">  request.open(<span class="string">'GET'</span>, <span class="string">'/xxx'</span>) <span class="comment">// 配置 request</span></span><br><span class="line">  request.send()</span><br><span class="line">  request.onreadystatechange = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (request.readystate === <span class="number">4</span>) &#123;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">'请求都响应完毕了'</span>)</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span> (request.status &gt;= <span class="number">200</span> &amp;&amp; request.status &lt; <span class="number">300</span>) &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'说明请求成功'</span>)</span><br><span class="line">        <span class="keyword">let</span> string = request.responseText</span><br><span class="line">        <span class="comment">// 把符合 JSON 语法的字符串</span></span><br><span class="line">        <span class="comment">// 转换成 JS 对应的值</span></span><br><span class="line">        <span class="keyword">let</span> object = <span class="built_in">JSON</span>.parse(string)</span><br><span class="line">        <span class="comment">// JSON.parse 是浏览器提供的</span></span><br><span class="line">      &#125; <span class="keyword">else</span> <span class="keyword">if</span> (request.status &gt;= <span class="number">400</span>) &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'说明请求失败'</span>)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
 <h1 id="同源策略"><a href="#同源策略" class="headerlink" title="同源策略"></a>同源策略</h1><p>用表单发送 GET 请求，可以跨域。因为获取到响应后页面会刷新，浏览器认为这样是安全的。<br>用 AJAX 不能跨域。因为 AJAX 可以获取到响应内容，</p>
 <p>浏览器必须保证<br>只有 协议+端口+域名 <code>一模一样</code>才允许发 AJAX 请求</p>
@@ -322,26 +324,6 @@
     
   </nav>
 
-  
-    <a href="#comment" class="comment-anchor"></a>
-<div class="comment-title"><i class="iconfont icon-footprint"></i> 留下足迹 <i class="iconfont icon-footprint"></i></div>
-<div id="vcomments"></div>
-
-<script defer>
-  if( true ) {
-    let path = getRealPath()
-    new Valine({
-      el: "#vcomments",
-      appId: "5t4xu3HBz1CCS0dWUdEaYl1T-gzGzoHsz",
-      appKey: "2je5yKJYh98beKd80936XS8g",
-      notify: false,
-      verify: false,
-      avatar: "robohash",
-      placeholder: "正确填写邮箱, 才能及时收到回复哦♪(^∇^*)",
-      path
-    });
-  }
-</script>
    
 
   
