@@ -8,12 +8,12 @@
   
   
   
-  <title>数据_Cookie_Session_LocalStorage_Cache-Control | Celeste&#39;s Blog</title>
+  <title>Vue_造轮子（一） | Celeste&#39;s Blog</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
   
-    <meta name="keywords" content="Cookie,">
+    <meta name="keywords" content="相关资料,构建项目流程,">
   
 
   <script>
@@ -169,17 +169,17 @@
 
 <div class="post">
   <h1 class="article-title">
-    <span>数据_Cookie_Session_LocalStorage_Cache-Control</span>
+    <span>Vue_造轮子（一）</span>
   </h1>
   <div class="article-top-meta">
     <span>
       发布 : 
-      2019-04-05
+      2019-04-11
     </span>
     
     
       <span>
-        浏览 : <span class="article-timer" data-identity="数据-Cookie-Session-LocalStorage-Cache-Control"></span>
+        浏览 : <span class="article-timer" data-identity="Vue-造轮子（一）"></span>
       </span>
     
   </div>
@@ -188,48 +188,58 @@
 
   <div class="article-content">
     <div class="markdown-body">
-      <h1 id="Cookie"><a href="#Cookie" class="headerlink" title="Cookie"></a>Cookie</h1><h2 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h2><ol>
-<li>服务器通过 Set-Cookie 响应头设置 Cookie</li>
-<li>浏览器得到 Cookie 之后，每次请求都要带上 Cookie</li>
-<li>服务器读取 Cookie 就知道登陆用户的信息</li>
-</ol>
-<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><ol>
-<li><p>在 Chrome 上登陆得到了 Cookie，用 Safari 访问，Safari 会带上 Cookie 吗？</p>
-<p> 答：不会，Cookie 是跟着浏览器的。</p>
-</li>
-<li><p>Cookie 存在哪？</p>
-<p> 答：Windows 存在 C 盘的一个文件里，其他系统存在硬盘的某个文件中，你找不到，系统不让你改。</p>
-</li>
-<li><p>Cookie 可以作假吗？</p>
-<p> 答：可以。Chrome 调试工具里就可以改。设置 HttpOnly 后，将不能用 JS 修改该 Cookie。</p>
-</li>
-<li><p>Cookie 的有效期是多久？</p>
-<p> 答：20分钟左右，由浏览器决定。</p>
-</li>
-</ol>
-<h2 id="LocalStorage"><a href="#LocalStorage" class="headerlink" title="LocalStorage"></a>LocalStorage</h2><p>session 是服务器上的 hash 表。<br>session 占内存，cookie 不占内存。<br>localStorage 是浏览器上的 hash 表。</p>
-<p>localStorage.setItem(‘object’, { name: ‘obj’ })<br>在存储时会转化为字符串，而对象 toString 都会变成 “[object Object]”</p>
-<p>正确：<br>localStorage.setItem(‘jsonString’, JSON.stringify({ name: ‘obj’ }))<br>localStorage.getItem<br>localStorage.clear()</p>
-<p>localStorage 持久化存储，存在 C 盘文件中（windows系统）</p>
-<p>问题：</p>
-<ol>
-<li><p>Cookie 和 Session 有什么关系？</p>
-<p> 答：一般来说，Session 是基于 Cookie 来实现的，因为 SessionId（随机数）通过 Cookie 发给客户端。</p>
-</li>
-<li><p>Cookie 和 LocalStorage 最大的区别是什么？</p>
-<p> 答：Cookie（4K） 会通过浏览器被带到服务器上去，HTTP 不会带上 LocalStorage（5Mb） 的值。</p>
-</li>
-<li><p>LocalStorage 和 SessionStorage 的区别？</p>
-<p> 答：SessionStorage 在用户关闭页面（会话结束）后就失效。</p>
-</li>
-<li><p>Cookie 和 SessionStorage 的区别？</p>
-<p> 答：都是在用户关闭页面后就失效，但是后台代码可以任意设置 Cookie 的过期时间。</p>
-</li>
-</ol>
-<h2 id="不基于-Cookie-的-Session"><a href="#不基于-Cookie-的-Session" class="headerlink" title="不基于 Cookie 的 Session"></a>不基于 Cookie 的 Session</h2><ul>
-<li>通过查询参数和 LocalStorage 传递 sessionId</li>
+      <h1 id="简易-UI-框架"><a href="#简易-UI-框架" class="headerlink" title="简易 UI 框架"></a>简易 UI 框架</h1><h2 id="课外资料"><a href="#课外资料" class="headerlink" title="课外资料"></a>课外资料</h2><ol>
+<li><p>UI</p>
+<ul>
+<li><a href="https://framework7.io/docs/button.html" target="_blank" rel="noopener">Framework7</a></li>
+<li><a href="https://ant.design/docs/react/introduce-cn" target="_blank" rel="noopener">Ant Design</a></li>
+<li><a href="http://element.eleme.io/#/zh-CN/component/installation" target="_blank" rel="noopener">Element UI</a></li>
+<li><a href="https://www.iviewui.com/docs/guide/install" target="_blank" rel="noopener">iView</a></li>
 </ul>
-<h2 id="前端永远不要-读-写-Cookie，用-LocalStorage"><a href="#前端永远不要-读-写-Cookie，用-LocalStorage" class="headerlink" title="前端永远不要 读/写 Cookie，用 LocalStorage"></a>前端永远不要 读/写 Cookie，用 LocalStorage</h2>
+</li>
+<li><p>设计</p>
+<ul>
+<li>《写给大家看的设计书》</li>
+<li><a href="Sketch中文网">Sketch中文网</a></li>
+</ul>
+</li>
+<li><p>ES 6</p>
+<ul>
+<li><a href="https://frankfang.github.io/es-6-tutorials/" target="_blank" rel="noopener">ES 6 新特性列表及教程</a></li>
+<li><a href="https://xiedaimala.com/courses/12a78a03-35f9-42ea-9b37-540540460f6e#/common" target="_blank" rel="noopener">《ES6 深入浅出》课程</a></li>
+</ul>
+</li>
+<li><p>配色网站推荐</p>
+<ul>
+<li><a href="https://colorhunt.co/" target="_blank" rel="noopener">https://colorhunt.co/</a></li>
+<li><a href="https://color.adobe.com/explore/" target="_blank" rel="noopener">https://color.adobe.com/explore/</a></li>
+<li><a href="https://www.materialpalette.com/" target="_blank" rel="noopener">https://www.materialpalette.com/</a></li>
+</ul>
+</li>
+<li><p>Windows 上像 Sketch 一样的工具 <a href="https://www.adobe.com/cn/products/xd.html" target="_blank" rel="noopener">https://www.adobe.com/cn/products/xd.html</a></p>
+</li>
+</ol>
+<h2 id="构建流程"><a href="#构建流程" class="headerlink" title="构建流程"></a>构建流程</h2><ol>
+<li>本地创建目录</li>
+<li>创建仓库（e.t. github, gitlab）</li>
+<li><p>相关命令：本地初始化仓库、npm、安装 parcel，不要忘记 <code>.gitignore</code>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">touch README.md</span><br><span class="line">git init</span><br><span class="line">git add .</span><br><span class="line">git re..... // 直接复制就行</span><br><span class="line"></span><br><span class="line">npm init</span><br><span class="line"></span><br><span class="line">npm i -D parcel-bundler</span><br><span class="line"></span><br><span class="line">// ./node_modules/.bin/parcel index.html --no-cache</span><br><span class="line"></span><br><span class="line">npx parcel index.html --no-cache</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>用 Vue.js 需要在 package.json 中配置</p>
+</li>
+<li><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&quot;alias&quot;: &#123;</span><br><span class="line">  &quot;vue&quot; : &quot;./node_modules/vue/dist/vue.common.js&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>parcel<br>i. 创建 src 目录，将 JS 放入该目录<br>ii. 修改代码</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// path: 'ProjectName/src/app.js'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">'vue'</span></span><br><span class="line"><span class="keyword">import</span> Button <span class="keyword">from</span> <span class="string">'./button'</span></span><br><span class="line"></span><br><span class="line">Vue.component(<span class="string">'g-button'</span>, Button)</span><br><span class="line"></span><br><span class="line"><span class="keyword">new</span> Vue(&#123;</span><br><span class="line">    el: <span class="string">'#app'</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">// path: &apos;ProjectName/src/button.vue&apos;</span><br><span class="line"></span><br><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;button class=&quot;g-button&quot;&gt;按钮&lt;/button&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line">    export default &#123;&#125;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line">&lt;style lang=&quot;scss&quot;&gt;</span><br><span class="line">    .g-button &#123;</span><br><span class="line">        font-size: var(--font-size);</span><br><span class="line">        height: var(--button-height);</span><br><span class="line">        padding: 0 1em;</span><br><span class="line">        border-radius: var(--border-radius);</span><br><span class="line">        border: 1px solid var(--border-color);</span><br><span class="line">        background: var(--button-bg);</span><br><span class="line">        &amp;:hover &#123;</span><br><span class="line">            border-color: var(--border-color-hover);</span><br><span class="line">        &#125;</span><br><span class="line">        &amp;:active &#123;</span><br><span class="line">            background-color: var(--button-active-bg);</span><br><span class="line">        &#125;</span><br><span class="line">        &amp;:focus &#123;</span><br><span class="line">            outline: none;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&lt;/style&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="提交"><a href="#提交" class="headerlink" title="提交"></a>提交</h2><p>查看提交历史</p>
+<ol>
+<li>安装 <code>npm i -g git-open</code></li>
+<li>在目录运行 <code>git open</code>，直接打开 github 对应页面</li>
+</ol>
+
     </div>
   </div>
   
@@ -250,8 +260,14 @@
           <i class="iconfont icon-06tags"></i>标签: 
           
           <span class="span--tag">
-            <a href="/tags/Cookie/">
-              #Cookie
+            <a href="/tags/相关资料/">
+              #相关资料
+            </a>
+          </span>
+          
+          <span class="span--tag">
+            <a href="/tags/构建项目流程/">
+              #构建项目流程
             </a>
           </span>
           
@@ -276,15 +292,9 @@
       <div class="nav-pre">
         <i class="iconfont icon-prev"></i>
         上一篇:
-        <a href="/2019/03/19/JS题目总结（原型链、new、JSON、MVC、Promise）/" target="_self">JS题目总结（原型链、new、JSON、MVC、Promise）</a>
-      </div>
-    
-    
-      <div class="nav-next">
-        下一篇:
         <a href="/2019/04/05/自用快捷键整理/" target="_self">自用快捷键整理</a>
-        <i class="iconfont icon-next"></i>
       </div>
+    
     
   </nav>
 
